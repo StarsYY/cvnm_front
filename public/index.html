@@ -6,6 +6,40 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      body, ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      body::-webkit-scrollbar{
+        width: 8px;
+        height: 8px;
+      }
+
+      body::-webkit-scrollbar-thumb{ /* 正常情况下滑块的样式 */
+        background-color: white;
+        border-radius: 10px;
+      }
+
+      body:hover::-webkit-scrollbar-thumb{ /* 鼠标悬浮在该类指向的控件上时滑块的样式 */
+        background-color: #E5E5E5;
+        border-radius: 10px;
+      }
+
+      body::-webkit-scrollbar-thumb:hover{ /*鼠标悬浮在滑块上时滑块的样式 */
+        background-color: #E5E5E5;
+      }
+
+      body::-webkit-scrollbar-track{ /* 正常时候的主干部分 */
+        border-radius: 10px;
+        background-color: white;
+      }
+
+      body::-webkit-scrollbar-track:hover{ /* 鼠标悬浮在滚动条上的主干部分 */
+        background-color: rgba(0,0,0,.01);
+      }
+    </style>
   </head>
   <body>
     <noscript>

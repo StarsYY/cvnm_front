@@ -1,0 +1,67 @@
+.i-main {
+  display: flex;
+  justify-content: center;
+}
+
+.i-content {
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+  padding-top: 48px;
+  font-size: 14px;
+  width: 86%;
+}
+
+.i-left {
+  display: block;
+  flex: 0 0 20.83%;
+  max-width: 20.83%;
+}
+
+.i-menu {
+  width: 68%;
+  max-width: 162px;
+  height: 400px;
+  float: left;
+}
+
+.i-menuList {
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 16px;
+  height: 40px;
+}
+
+.i-link {
+  color: #777;
+  display: block;
+  width: 100%;
+  line-height: 40px;
+  text-decoration: none!important;
+  touch-action: manipulation;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.i-link-select {
+  background-color: #f3f3f3;
+  color: #000;
+}
+
+.i-link:active, .i-link:hover {
+  color: #000;
+}  
+
+.i-tag {
+  display: inline-block;
+  line-height: 24px;
+  padding-left: 20px;
+}
+
+.i-right {
+  display: block;
+  flex: 0 0 79.16%;
+  max-width: 79.16%;
+}

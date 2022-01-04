@@ -1,0 +1,117 @@
+.c-col-tag{
+  display: inline-block;
+  margin-top: 24px;
+  margin-left: -16px;
+}
+
+.c-tag-ul {
+  overflow: hidden;
+  margin-bottom: 0;
+  margin-top: 0;
+  list-style: none;
+}
+
+.c-tag-li {
+  float: left;
+  display: list-item;
+  list-style: none;
+}
+
+.c-tag-a {
+  position: relative;
+  font-weight: 400;
+  font-size: 16px;
+  color: #777;
+  line-height: 24px;
+  display: block;
+  padding: 16px;
+  text-decoration: none!important;
+  touch-action: manipulation;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.c-tag-msg {
+  font-weight: 400;
+  font-size: 16px;
+  color: #777;
+  line-height: 24px;
+}
+
+.c-tag-msg-select {
+  border-bottom: 2px solid #000;
+  padding-bottom: 6px;
+  color: black;
+}
+
+.c-star {
+  height: 48px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  float: right;
+}
+
+.c-star-s {
+  color: #328dff;
+  margin-left: 32px;
+  line-height: 48px;
+}
+
+.c-col-main {
+  flex: 1;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.c-col-content {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.c-c-c-msg {
+  flex: 1;
+  font-weight: 500;
+  font-size: 16px;
+  color: #333;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  max-height: 144px;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.c-read {
+  float: left;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  text-align: right;
+  line-height: 24px;
+  margin-left: 8px;
+}
+
+.c-col-name {
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  line-height: 24px;
+  margin-right: 16px;
+  margin-left: 10px;
+}
+
+.c-col-time {
+  display: inline-block;
+  opacity: .5;
+  font-weight: 400;
+  font-size: 14px;
+  color: #777;
+  line-height: 24px;
+}

@@ -1,0 +1,52 @@
+.u-i-title {
+  text-align: center;
+  margin: 0;
+  opacity: .9;
+  font-size: 32px;
+  color: #000;
+}
+
+.u-i-i {
+  vertical-align: middle;
+  line-height: 1.3;
+  font-size: 32px;
+  color: #000;
+}
+
+.u-i-userhead {
+  padding-bottom: 16px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #F3F3F3;
+}
+
+.u-i-head {
+  width: 70px;
+  line-height: 42px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.u-i-h {
+  vertical-align: middle;
+  line-height: 42px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.ui-but {
+  margin: 30px 0px;
+  background: rgba(0,0,0,.05);
+  opacity: .38;
+  border-radius: 8px;
+  border: 1px transparent;
+  text-align: center;
+  width: 276px;
+  height: 48px;
+  font-size: 18px;
+  color: #007dff;
+  line-height: 48px;
+}

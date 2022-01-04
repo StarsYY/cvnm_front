@@ -1,0 +1,158 @@
+.p-main {
+  background-image: url("../assets/personal.png");
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 272px;
+  padding: 0;
+}
+
+.p-info {
+  width: 86%;
+  height: 149px;
+  padding-top: 35px;
+  padding-bottom: 35px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.p-head {
+  width: 84px;
+  margin-right: 28px;
+  display: block;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  float: left;
+  max-width: none;
+  position: relative;
+  min-height: 1px;
+}
+
+.p-name {
+  display: block;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  float: left;
+  max-width: 45.8%;
+  position: relative;
+  min-height: 1px;
+}
+
+.p-nick {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.p-nickname {
+  font-size: 24px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 32px;
+  max-width: 85%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 32px;
+}
+
+.p-level {
+  font-weight: 500;
+  font-size: 14px;
+  color: #d85700;
+  text-align: center;
+  line-height: 24px;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.p-profile {
+  font-size: 14px;
+  color: #777;
+  letter-spacing: 0;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  max-height: 72px;
+}
+
+.p-edit {
+  background-image: url("../assets/edit.png");
+  width: 12px;
+  height: 12px;
+  background-size: 12px 12px;
+  display: inline-block;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.p-star {
+  display: block;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  float: right;
+  max-width: 45.8%;
+  min-height: 1px;
+}
+
+.p-danner {
+  margin-top: 41px;
+  height: 64px;
+}
+
+.p-danner-m {
+  float: right;
+  margin-left: 56px;
+  cursor: pointer;
+}
+
+.p-num {
+  font-size: 32px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 40px;
+}
+
+.p-follow {
+  font-size: 14px;
+  color: #777;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.p-tag {
+  background: hsla(0,0%,100%,.2);
+}
+
+.p-tag-main {
+  width: 86%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  display: flex;
+  flex: auto;
+  align-self: stretch;
+  overflow: hidden;
+  white-space: nowrap;
+  transform: translate(0);
+}
+
+.p-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: rgb(110, 105, 105);
+  cursor: pointer;
+  padding: 16px 0;
+  text-align: center;
+  margin: 0 40px 0 0;
+}
+
+.p-cart-select {
+  color: black;
+  border-bottom: 1px solid black;
+}

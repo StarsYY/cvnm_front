@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_account</title>
+    <defs>
+        <path d="M10.3760119,7.651875 C12.2925715,7.651875 13.84625,9.20555352 13.84625,11.1221131 L13.84625,13.1881361 C13.84625,13.9636627 13.2175615,14.5923512 12.4420349,14.5923512 L1.40421505,14.5923512 C0.628688494,14.5923512 3.17019217e-16,13.9636627 0,13.1881361 L0,11.1221131 C-2.34710855e-16,9.20555352 1.55367852,7.651875 3.4702381,7.651875 L10.3760119,7.651875 Z M6.90298247,0 C8.80353414,0 10.3442014,1.55527277 10.3442014,3.47384167 C10.3442014,5.39241056 8.80353414,6.94768333 6.90298247,6.94768333 C5.00222975,6.94768333 3.4615625,5.39241056 3.4615625,3.47384167 C3.4615625,1.55527277 5.00222975,0 6.90298247,0 Z" id="path-1"></path>
+    </defs>
+    <g id="ic_account" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组">
+            <circle id="椭圆形" fill="#309AFF" cx="16" cy="16" r="16"></circle>
+            <g transform="translate(5.000000, 5.000000)" id="ic/wlan/ic_wlan备份-12">
+                <g id="ic/public/ic_cloud/" transform="translate(4.008125, 3.643750)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Combined-Shape" fill="#FFFFFF" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
