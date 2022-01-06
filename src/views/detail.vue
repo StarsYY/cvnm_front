@@ -465,38 +465,13 @@ export default {
         this.setComment()
         this.comment.userid = id
         followAuthor(this.comment).then(response => {
+          this.commentList = response.data.commentList
           if (str === "article") {
-            this.commentList = response.data.commentList
             if (this.article[1].follow) {
-              // this.commentList.forEach(item => {
-              //   if (item.user.nickname === this.article[1].nickname) {
-              //     item.user.follow = false
-              //   }
-              // })
               this.article[1].follow = false
             } else {
-              // this.commentList.forEach(item => {
-              //   if (item.user.nickname === this.article[1].nickname) {
-              //     item.user.follow = true
-              //   }
-              // })
               this.article[1].follow = true
             }
-          } else {
-            // this.commentList.forEach(item => {
-            //   if (item.user.follow) {
-            //     if (item.user.nickname === this.article[1].nickname) {
-            //       this.article[1].follow = false
-            //     }
-            //     item.user.follow = false
-            //   } else {
-            //     if (item.user.nickname === this.article[1].nickname) {
-            //       this.article[1].follow = true
-            //     }
-            //     item.user.follow = true
-            //   }
-            // })
-            this.commentList = response.data.commentList
           }
         })
       }
