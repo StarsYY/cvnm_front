@@ -288,7 +288,7 @@ export default {
       window.open(this.$router.resolve({name:'Detail', params:{id: id}}).href, '_blank')
     },
     create() {
-      if (Cookie.get("nickname") === undefined || Cookie.get("nickname") === null || Cookie.get("nickname") === "") {
+      if (Cookie.get("nickname") === undefined) {
         this.$router.push({name:'Login'})
         return
       }

@@ -55,7 +55,10 @@
                 <div class="d-num">166</div>
               </div>
             </div>
-            <div class="d-follow">关注</div>
+            <div class="d-follow" @click="follow(article[1].uid, article[1].nickname, 'article')">
+              <span v-if="article[1].follow">已关注</span>
+              <span v-if="!article[1].follow">关注</span>
+            </div>
           </div>
           <div style="margin-top: 40px;">
             <div class="d-hot">热门文章</div>
@@ -103,38 +106,46 @@
               {{ article[0].watch }}
             </span>
             <span class="d-article-vs">
-              <el-icon :size="19"><StarFilled /></el-icon>
+              <el-icon v-if="!article[0].star" :size="17" color="#707070" style="cursor: pointer" @click="star"><Star /></el-icon>
+              <el-icon v-if="article[0].star" :size="19" style="cursor: pointer" @click="star"><StarFilled /></el-icon>
+              {{ article[0].collect }}
             </span>
           </div>
           <div class="d-article">
             <div v-html="article[0].content"></div>
             <svg-icon icon-class="top"></svg-icon>
             <p class="d-article-final">本帖最后由 {{ article[0].author }} 于 {{ article[0].createtime }} 编辑</p>
-            <div class="d-article-bottom" @mouseenter="show = !show" @mouseleave="show = !show">
+            <div class="d-article-bottom"><!-- 点击后效果相反 @mouseenter="show = !show" @mouseleave="show = !show" -->
               <div class="d-article-author">
                 <div class="d-article-author-msg">
                   <el-avatar :src="article[1].portrait" :size="35" style="margin-right: 20px"></el-avatar>
                   <span class="d-article-name">{{ article[0].author }}</span>
-                  <div class="d-follow" style="margin: auto 20px">关注</div>
+                  <div class="d-follow" style="margin: auto 20px" @click="follow(article[1].uid, article[1].nickname, 'article')">
+                    <span v-if="article[1].follow">已关注</span>
+                    <span v-if="!article[1].follow">关注</span>
+                  </div>
                 </div>
                 <div>
+                  <span style="margin-left: 24px; font-size: 20px; cursor: pointer" :class="{ 'd-hidden' : !show }">
+                    <svg-icon icon-class="report"></svg-icon>
+                  </span>
                   <span style="margin-left: 24px">
-                    <svg-icon icon-class="up" style="font-size: 22px; cursor: pointer" @click="up"></svg-icon>
+                    <svg-icon v-if="!article[0].like" icon-class="up" style="font-size: 22px; cursor: pointer" @click="up"></svg-icon>
+                    <svg-icon v-if="article[0].like" icon-class="isup" style="font-size: 20px; cursor: pointer" @click="up"></svg-icon>
                     <span style="font-size: 15px; color: #777; margin-left: 6px">{{ article[0].up }}</span>
                   </span>
                   <span style="margin-left: 24px">
-                    <svg-icon icon-class="down" style="font-size: 18px; cursor: pointer" @click="down"></svg-icon>
+                    <svg-icon v-if="!article[0].unlike" icon-class="down" style="font-size: 18px; cursor: pointer" @click="down"></svg-icon>
+                    <svg-icon v-if="article[0].unlike" icon-class="isdown" style="font-size: 18px; cursor: pointer" @click="down"></svg-icon>
                   </span>
                   <span style="margin-left: 24px">
                     <svg-icon icon-class="review" style="font-size: 22px"></svg-icon>
                     <span style="font-size: 15px; color: #777; margin-left: 6px">{{ article[0].comment }}</span>
                   </span>
                   <span style="margin-left: 24px; cursor: pointer">
-                    <el-icon :size="17" color="#707070" @click="star"><Star /></el-icon>
-                    <span style="font-size: 15px; color: #777; margin-left: 6px"></span>
-                  </span>
-                  <span style="margin-left: 24px; font-size: 20px; cursor: pointer" :class="{ 'd-hidden' : show }">
-                    <svg-icon icon-class="report"></svg-icon>
+                    <el-icon v-if="!article[0].star" :size="17" color="#707070" style="cursor: pointer" @click="star"><Star /></el-icon>
+                    <el-icon v-if="article[0].star" :size="19" style="cursor: pointer" @click="star"><StarFilled /></el-icon>
+                    <span style="font-size: 15px; color: #777; margin-left: 6px">{{ article[0].collect }}</span>
                   </span>
                 </div>
               </div>
@@ -168,7 +179,10 @@
                         <div class="d-num">166</div>
                       </div>
                     </div>
-                    <div class="d-follow">关注</div>
+                    <div class="d-follow" @click="follow(item.user.uid, item.user.nickname, 'comment')">
+                      <span v-if="item.user.follow">已关注</span>
+                      <span v-if="!item.user.follow">关注</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -178,17 +192,18 @@
                   <div class="d-comment-msg" @mouseenter="item.hidden = !item.hidden" @mouseleave="item.hidden = !item.hidden">
                     <div class="d-comment-creattime">
                       <span style="margin-right: 8px">楼</span>
-                      <span>回复于{{ item.createtime }}</span>
+                      <span>回复于{{ item.createtime }}item.id：{{ item.id }}</span>
                     </div>
                     <div>
                       <span style="margin-left: 24px" :class="{ 'd-hidden' : item.hidden }">
-                        <svg-icon icon-class="report" style="font-size: 20px"></svg-icon>
+                        <svg-icon icon-class="report" style="font-size: 20px; cursor: pointer"></svg-icon>
                       </span>
                       <span style="margin-left: 24px" @click="item.reply = !item.reply">
-                        <svg-icon icon-class="review" style="font-size: 22px"></svg-icon>
+                        <svg-icon icon-class="review" style="font-size: 22px; cursor: pointer"></svg-icon>
                       </span>
                       <span style="margin-left: 24px">
-                        <svg-icon icon-class="up" style="font-size: 22px"></svg-icon>
+                        <svg-icon v-if="!item.like" icon-class="up" style="font-size: 22px; cursor: pointer" @click="upComment(item.id)"></svg-icon>
+                        <svg-icon v-if="item.like" icon-class="isup" style="font-size: 20px; cursor: pointer" @click="upComment(item.id)"></svg-icon>
                         <span style="font-size: 14px; color: #777; margin-left: 6px">{{ item.up }}</span>
                       </span>
                     </div>
@@ -212,17 +227,18 @@
                       <view v-html="itemReply.comment" class="d-reply-detail"></view>
                     </div>
                     <div class="d-reply-msg">
-                      <div class="d-reply-time">{{ itemReply.createtime }}</div>
+                      <div class="d-reply-time">{{ itemReply.createtime }}<span>itemReply.id：{{ itemReply.id }}</span></div>
                       <div>
                         <span style="margin-left: 24px" :class="{ 'd-hidden' : itemReply.hidden }">
-                          <svg-icon icon-class="report" style="font-size: 20px"></svg-icon>
+                          <svg-icon icon-class="report" style="font-size: 20px; cursor: pointer"></svg-icon>
                         </span>
                         <span style="margin-left: 24px" @click="itemReply.reply = !itemReply.reply">
-                          <svg-icon icon-class="review" style="font-size: 22px"></svg-icon>
+                          <svg-icon icon-class="review" style="font-size: 22px; cursor: pointer"></svg-icon>
                         </span>
                         <span style="margin-left: 24px">
-                          <svg-icon icon-class="up" style="font-size: 22px"></svg-icon>
-                          <span style="font-size: 14px; color: #777; margin-left: 6px">913</span>
+                          <svg-icon v-if="!itemReply.like" icon-class="up" style="font-size: 22px; cursor: pointer" @click="upComment(itemReply.id)"></svg-icon>
+                          <svg-icon v-if="itemReply.like" icon-class="isup" style="font-size: 20px; cursor: pointer" @click="upComment(itemReply.id)"></svg-icon>
+                          <span style="font-size: 14px; color: #777; margin-left: 6px">{{ itemReply.up }}</span>
                         </span>
                       </div>
                     </div>
@@ -274,8 +290,9 @@
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { StarFilled, Star } from '@element-plus/icons'
-import { fetchArticle, fetchComment, createComment } from '@/api/detail'
+import { fetchArticle, fetchComment, createComment, upArticle, downArticle, starArticle, upComment, followAuthor } from '@/api/detail'
 import Cookie from 'js-cookie'
+import { isLogin } from '@/utils/tool'
 import Tinymce from '@/components/tinymcec'
 import tinymce from 'tinymce'
 import { ElMessage } from 'element-plus'
@@ -317,7 +334,9 @@ export default {
         username: '',
         articleid: '',
         comment: '',
-        comid: 0
+        comid: 0,
+        is: '',
+        userid: ''
       }
     }
   },
@@ -343,78 +362,187 @@ export default {
   },
   methods: {
     getArticle(id) {
-      fetchArticle(id).then(response => {
+      if(Cookie.get("nickname") !== undefined) {
+        this.comment.username = Cookie.get("nickname")
+      }
+      this.comment.articleid = id
+      fetchArticle(this.comment).then(response => {
         this.tags = response.data[0].labelMap
         this.article = response.data
       })
     },
     getComment(id) {
-      fetchComment(id).then(response => {
+      if(Cookie.get("nickname") !== undefined) {
+        this.comment.username = Cookie.get("nickname")
+      }
+      this.comment.articleid = id
+      fetchComment(this.comment).then(response => {
         this.commentList = response.data
       })
     },
-    up() {
-      alert(this.article[0].id)
-    },
-    down() {
-      alert(this.article[0].id)
-    },
-    star() {
-      alert(this.article[0].id)
-    },
-    publish() {
-      if (Cookie.get("nickname") === undefined) {
-        ElMessage({
-          message: '您还没有登录，请登陆后再发表评论.',
-          type: 'warning',
-        })
-        return
-      }
+    setComment() {
       this.comment.username = Cookie.get("nickname")
       this.comment.articleid = this.article[0].id
-      this.comment.comment = tinymce.editors[0].getContent()
-      if (this.comment.comment.length === 0) {
-        ElMessage({
-          message: '评论内容不能为空.',
-          type: 'warning',
+    },
+    up() {
+      if(isLogin()) {
+        if(this.article[0].unlike) {
+          ElMessage({
+            message: '您已经将文章标为不喜欢，请先取消再点赞.',
+            type: 'warning',
+          })
+          return
+        }
+        this.setComment()
+        this.comment.is = 1
+        upArticle(this.comment).then(response => {
+          if (this.article[0].like) {
+            this.article[0].like = false
+            this.article[0].up = this.article[0].up - 1
+          } else {
+            this.article[0].like = true
+            this.article[0].up = this.article[0].up + 1
+          }
         })
-        return
       }
-      createComment(this.comment).then(response => {
-        this.commentList = response.data.commentList
-        this.article[0].comment = this.article[0].comment + 1
-      })
+    },
+    down() {
+      if(isLogin()) {
+        if(this.article[0].like) {
+          ElMessage({
+            message: '您已经点赞该文章，请先取消吧.',
+            type: 'warning',
+          })
+          return
+        }
+        this.setComment()
+        this.comment.is = 0
+        downArticle(this.comment).then(response => {
+          if (this.article[0].unlike) {
+            this.article[0].unlike = false
+            this.article[0].down = this.article[0].down - 1
+          } else {
+            this.article[0].unlike = true
+            this.article[0].down = this.article[0].down + 1
+          }
+        })
+      }
+    },
+    star() {
+      if(isLogin()) {
+        this.setComment()
+        starArticle(this.comment).then(response => {
+          if (this.article[0].star) {
+            this.article[0].star = false
+            this.article[0].collect = this.article[0].collect - 1
+          } else {
+            this.article[0].star = true
+            this.article[0].collect = this.article[0].collect + 1
+          }
+        })
+      }
+    },
+    upComment(id) {
+      if(isLogin()) {
+        this.setComment()
+        this.comment.comid = id
+        this.comment.is = 1
+        console.log(this.comment)
+        upComment(this.comment).then(response => {
+          this.commentList = response.data.commentList
+        })
+      }
+    },
+    follow(id, nickname, str) {
+      if(isLogin()) {
+        if (Cookie.get("nickname") === nickname) {
+          ElMessage({
+            message: '不能自己关注自己呦🤣',
+            type: 'warning',
+          })
+          return
+        }
+        this.setComment()
+        this.comment.userid = id
+        followAuthor(this.comment).then(response => {
+          if (str === "article") {
+            this.commentList = response.data.commentList
+            if (this.article[1].follow) {
+              // this.commentList.forEach(item => {
+              //   if (item.user.nickname === this.article[1].nickname) {
+              //     item.user.follow = false
+              //   }
+              // })
+              this.article[1].follow = false
+            } else {
+              // this.commentList.forEach(item => {
+              //   if (item.user.nickname === this.article[1].nickname) {
+              //     item.user.follow = true
+              //   }
+              // })
+              this.article[1].follow = true
+            }
+          } else {
+            // this.commentList.forEach(item => {
+            //   if (item.user.follow) {
+            //     if (item.user.nickname === this.article[1].nickname) {
+            //       this.article[1].follow = false
+            //     }
+            //     item.user.follow = false
+            //   } else {
+            //     if (item.user.nickname === this.article[1].nickname) {
+            //       this.article[1].follow = true
+            //     }
+            //     item.user.follow = true
+            //   }
+            // })
+            this.commentList = response.data.commentList
+          }
+        })
+      }
+    },
+    publish() {
+      if (isLogin()) {
+        this.setComment()
+        this.comment.comment = tinymce.editors[0].getContent()
+        this.comment.comid = 0
+        if (this.comment.comment.length === 0) {
+          ElMessage({
+            message: '评论内容不能为空.',
+            type: 'warning',
+          })
+          return
+        }
+        createComment(this.comment).then(response => {
+          this.commentList = response.data.commentList
+          this.article[0].comment = this.article[0].comment + 1
+        })
+      }
     },
     reply(val) {
-      console.log(val)
-      if (Cookie.get("nickname") === undefined) {
-        ElMessage({
-          message: '您还没有登录，请登陆后再发表评论.',
-          type: 'warning',
+      if (isLogin()) {
+        this.comment.username = Cookie.get("nickname")
+        this.comment.articleid = val.articleid
+        this.comment.comid = val.id
+        if (this.comment.comment.length === 0) {
+          ElMessage({
+            message: '评论内容不能为空.',
+            type: 'warning',
+          })
+          return
+        }
+        createComment(this.comment).then(response => {
+          this.commentList = response.data.commentList
+          this.article[0].comment = this.article[0].comment + 1
         })
-        return
       }
-      this.comment.username = Cookie.get("nickname")
-      this.comment.articleid = val.articleid
-      this.comment.comid = val.id
-      if (this.comment.comment.length === 0) {
-        ElMessage({
-          message: '评论内容不能为空.',
-          type: 'warning',
-        })
-        return
-      }
-      createComment(this.comment).then(response => {
-        this.commentList = response.data.commentList
-        this.article[0].comment = this.article[0].comment + 1
-      })
     }
   },
   mounted() {
     window.onresize= () => {
       return (() => {
         this.win = document.body.clientWidth
-        if(document.body.clientWidth < 1191) {
+        if(document.body.clientWidth < 1200) {
           this.col.offset = 2
           this.col.xs = 20
           this.col.sm = 20

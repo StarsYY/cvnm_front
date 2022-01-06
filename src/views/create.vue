@@ -107,6 +107,7 @@ import { UploadFilled } from '@element-plus/icons'
 import { fetchCreate, createArticle } from '@/api/create'
 import { ElNotification, ElMessage } from 'element-plus'
 import Cookie from 'js-cookie'
+import { isLogin } from '@/utils/tool'
 import Tinymce from '@/components/tinymce'
 import tinymce from 'tinymce'
 
@@ -220,56 +221,60 @@ export default {
       this.ruleForm.labelid = idss
     },
     submitForm(formName) {
-      this.ruleForm.content = tinymce.editors[0].getContent()
-      this.$refs[formName].validate((valid) => {
-        console.log(this.ruleForm)
-        if (valid) {
-          if (this.ruleForm.labelid.length === 1) {
-            ElMessage({
-              message: '文章标签不能为空',
-              type: 'warning',
+      if (isLogin()) {
+        this.ruleForm.content = tinymce.editors[0].getContent()
+        this.$refs[formName].validate((valid) => {
+          console.log(this.ruleForm)
+          if (valid) {
+            if (this.ruleForm.labelid.length === 1) {
+              ElMessage({
+                message: '文章标签不能为空',
+                type: 'warning',
+              })
+              return
+            }
+            this.ruleForm.status = "Audit"
+            this.ruleForm.author = Cookie.get("nickname")
+            createArticle(this.ruleForm).then(response => {
+              ElNotification({
+                title: '发布成功',
+                message: '正在等待管理员审核',
+                type: 'success',
+              })
             })
-            return
+          } else {
+            console.log('error submit!!')
+            return false
           }
-          this.ruleForm.status = "Audit"
-          this.ruleForm.author = Cookie.get("nickname")
-          createArticle(this.ruleForm).then(response => {
-            ElNotification({
-              title: '发布成功',
-              message: '正在等待管理员审核',
-              type: 'success',
-            })
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+        })
+      }
     },
     draftForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        console.log(this.ruleForm)
-        if (valid) {
-          if (this.ruleForm.labelid.length === 1) {
-            ElMessage({
-              message: '文章标签不能为空',
-              type: 'warning',
+      if (isLogin()) {        
+        this.$refs[formName].validate((valid) => {
+          console.log(this.ruleForm)
+          if (valid) {
+            if (this.ruleForm.labelid.length === 1) {
+              ElMessage({
+                message: '文章标签不能为空',
+                type: 'warning',
+              })
+              return
+            }
+            this.ruleForm.status = "Draft"
+            this.ruleForm.author = Cookie.get("nickname")
+            createArticle(this.ruleForm).then(response => {
+              ElMessage({
+                message: '保存成功',
+                type: 'success',
+              })
             })
-            return
+          } else {
+            console.log('error submit!!')
+            return false
           }
-          this.ruleForm.status = "Draft"
-          this.ruleForm.author = Cookie.get("nickname")
-          createArticle(this.ruleForm).then(response => {
-            ElMessage({
-              message: '保存成功',
-              type: 'success',
-            })
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+        })
+      }
     }
   }
 }
