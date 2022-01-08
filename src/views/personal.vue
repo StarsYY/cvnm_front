@@ -11,12 +11,17 @@
           <div class="p-level">Lv 10</div>
         </div>
         <div class="p-profile">
-          暂未维护个人简介内容。
+          【开发者宝典】HarmonyOS社区精华内容汇总（持续更新） https://developer.huawei.com/consumer/cn/forum/topic/0202599954909980740?fid=0101303901040230869
           <div class="p-edit"></div>
+        </div>
+        <div class="p-medal">
+          <img src="@/assets/1.png" class="p-medal-img">
+          <img src="@/assets/2.png" class="p-medal-img">
+          <img src="@/assets/3.png" class="p-medal-img">
         </div>
       </div>
       <div class="p-star">
-        <div class="p-danner">
+        <div class="p-danner" style="margin-top: 8px">
           <div class="p-danner-m">
             <div class="p-num">1</div>
             <div class="p-follow">关注</div>
@@ -29,6 +34,9 @@
             <div class="p-num">3</div>
             <div class="p-follow">积分</div>
           </div>
+        </div>
+        <div class="pe-btn">
+          <div class="pe-btn-btn">关注</div>
         </div>
       </div>
     </div>

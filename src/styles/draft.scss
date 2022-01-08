@@ -1,0 +1,61 @@
+.dr-list {
+  box-shadow: inset 0 -1px 0 0 #e8e8e8;
+  padding-bottom: 16px;
+  margin-top: 32px;
+  box-sizing: border-box;
+}
+
+.dr-top {
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.dr-title {
+  font-size: 24px;
+  color: #333;
+  max-height: 64px;
+  line-height: 32px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-inline-box;
+  box-sizing: border-box;
+}
+
+.dr-svg {
+  margin-left: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.dr-plate {
+  font-size: 14px;
+  color: #777;
+  line-height: 24px;
+  font-weight: 400;
+  cursor: unset;
+}
+
+.dr-line {
+  width: 1px;
+  height: 14px;
+  line-height: 24px;
+  background: #777;
+  margin: 0 12px;
+  display: inline-block;
+  vertical-align: middle;
+  opacity: 1;
+  font-size: 14px;
+  color: #777;
+  font-weight: 400;
+}
+
+.dr-time {
+  margin-top: 24px;
+  opacity: .5;
+  font-size: 14px;
+  color: #777;
+  line-height: 24px;
+  font-weight: 400;
+}

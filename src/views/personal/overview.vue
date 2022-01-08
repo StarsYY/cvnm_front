@@ -46,6 +46,34 @@
                   <div>
                     <div class="o-nothing">还没有交流过什么，下面有没有你感兴趣的内容…</div>
                   </div>
+                  <div style="margin: 8px 0">
+                    <div style="display: flex; margin-bottom: 16px">
+                      <div class="o-article-left">发帖<span style="margin-left: 12px; margin-right: 4px">|</span></div>
+                      <div style="width: 93%">
+                        <div class="o-article-title">标题</div>
+                        <div class="o-detail">这是一段很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的简介</div>
+                        <div style="margin-left: 8px; margin-top: 16px">
+                          <div class="o-article-tag">浏览：8</div>
+                          <div class="o-article-tag">回复：3</div>
+                          <div class="o-article-tag" style="margin-right: 24px">点赞：10</div>
+                          <div class="o-article-time">2022/01/06 21:18:32</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="display: flex; margin-bottom: 16px">
+                      <div class="o-article-left">发帖<span style="margin-left: 12px; margin-right: 4px">|</span></div>
+                      <div style="width: 93%">
+                        <div class="o-article-title">标题</div>
+                        <div class="o-detail">这是一段很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的简介</div>
+                        <div style="margin-left: 8px; margin-top: 16px">
+                          <div class="o-article-tag">浏览：8</div>
+                          <div class="o-article-tag">回复：3</div>
+                          <div class="o-article-tag" style="margin-right: 24px">点赞：10</div>
+                          <div class="o-article-time">2022/01/06 21:18:32</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div class="o-write">
                     <div class="o-write-title">发帖</div>
                   </div>
@@ -186,6 +214,38 @@
           <div style="margin-left: 16px">
             <div style="background: white; padding: 16px">
               <div class="o-follow">
+                <span class="o-follow-title">访问统计</span>
+              </div>
+              <div style="padding: 0 8px">
+                <div style="display: inline-block">
+                  <span class="o-watch">今日访问</span>
+                  <span class="o-watch-num">7</span>
+                </div>
+                <div class="o-watch-y">
+                  <span class="o-watch">昨日访问</span>
+                  <span class="o-watch-num">9</span>
+                </div>
+              </div>
+              <div class="o-chart">图表</div>
+              <div class="o-watch-now">
+                <div>
+                  <div class="o-watch-week">16</div>
+                  <div class="o-watch-week-title">本周访问</div>
+                </div>
+                <div>
+                  <div class="o-watch-week">16</div>
+                  <div class="o-watch-week-title">本月访问</div>
+                </div>
+                <div>
+                  <div class="o-watch-week">16</div>
+                  <div class="o-watch-week-title">累计访问</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 16px; margin-top: 16px">
+            <div style="background: white; padding: 16px">
+              <div class="o-follow">
                 <span class="o-follow-title">我的关注</span>
                 <img src="@/assets/arrow.png" style="width: 8px" class="o-title-img">
               </div>
@@ -197,6 +257,26 @@
                   <div class="o-write-title">论坛</div>
                 </div>
               </div>
+              <div style="margin-top: 16px; padding: 0px 8px">
+                <div class="o-follow-user">
+                  <div class="o-follow-av">
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
+                  </div>
+                  <div class="o-follow-nickname">
+                    <div class="o-follow-name">小羊</div>
+                    <div class="o-follow-lv">Lv 7</div>
+                  </div>
+                </div>
+                <div class="o-follow-user">
+                  <div class="o-follow-av">
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
+                  </div>
+                  <div class="o-follow-nickname">
+                    <div class="o-follow-name">小羊</div>
+                    <div class="o-follow-lv">Lv 7</div>
+                  </div>
+                </div>
+              </div>
               <div style="margin-top: 24px">
                 <div class="o-exert">
                   <div class="o-exert-push">专家博主推荐</div>
@@ -206,14 +286,14 @@
                   </div>
                 </div>
                 <div style="margin-top: 16px; padding: 0 8px">
-                  <div class="o-exert-cart">
-                    <div class="o-head">
-                      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="40"></el-avatar>
+                  <div class="o-follow-user">
+                    <div class="o-follow-av">
+                      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
                       <svg-icon icon-class="certification" class="o-head-svg"></svg-icon>
                     </div>
-                    <div class="o-name">
-                      <span class="o-name-list">东顾</span>
-                      <span class="o-level">Lv 7</span>
+                    <div class="o-follow-nickname">
+                      <div class="o-follow-name">小羊</div>
+                      <div class="o-follow-lv">Lv 7</div>
                     </div>
                     <div class="o-follow-exert">
                       <span class="o-f-f">关注</span>
@@ -221,18 +301,46 @@
                   </div>
                 </div>
                 <div style="margin-top: 16px; padding: 0 8px">
-                  <div class="o-exert-cart">
-                    <div class="o-head">
-                      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="40"></el-avatar>
+                  <div class="o-follow-user">
+                    <div class="o-follow-av">
+                      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
                       <svg-icon icon-class="certification" class="o-head-svg"></svg-icon>
                     </div>
-                    <div class="o-name">
-                      <span class="o-name-list">东顾</span>
-                      <span class="o-level">Lv 7</span>
+                    <div class="o-follow-nickname">
+                      <div class="o-follow-name">小羊</div>
+                      <div class="o-follow-lv">Lv 7</div>
                     </div>
                     <div class="o-follow-exert">
                       <span class="o-f-f">关注</span>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 16px; margin-top: 16px">
+            <div style="background: white; padding: 16px">
+              <div class="o-follow">
+                <span class="o-follow-title">我的粉丝</span>
+                <img src="@/assets/arrow.png" style="width: 8px" class="o-title-img">
+              </div>
+              <div style="margin-top: 16px; padding: 0px 8px">
+                <div class="o-follow-user">
+                  <div class="o-follow-av">
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
+                  </div>
+                  <div class="o-follow-nickname">
+                    <div class="o-follow-name">小羊</div>
+                    <div class="o-follow-lv">Lv 7</div>
+                  </div>
+                </div>
+                <div class="o-follow-user">
+                  <div class="o-follow-av">
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
+                  </div>
+                  <div class="o-follow-nickname">
+                    <div class="o-follow-name">小羊</div>
+                    <div class="o-follow-lv">Lv 7</div>
                   </div>
                 </div>
               </div>

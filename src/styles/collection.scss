@@ -8,6 +8,84 @@
   margin-top: 0;
 }
 
-.c-col-content {
-  margin-top: 44px;
+.c-ct-list {
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.c-ct-title {
+  margin-bottom: 0;
+  font-weight: 500;
+  font-size: 24px;
+  color: #333;
+  line-height: 32px;
+  padding-right: 8px;
+  max-height: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.c-ct-summary {
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  line-height: 24px;
+  margin-bottom: 42px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-height: 72px;
+}
+
+.c-ct-left {
+  float: left;
+  display: flex;
+  align-items: center;
+}
+
+.c-ct-plate {
+  font-weight: 400;
+  font-size: 14px;
+  color: #777;
+  line-height: 24px;
+  margin-right: 8px;
+  overflow: hidden;
+  padding-bottom: 4px;
+}
+
+.c-ct-nickname {
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  line-height: 24px;
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+.c-ct-vip {
+  width: 18px;
+  height: 16px;
+  line-height: 24px;
+  margin-left: -5px;
+  vertical-align: top;
+  border-radius: 50%;
+  margin-right: 8px;
+  border-style: none;
+}
+
+.c-ct-time {
+  opacity: .5;
+  font-weight: 400;
+  font-size: 14px;
+  color: #777;
+  line-height: 24px;
+}
+
+.c-ct-watch-num {
+  margin-right: 20px;
+  line-height: 24px;
+  margin-left: 6px;
 }

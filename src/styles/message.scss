@@ -60,6 +60,71 @@
   line-height: 48px;
 }
 
+.msg-list {
+  width: 100%;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.msg-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  max-height: 144px;
+}
+
+.msg-reply-name {
+  margin-right: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
+  line-height: 24px;
+}
+
+.msg-msg {
+  font-size: 16px;
+  margin-right: 0!important;
+  font-weight: 400;
+  color: #333;
+  line-height: 24px;
+}
+
+.msg-time {
+  margin-top: 8px;
+  margin-bottom: 12px;
+  opacity: .5;
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  line-height: 24px;
+}
+
+.msg-read {
+  font-weight: 400;
+  font-size: 14px;
+  color: #333;
+  text-align: right;
+  line-height: 24px;
+  margin-left: 8px;
+  float: left;
+}
+
+.msg-main {
+  font-weight: 500;
+  font-size: 16px;
+  color: #333;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  max-height: 144px;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
 .c-col-main {
   flex: 1;
   border-bottom: 1px solid #e8e8e8;
