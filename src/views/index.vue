@@ -135,11 +135,11 @@
           <div style="margin-top: 40px;">
             <div class="tag">
               <div class="tag-hot">热门标签</div>
-              <div class="tag-more">更多</div>
+              <div class="tag-more" @click="tags">更多</div>
             </div>
             <div style="margin: 0 -8px 0 0; padding-bottom: 0">
-              <div style="height: 84px; overflow: hidden">
-                <h3 class="hot-tag">HarmonyOS</h3>
+              <div style="max-height: 84px; overflow: hidden">
+                <h3 class="hot-tag" @click="tagDetail">HarmonyOS</h3>
                 <h3 class="hot-tag">开发</h3>
                 <h3 class="hot-tag">HMS Core</h3>
                 <h3 class="hot-tag">HarmonyOS app</h3>
@@ -235,6 +235,12 @@ export default {
     },
     personal(name) {
       window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
+    },
+    tags() {
+      window.open(this.$router.resolve({name:'Tags'}).href, '_blank')
+    },
+    tagDetail() {
+      window.open(this.$router.resolve({name:'TagDetail'}).href, '_blank')
     },
     select(index) {
       if (this.def[index - 1].key == index) {

@@ -31,6 +31,21 @@ const routes = [
     component: () => import('@/views/user'),
     name: "User",
   },
+  {
+    path: "/tags",
+    component: () => import('@/views/tags'),
+    name: "Tags",
+  },
+  {
+    path: "/tagDetail",
+    component: () => import('@/views/tag-detail'),
+    name: "TagDetail",
+  },
+  {
+    path: "/verify",
+    component: () => import('@/views/verify'),
+    name: "Verify",
+  },
 ];
 
 const router = createRouter({
