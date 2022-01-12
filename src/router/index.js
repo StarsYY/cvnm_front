@@ -22,7 +22,7 @@ const routes = [
     name: "Create",
   },
   {
-    path: "/personal",
+    path: "/personal/:name",
     component: () => import('@/views/personal'),
     name: "Personal",
   },

@@ -86,6 +86,16 @@
   display: flex;
 }
 
+.user-name {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #000;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
 .u-list {
   font-size: 16px;
   position: relative;

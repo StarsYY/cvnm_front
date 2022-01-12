@@ -55,8 +55,8 @@
                 <div class="d-num">166</div>
               </div>
             </div>
-            <div class="d-follow" @click="follow(article[1].uid, article[1].nickname, 'article')">
-              <span v-if="article[1].follow">已关注</span>
+            <div :class="{ 'is_follow' : article[1].follow }" class="d-follow" @click="follow(article[1].uid, article[1].nickname, 'article')">
+              <span v-if="article[1].follow" class="is_follow_span">已关注</span>
               <span v-if="!article[1].follow">关注</span>
             </div>
           </div>
@@ -87,7 +87,7 @@
         </div>
       </el-col>
       <el-col :xs="{span: col.xs, offset: col.offset}" :sm="{span: col.sm, offset: col.offset}" :md="{span: col.md, offset: col.offset}" :lg="{span: col.lg, offset: col.offset}" :xl="{span: col.xl, offset: col.offset}">
-        <div class="d-right">
+        <div class="d-right" style="overflow: hidden">
           <div class="d-title">
             <span v-if="article[0].hot === 'Top'" class="d-title-icon d-icon-top"></span>
             <span v-if="article[0].hot === 'Hot'" class="d-title-icon d-icon-hot"></span>
@@ -120,8 +120,8 @@
                 <div class="d-article-author-msg">
                   <el-avatar :src="article[1].portrait" :size="35" style="margin-right: 20px"></el-avatar>
                   <span class="d-article-name">{{ article[0].author }}</span>
-                  <div class="d-follow" style="margin: auto 20px" @click="follow(article[1].uid, article[1].nickname, 'article')">
-                    <span v-if="article[1].follow">已关注</span>
+                  <div :class="{ 'is_follow' : article[1].follow }" class="d-follow" style="margin: auto 20px" @click="follow(article[1].uid, article[1].nickname, 'article')">
+                    <span v-if="article[1].follow" class="is_follow_span">已关注</span>
                     <span v-if="!article[1].follow">关注</span>
                   </div>
                 </div>
@@ -179,8 +179,8 @@
                         <div class="d-num">166</div>
                       </div>
                     </div>
-                    <div class="d-follow" @click="follow(item.user.uid, item.user.nickname, 'comment')">
-                      <span v-if="item.user.follow">已关注</span>
+                    <div :class="{ 'is_follow' : item.user.follow }" class="d-follow" @click="follow(item.user.uid, item.user.nickname, 'comment')">
+                      <span v-if="item.user.follow" class="is_follow_span">已关注</span>
                       <span v-if="!item.user.follow">关注</span>
                     </div>
                   </div>
@@ -562,5 +562,14 @@ export default {
 
 .d-comment-publish >>> .el-button--info {
   --el-button-background-color: #340403;
+}
+
+.is_follow {
+  opacity: .7;
+  background: #328dff;
+}
+
+.is_follow_span {
+  color: #fff;
 }
 </style>

@@ -29,6 +29,8 @@
         <div style="width: 20%; display: inline-block">
           <div style="text-align: center">
             <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="80"></el-avatar>
+            <div class="user-name">仰望星空</div>
+            <div class="user-name">15100000000</div>
           </div>
           <div class="u-list">
             <ul style="list-style: none">

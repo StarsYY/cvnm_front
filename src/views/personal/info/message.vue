@@ -48,6 +48,12 @@
             </div>
           </div>
         </div>
+        <div class="a-nothing">
+          <div style="height: 100px; margin-bottom: 8px">
+            <svg-icon icon-class="nothing" style="font-size: 100px"></svg-icon>
+            <p>暂无消息</p>
+          </div>
+        </div>
       </div>
       <div v-if="two">
         <div style="display: flex">
@@ -67,6 +73,12 @@
                 <span class="c-col-time">2021/10/22 18:56:39</span>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="a-nothing">
+          <div style="height: 100px; margin-bottom: 8px">
+            <svg-icon icon-class="nothing" style="font-size: 100px"></svg-icon>
+            <p>暂无消息</p>
           </div>
         </div>
       </div>
@@ -100,4 +112,11 @@ export default {
 <style scoped>
 @import "~@/styles/message.scss";
 
+.a-nothing {
+  margin: 0 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  margin-top: 16px;
+}
 </style>

@@ -16,7 +16,7 @@
           </div>
         </div>
         <el-dropdown v-if="nickname != undefined || nickname != null" :class="{ 'h-hidden': isHidden }">
-          <div class="nick" @click="personal">
+          <div class="nick" @click="personal(nickname)">
             <el-icon><user /></el-icon>
             <span class="h-n-name">{{ nickname }}</span>
             <el-icon><arrow-down /></el-icon>
@@ -26,7 +26,7 @@
               <div class="avatar">
                 <el-avatar :src="user.portrait" :size="50" style="margin-right: 16px"></el-avatar>
                 <div>
-                  <div class="name" @click="personal">
+                  <div class="name" @click="personal(nickname)">
                     <span class="i-name">{{ nickname }}</span>
                     <span class="level">Lv {{ user.grow }}</span>
                   </div>
@@ -37,7 +37,7 @@
                 </div>
               </div>
               <ul class="list">
-                <li class="h-l" @click="personal">个人资料</li>
+                <li class="h-l" @click="personal(nickname)">个人资料</li>
                 <li class="h-l" @click="account">账号设置</li>
               </ul>
               <div class="out" @click="logout">
@@ -124,8 +124,8 @@ export default {
       this.hidden = false
       this.isHidden = true
     },
-    personal() {
-      window.open(this.$router.resolve({name:'Personal'}).href, '_blank')
+    personal(name) {
+      window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
     },
     account() {
       window.open(this.$router.resolve({name:'User'}).href, '_blank')

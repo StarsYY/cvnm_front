@@ -6,7 +6,8 @@
           <div v-for="item in menu" :key="item.key" class="i-menuList">
             <div style="white-space: nowrap">
               <a class="i-link" :class="{ 'i-link-select' : item.is }" @click="select(item.key)">
-                <span class="i-tag">{{ item.value }}</span>
+                <span v-if="isLog" class="i-tag">我的{{ item.value }}</span>
+                <span v-if="!isLog" class="i-tag">TA的{{ item.value }}</span>
               </a>
             </div>
           </div>
@@ -39,6 +40,7 @@ import Reply from "./community/reply.vue"
 import Fans from "./community/fans.vue"
 import Follow from "./community/follow.vue"
 import Draft from "./community/draft.vue"
+import Cookie from 'js-cookie'
 
 export default {
   name: "Community",
@@ -47,12 +49,20 @@ export default {
     return {
       key: '0',
       menu: [
-        { key: '0', value: '我的文章', is: true },
-        { key: '1', value: '我的回复', is: false },
-        { key: '2', value: '我的粉丝', is: false },
-        { key: '3', value: '我的关注', is: false },
-        { key: '4', value: '我的草稿', is: false }
+        { key: '0', value: '文章', is: true },
+        { key: '1', value: '回复', is: false },
+        { key: '2', value: '粉丝', is: false },
+        { key: '3', value: '关注', is: false },
+        { key: '4', value: '草稿', is: false }
       ],
+      isLog: true
+    }
+  },
+  created() {
+    if(this.$route.params.name === Cookie.get("nickname")) {
+      this.isLog = true
+    } else {
+      this.isLog = false
     }
   },
   methods: {

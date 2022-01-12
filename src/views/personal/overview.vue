@@ -16,7 +16,13 @@
         <img src="@/assets/communication.png" class="o-cart-img">
         <span class="o-cart-title">交流</span>
       </div>
-      <div class="o-card-introduce">针对各种开放服务能力提出疑问，并与其他开发者分享技术资讯。</div>
+      <div v-if="numberOfCom === 0" class="o-card-introduce">针对各种开放服务能力提出疑问，并与其他开发者分享技术资讯。</div>
+      <div v-if="numberOfCom > 0" style="margin-top: 21px; white-space: nowrap">
+        <div v-for="(item, key) in communication" :key="key" style="cursor: pointer; display: inline-block; margin-right: 64px;">
+          <div style="font-size: 28px; color: #333; line-height: 32px">{{ item }}</div>
+          <div style="font-size: 14px; color: #777; line-height: 24px">{{ key }}</div>
+        </div>
+      </div>
       <div class="o-card-link">
         <div class="o-link-content">论坛</div>
         <div class="o-link-content">问答</div>
@@ -43,42 +49,32 @@
               </div>
               <div style="margin: 8px 0; padding: 0 8px;">
                 <div>
-                  <div>
+                  <div v-if="newArticle && newArticle.length === 0">
                     <div class="o-nothing">还没有交流过什么，下面有没有你感兴趣的内容…</div>
                   </div>
-                  <div style="margin: 8px 0">
-                    <div style="display: flex; margin-bottom: 16px">
-                      <div class="o-article-left">发帖<span style="margin-left: 12px; margin-right: 4px">|</span></div>
+                  <div v-if="newArticle && newArticle.length > 0" style="margin: 8px 0">
+                    <div v-for="item in newArticle" :key="item.id" style="display: flex; margin-bottom: 16px">
+                      <div class="o-article-left">文章<span style="margin-left: 12px; margin-right: 4px">|</span></div>
                       <div style="width: 93%">
-                        <div class="o-article-title">标题</div>
-                        <div class="o-detail">这是一段很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的简介</div>
+                        <div class="o-article-title" @click="detail(item.id)">{{ item.title }}</div>
+                        <div class="o-detail">{{ item.summary }}</div>
                         <div style="margin-left: 8px; margin-top: 16px">
-                          <div class="o-article-tag">浏览：8</div>
-                          <div class="o-article-tag">回复：3</div>
-                          <div class="o-article-tag" style="margin-right: 24px">点赞：10</div>
-                          <div class="o-article-time">2022/01/06 21:18:32</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div style="display: flex; margin-bottom: 16px">
-                      <div class="o-article-left">发帖<span style="margin-left: 12px; margin-right: 4px">|</span></div>
-                      <div style="width: 93%">
-                        <div class="o-article-title">标题</div>
-                        <div class="o-detail">这是一段很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的简介</div>
-                        <div style="margin-left: 8px; margin-top: 16px">
-                          <div class="o-article-tag">浏览：8</div>
-                          <div class="o-article-tag">回复：3</div>
-                          <div class="o-article-tag" style="margin-right: 24px">点赞：10</div>
-                          <div class="o-article-time">2022/01/06 21:18:32</div>
+                          <div class="o-article-tag">浏览：{{ item.watch }}</div>
+                          <div class="o-article-tag">回复：{{ item.comment }}</div>
+                          <div class="o-article-tag" style="margin-right: 24px">点赞：{{ item.up }}</div>
+                          <div class="o-article-time">{{ item.createtime }}</div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="o-write">
+                  <div v-if="newArticle && newArticle.length === 0" class="o-write">
+                    <div class="o-write-title">发帖</div>
+                  </div>
+                  <div v-if="newArticle && newArticle.length > 0" class="o-write" style="text-align: left">
                     <div class="o-write-title">发帖</div>
                   </div>
                 </div>
-                <div style="margin-top: 24px;">
+                <div v-if="isLogName && newArticle && newArticle.length === 0" style="margin-top: 24px;">
                   <div class="o-export">
                     <div class="o-e-title">热门推荐</div>
                     <div class="o-e-more">更多</div>
@@ -94,41 +90,11 @@
                         </div>
                       </div>
                     </div>
-                    <div class="o-content">
-                      <div style="display: inline-block;">博文｜</div>
-                      <div class="o-content-right">
-                        <div class="o-c-r-title">【聊聊心目中的鸿蒙智联产品】参与话题互动阿巴阿巴阿巴</div>
-                        <div class="o-content-sec">
-                          <span style="margin-right: 16px">点赞：6</span>
-                          <span style="margin-right: 16px">回复：17</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="o-content">
-                      <div style="display: inline-block;">博文｜</div>
-                      <div class="o-content-right">
-                        <div class="o-c-r-title">【聊聊心目中的鸿蒙智联产品】参与话题互动阿巴阿巴阿巴</div>
-                        <div class="o-content-sec">
-                          <span style="margin-right: 16px">点赞：6</span>
-                          <span style="margin-right: 16px">回复：17</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="o-content">
-                      <div style="display: inline-block;">博文｜</div>
-                      <div class="o-content-right">
-                        <div class="o-c-r-title">【聊聊心目中的鸿蒙智联产品】参与话题互动阿巴阿巴阿巴</div>
-                        <div class="o-content-sec">
-                          <span style="margin-right: 16px">点赞：6</span>
-                          <span style="margin-right: 16px">回复：17</span>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div style="background: white; padding: 16px; margin-top: 16px">
+            <div v-if="isLogName" style="background: white; padding: 16px; margin-top: 16px">
               <div class="o-post-title-block">
                 <div class="o-post-left">
                   <span class="o-title-text">我的活动</span>
@@ -156,48 +122,6 @@
                       </div>
                       <div style="margin-left: 16px">
                         <div class="o-event-title">HarmonyOS开发者创新大赛</div>
-                        <div class="o-event-time">
-                          2022/1/2-2022/9/13
-                          <span class="o-event-local">｜中国</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="o-event-main">
-                    <div class="o-event">
-                      <div style="cursor: pointer">
-                        <img src="@/assets/e2.jpg" class="o-event-img">
-                      </div>
-                      <div style="margin-left: 16px">
-                        <div class="o-event-title">华为1+X《移动应用开发》职业技能等级证书</div>
-                        <div class="o-event-time">
-                          2022/1/2-2022/9/13
-                          <span class="o-event-local">｜中国</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="o-event-main">
-                    <div class="o-event">
-                      <div style="cursor: pointer">
-                        <img src="@/assets/e3.jpg" class="o-event-img">
-                      </div>
-                      <div style="margin-left: 16px">
-                        <div class="o-event-title">“开发者说”新栏目开放</div>
-                        <div class="o-event-time">
-                          2022/1/2-2022/9/13
-                          <span class="o-event-local">｜中国</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="o-event-main">
-                    <div class="o-event">
-                      <div style="cursor: pointer">
-                        <img src="@/assets/e4.jpg" class="o-event-img">
-                      </div>
-                      <div style="margin-left: 16px">
-                        <div class="o-event-title">华为游戏中心联合推广</div>
                         <div class="o-event-time">
                           2022/1/2-2022/9/13
                           <span class="o-event-local">｜中国</span>
@@ -246,10 +170,11 @@
           <div style="margin-left: 16px; margin-top: 16px">
             <div style="background: white; padding: 16px">
               <div class="o-follow">
-                <span class="o-follow-title">我的关注</span>
+                <span v-if="isLogName" class="o-follow-title">我的关注</span>
+                <span v-if="!isLogName" class="o-follow-title">TA的关注</span>
                 <img src="@/assets/arrow.png" style="width: 8px" class="o-title-img">
               </div>
-              <div>
+              <div v-if="follow && follow.length === 0">
                 <div style="margin-top: 10px">
                   <div class="o-nothing">还没有关注过人、标签、板块，大家关注这些…</div>
                 </div>
@@ -257,27 +182,18 @@
                   <div class="o-write-title">论坛</div>
                 </div>
               </div>
-              <div style="margin-top: 16px; padding: 0px 8px">
-                <div class="o-follow-user">
+              <div v-if="follow && follow.length > 0" style="margin-top: 16px; padding: 0px 8px">
+                <div v-for="item in follow" :key="item.id" class="o-follow-user">
                   <div class="o-follow-av">
-                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
+                    <el-avatar :src="item.portrait" :size="32" @click="personal(item.nickname)"></el-avatar>
                   </div>
                   <div class="o-follow-nickname">
-                    <div class="o-follow-name">小羊</div>
-                    <div class="o-follow-lv">Lv 7</div>
-                  </div>
-                </div>
-                <div class="o-follow-user">
-                  <div class="o-follow-av">
-                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
-                  </div>
-                  <div class="o-follow-nickname">
-                    <div class="o-follow-name">小羊</div>
-                    <div class="o-follow-lv">Lv 7</div>
+                    <div class="o-follow-name" @click="personal(item.nickname)">{{ item.nickname }}</div>
+                    <div class="o-follow-lv">Lv {{ item.grow }}</div>
                   </div>
                 </div>
               </div>
-              <div style="margin-top: 24px">
+              <div v-if="isLogName" style="margin-top: 24px">
                 <div class="o-exert">
                   <div class="o-exert-push">专家博主推荐</div>
                   <div class="o-exert-new">
@@ -300,47 +216,24 @@
                     </div>
                   </div>
                 </div>
-                <div style="margin-top: 16px; padding: 0 8px">
-                  <div class="o-follow-user">
-                    <div class="o-follow-av">
-                      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
-                      <svg-icon icon-class="certification" class="o-head-svg"></svg-icon>
-                    </div>
-                    <div class="o-follow-nickname">
-                      <div class="o-follow-name">小羊</div>
-                      <div class="o-follow-lv">Lv 7</div>
-                    </div>
-                    <div class="o-follow-exert">
-                      <span class="o-f-f">关注</span>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-          <div style="margin-left: 16px; margin-top: 16px">
+          <div v-if="fans && fans.length > 0" style="margin-left: 16px; margin-top: 16px">
             <div style="background: white; padding: 16px">
               <div class="o-follow">
-                <span class="o-follow-title">我的粉丝</span>
+                <span v-if="isLogName" class="o-follow-title">我的粉丝</span>
+                <span v-if="!isLogName" class="o-follow-title">TA的粉丝</span>
                 <img src="@/assets/arrow.png" style="width: 8px" class="o-title-img">
               </div>
               <div style="margin-top: 16px; padding: 0px 8px">
-                <div class="o-follow-user">
+                <div v-for="item in fans" :key="item.id" class="o-follow-user">
                   <div class="o-follow-av">
-                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
+                    <el-avatar :src="item.portrait" :size="32" @click="personal(item.nickname)"></el-avatar>
                   </div>
                   <div class="o-follow-nickname">
-                    <div class="o-follow-name">小羊</div>
-                    <div class="o-follow-lv">Lv 7</div>
-                  </div>
-                </div>
-                <div class="o-follow-user">
-                  <div class="o-follow-av">
-                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
-                  </div>
-                  <div class="o-follow-nickname">
-                    <div class="o-follow-name">小羊</div>
-                    <div class="o-follow-lv">Lv 7</div>
+                    <div class="o-follow-name" @click="personal(item.nickname)">{{ item.nickname }}</div>
+                    <div class="o-follow-lv">Lv {{ item.grow }}</div>
                   </div>
                 </div>
               </div>
@@ -353,17 +246,52 @@
 </template>
 
 <script>
+import { fetchOverview } from '@/api/personal'
+import Cookie from 'js-cookie'
+
 export default {
   name: "Overview",
   data() {
     return {
+      name: {
+        name: ''
+      },
+      communication: null,
+      newArticle: null,
+      follow: null,
+      fans: null,
       one: true,
       two: false,
-      three: false
+      three: false,
+      isLogName: true,
+      numberOfCom: 0
     }
   },
+  created() {
+    this.getOverview(this.$route.params.name)
+  },
   methods: {
-
+    getOverview(name) {
+      if (name === Cookie.get("nickname")) {
+        this.isLogName = true
+      } else {
+        this.isLogName = false
+      }
+      this.name.name = name
+      fetchOverview(this.name).then(response => {
+        this.numberOfCom = response.data.numberOfCom
+        this.communication = response.data.communication
+        this.newArticle = response.data.newArticle
+        this.follow = response.data.follow
+        this.fans = response.data.fans
+      })
+    },
+    detail(id) {
+      window.open(this.$router.resolve({name:'Detail', params:{id: id}}).href, '_blank')
+    },
+    personal(name) {
+      window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
+    },
   }
 }
 </script>

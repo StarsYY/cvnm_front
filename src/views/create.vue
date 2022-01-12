@@ -79,7 +79,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="摘要">
+        <el-form-item label="摘要" prop="summary">
           <el-input v-model="ruleForm.summary" :autosize="{ minRows: 3 }" type="textarea" clearable maxlength="500" placeholder="摘要（选填）：会在推荐、列表等场景外露，帮助读者快速了解内容" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="发布形式" prop="publish">
@@ -136,42 +136,49 @@ export default {
         title: [
           {
             required: true,
-            message: 'Please input Activity name',
+            message: '标题不能为空',
             trigger: 'blur',
           },
         ],
         type: [
           {
             required: true,
-            message: 'Please select Activity zone',
+            message: '请选择一个分类',
             trigger: 'change',
           },
         ],
         plateid: [
           {
             required: true,
-            message: 'Please select Activity zone',
+            message: '请选择一个板块',
             trigger: 'change',
           },
         ],
         labelid: [
           {
             required: true,
-            message: 'Please select Activity zone',
+            message: '至少添加一个标签',
             trigger: 'change',
           }
         ],
         publish: [
           {
             required: true,
-            message: 'Please select activity type',
+            message: '请选择发布形式',
             trigger: 'change',
           },
         ],
         content: [
           {
             required: true,
-            message: 'Please input activity form',
+            message: '文章内容不能为空',
+            trigger: 'blur',
+          },
+        ],
+        summary: [
+          {
+            required: true,
+            message: '摘要不能为空',
             trigger: 'blur',
           },
         ],

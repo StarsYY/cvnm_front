@@ -67,10 +67,10 @@
                 </div>
                 <div class="message">
                   <div style="display: flex">
-                    <el-avatar :src="item.portrait" :size="24" style="margin-right: 8px; position: relative;"></el-avatar>
+                    <el-avatar :src="item.portrait" :size="24" style="margin-right: 8px; position: relative; cursor: pointer" @click="personal(item.nickname)"></el-avatar>
                     <div class="pub-user">
                       <span class="user-msg">
-                        <span class="user-det">{{ item.nickname }}</span>
+                        <span class="user-det" @click="personal(item.nickname)">{{ item.nickname }}</span>
                       </span>
                       <span>
                         <img src="../assets/certification.svg" class="user-v">
@@ -232,6 +232,9 @@ export default {
     },
     handleNodeClick(data) {
       console.log(data)
+    },
+    personal(name) {
+      window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
     },
     select(index) {
       if (this.def[index - 1].key == index) {

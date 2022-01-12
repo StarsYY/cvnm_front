@@ -52,6 +52,10 @@
   padding-bottom: 4px;
   overflow: hidden;
   cursor: unset;
+  text-decoration: none!important;
+  background-color: transparent;
+  outline: none;
+  transition: color .3s;
 }
 
 .a-a-t-main {
@@ -68,7 +72,7 @@
 }
 
 .a-a-t-main:hover {
-  border-bottom: 3px solid black;
+  text-decoration: underline;
 }
 
 .a-svg {
