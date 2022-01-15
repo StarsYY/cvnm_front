@@ -25,31 +25,32 @@
           <div class="tag-search">
             <div class="tag-search-input">
               <el-input
-                v-model="search"
+                v-model="listQuery.label"
                 class="w-50 m-2"
                 size="small"
                 placeholder="输入标签名称搜索"
                 prefix-icon="Search"
+                @change="search"
               />
               <el-icon class="tag-icon"><Search /></el-icon>
             </div>
             <div style="height: 38px">
-              <div class="tag-item tag-item-active">按热度</div>
-              <div class="tag-item">按名称</div>
+              <div class="tag-item" :class="{ 'tag-item-active' : is }" @click="type(1)">按热度</div>
+              <div class="tag-item" :class="{ 'tag-item-active' : !is }" @click="type">按名称</div>
             </div>
           </div>
           <div class="tag-container">
-            <div class="tag-card" @click="tagDetail">
+            <div v-for="item in labelList" :key="item.id" class="tag-card" @click="tagDetail(item.id)">
               <h1 class="tag-basic-info">
                 <div class="tag-list">
-                  <h2 class="tag-block">标签</h2>
+                  <h2 class="tag-block">{{ item.label }}</h2>
                 </div>
-                <h3 class="tag-list-description">标签简介</h3>
+                <h3 class="tag-list-description">{{ item.describe }}</h3>
               </h1>
               <div class="tag-view-count">
                 <div style="margin-right: 24px">
                   <span class="tag-view-one">帖子</span>
-                  <span class="tag-view-num">520</span>
+                  <span class="tag-view-num">{{ item.articleCount }}</span>
                 </div>
                 <div>
                   <span class="tag-view-one">本月</span>
@@ -61,14 +62,13 @@
           <div class="tag-page">
             <div class="tag-page-total">
               <span>总计：</span>
-              <span class="tag-page-num">165</span>
+              <span class="tag-page-num">{{ total }}</span>
             </div>
             <el-pagination
               v-model:currentPage="currentPage3"
-              :page-size="100"
+              :page-size="16"
               layout="prev, pager, next, jumper"
-              :total="1000"
-              @size-change="handleSizeChange"
+              :total="total"
               @current-change="handleCurrentChange"
             >
             </el-pagination>
@@ -84,30 +84,55 @@
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { Search } from '@element-plus/icons'
-
-const handleSizeChange = (val) => {
-  console.log(`${val} items per page`)
-}
-
-const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`)
-}
+import { fetchTags } from '@/api/tags'
 
 export default {
   name: "Create",
   components: { Header, Footer, Search },
   data() {
     return {
-      search: '',
-      currentPage3: ''
+      currentPage3: '',
+      listQuery: {
+        label: '',
+        page: 1,
+        limit: 20,
+        title: 'hot'
+      },
+      labelList: null,
+      total: 0,
+      is: true
     }
   },
   created() {
+    this.getTags()
   },
   methods: {
-    tagDetail() {
-      this.$router.push({name:'TagDetail'})
+    getTags() {
+      fetchTags(this.listQuery).then(response => {
+        this.labelList = response.data.labelList
+        this.total = response.data.count
+      })
     },
+    search() {
+      this.getTags()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      this.getTags()
+    },
+    tagDetail(id) {
+      this.$router.push({name:'TagDetail', params:{id: id}})
+    },
+    type(num) {
+      if(num === 1) {
+        this.listQuery.title = 'hot'
+        this.is = true
+      } else {
+        this.listQuery.title = 'name'
+        this.is = false
+      }
+      this.getTags()
+    }
   }
 }
 </script>

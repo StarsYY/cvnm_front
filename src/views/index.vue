@@ -237,10 +237,10 @@ export default {
       window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
     },
     tags() {
-      window.open(this.$router.resolve({name:'Tags'}).href, '_blank')
+      this.$router.push({name:'Tags'})
     },
     tagDetail() {
-      window.open(this.$router.resolve({name:'TagDetail'}).href, '_blank')
+      this.$router.push({name:'TagDetail'})
     },
     select(index) {
       if (this.def[index - 1].key == index) {

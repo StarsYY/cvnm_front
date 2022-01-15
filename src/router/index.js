@@ -37,7 +37,7 @@ const routes = [
     name: "Tags",
   },
   {
-    path: "/tagDetail",
+    path: "/tagDetail/:id",
     component: () => import('@/views/tag-detail'),
     name: "TagDetail",
   },
