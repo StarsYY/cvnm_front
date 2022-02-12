@@ -242,7 +242,7 @@ export default {
             }
             this.ruleForm.status = "Audit"
             this.ruleForm.author = Cookie.get("nickname")
-            createArticle(this.ruleForm).then(response => {
+            createArticle(this.ruleForm).then(() => {
               ElNotification({
                 title: '发布成功',
                 message: '正在等待管理员审核',

@@ -19,7 +19,7 @@
     <div style="margin-bottom: 80px">
       <div>
         <h3 class="m-info">认证信息</h3>
-        <span class="m-edit">编辑</span>
+        <span class="m-edit" @click="editVerify(user.uid)">编辑</span>
       </div>
       <div style="padding-top: 96px; padding-bottom: 56px">
         <div class="m-fistLine">您当前暂未实名，快去实名认证吧</div>
@@ -102,6 +102,7 @@ export default {
         loginName: ''
       },
       user: {
+        uid: '',
         portrait: '',
         nickname: ''
       },
@@ -144,6 +145,9 @@ export default {
         this.user = response.data.user
       })
     },
+    editVerify(uid) {
+      this.$router.push({ name: 'Verify', params: { uid: uid }})
+    }
   }
 }
 </script>
