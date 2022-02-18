@@ -1,0 +1,82 @@
+.cs-main {
+  margin-bottom: 20px;
+}
+
+.cs-tag {
+  margin-bottom: 24px;
+  display: flex;
+}
+
+.cs-tag-title {
+  height: 32px;
+  line-height: 32px;
+  flex: none;
+  margin-right: 40px;
+  font-size: 16px;
+  color: #777;
+}
+
+.cs-tag-main {
+  flex: 1;
+  display: flex;
+  width: 50%;
+}
+
+.cs-tag-list {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  cursor: pointer;
+  border-radius: 18px;
+  background-color: #fafafa;
+  margin: 0 8px 8px 0;
+  height: 32px;
+  line-height: 32px;
+  color: #777;
+}
+
+.cs-tag-all {
+  width: 60px;
+  justify-content: center;
+  flex: none;
+  color: #777;
+  font-size: 16px;
+}  
+
+.cs-tt {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}  
+
+.cs-tl-name {
+  padding: 0 16px;
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 24px;
+  font-size: 16px;
+}
+
+.cs-tag-select {
+  color: #328dff;
+  font-weight: 700;
+  background: rgba(50,141,255,.1);
+}
+
+.cs-md-r {
+  font-size: 16px;
+  color: #333;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.cs-mr-clear {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+  cursor: pointer;
+}

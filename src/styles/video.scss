@@ -1,0 +1,335 @@
+.vi-video {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.vi-right {
+  background: #1f222a;
+  transition: all .5s;
+  width: 28.2722513%;
+  flex: 0 0 28.2722513%;
+}
+
+.vi-menu {
+  margin-left: 16px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  display: flex;
+}
+
+.vi-menu-title {
+  font-size: 16px;
+  color: #fff;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-right: 24px;
+}
+
+.vi-list-item {
+  padding: 8px 0;
+  margin-right: 10px;
+  margin-bottom: 2px;
+  background-color: #2a2e36;
+  display: flex;
+  align-items: center;
+}
+
+.vi-li-main {
+  -webkit-line-clamp: 2;
+  color: #fff;
+  margin: 0 8px 0 16px;
+  max-width: calc(100% - 80px);
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.vi-course-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vi-ct-left {
+  width: calc(100% - 450px);
+  margin-bottom: 0;
+  font-size: 28px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 40px;
+  -webkit-line-clamp: 2;
+}
+
+.vi-ct-right {
+  font-size: 14px;
+  color: #000;
+  letter-spacing: 0;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.vi-course-info {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 24px;
+  display: flex;
+}
+
+.vi-ci-tag {
+  margin-left: 24px;
+  max-width: 680px;
+  flex-wrap: wrap;
+  flex: 1;
+  height: 24px;
+  overflow: hidden;
+}
+
+.vi-ct-list {
+  height: 20px;
+  margin: 2px 0 2px 8px;
+  background: #eaf3ff;
+  border-radius: 10px;
+  display: inline-block;
+  font-size: 12px;
+  color: #328dff;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 16px;
+  opacity: unset;
+  padding: 0 8px;
+}
+
+.vi-content {
+  margin-top: 48px;
+  margin-bottom: 80px;
+  display: flex;
+}
+
+.vi-course-introduce {
+  display: flex;
+  flex-direction: row;
+  transition: margin-left .3s cubic-bezier(.645,.045,.355,1);
+  will-change: margin-left;
+  margin-left: 0%;
+  width: 100%;
+}
+
+.vi-ci-main {
+  flex-shrink: 0;
+  width: 100%;
+  opacity: 1;
+  transition: opacity .45s;
+}
+
+.vi-ci-cart {
+  padding: 32px 40px 0 40px;
+  margin: 32px 5px 64px;
+  background: #fff;
+  box-shadow: 0 8px 10px 10px rgb(235 235 235 / 0%), 0 0 12px 4px rgb(106 106 106 / 6%);
+  border-radius: 8px;
+  flex-direction: column;
+  display: flex;
+}
+
+.ci-cc-top {
+  font-size: 16px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.ci-cc-footer {
+  font-size: 14px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.vi-review-list {
+  padding: 32px 0;
+  width: 100%;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.vi-rl-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.vi-rt-left {
+  font-weight: 700;
+  color: #242728;
+  line-height: 24px;
+}
+
+.vi-rt-right {
+  opacity: .5;
+  font-size: 12px;
+  color: #333;
+  line-height: 16px;
+}
+
+.vi-rl-content {
+  margin-top: 16px;
+  color: #242728;
+  line-height: 24px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.vi-re-top {
+  font-size: 12px;
+  color: #777;
+  display: flex;
+  align-items: center;
+}
+
+.vi-rtt {
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.vi-rt-content {
+  margin-top: 8px;
+  margin-left: 28px;
+  color: #333;
+}
+
+.vi-left-top {
+  font-size: 20px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 32px;
+}
+
+.vi-author-cart {
+  box-shadow: 0 8px 10px 10px rgb(235 235 235 / 0%), 0 0 12px 4px rgb(106 106 106 / 6%);
+  border-radius: 8px;
+  margin-top: 16px;
+  padding: 24px 24px 40px;
+}
+
+.vi-ac-top {
+  color: #333;
+  letter-spacing: 0;
+  line-height: 32px;
+  margin-right: 8px;
+  font-size: 20px;
+  margin-bottom: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.vi-ac-fo {
+  -webkit-line-clamp: 3;
+  color: #777;
+  letter-spacing: 0;
+  word-break: break-all;
+  font-size: 12px;
+  line-height: 16px;
+  max-height: 48px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.vi-au-info {
+  padding: 0 2px;
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vi-ai-title {
+  font-size: 12px;
+  color: #777;
+  letter-spacing: 0;
+  line-height: 16px;
+  padding: 0 8px;
+}
+
+.vi-ai-num {
+  font-size: 20px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 32px;
+  padding: 0 8px;
+}
+
+.vi-ai-line {
+  float: left;
+  width: 1px;
+  height: 48px;
+  background: #d6d6d6;
+}
+
+.vi-recommend {
+  font-size: 20px;
+  color: #333;
+  line-height: 32px;
+}
+
+.ci-rc-main {
+  margin-top: 16px;
+  position: relative;
+  display: block;
+}
+
+.ci-rc-cart {
+  width: 100%;
+  display: block;
+  padding: 16px 24px;
+  background-color: #fff;
+  box-shadow: 0 8px 10px 10px rgb(235 235 235 / 0%), 0 0 12px 4px rgb(106 106 106 / 6%);
+  border-radius: 8px;
+  transition: box-shadow .5s;
+}
+
+.ci-rc-cart:hover {
+  box-shadow: 0 8px 10px 10px rgb(235 235 235 / 0%), 0 0 12px 4px rgb(106 106 106 / 26%);
+}
+
+.ci-rc-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  color: #333;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 24px;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+.ci-rc-info {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #333;
+  line-height: 16px;
+}
+
+.ci-rc-price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ci-rpp {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ce0e2d;
+  letter-spacing: 0;
+  line-height: 24px;
+}

@@ -54,18 +54,10 @@
           <font class="font">DEVELOPERS</font>
         </div>
         <div class="menu">
-          <div class="menu-list">
-            社区首页
-          </div>
-          <div class="menu-list">
-            认证
-          </div>
-          <div class="menu-list">
-            认证
-          </div>
-          <div class="menu-list">
-            认证
-          </div>
+          <div class="menu-list" @click="index">社区首页</div>
+          <div class="menu-list" @click="school">认证</div>
+          <div class="menu-list">认证</div>
+          <div class="menu-list">认证</div>
         </div>
         <div class="nav-right">
           <el-icon :size="20"><search /></el-icon>
@@ -129,6 +121,12 @@ export default {
     },
     account() {
       window.open(this.$router.resolve({name:'User'}).href, '_blank')
+    },
+    index() {
+      window.open(this.$router.resolve('/').href, '_blank')
+    },
+    school() {
+      window.open(this.$router.resolve('/school').href, '_blank')
     }
   },
   mounted() {
