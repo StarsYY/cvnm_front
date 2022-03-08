@@ -57,7 +57,7 @@ const routes = [
     name: "Course",
   },
   {
-    path: "/school/video",
+    path: "/school/video/:id",
     component: () => import('@/views/school/video'),
     name: "Video",
   },

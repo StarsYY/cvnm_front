@@ -154,7 +154,19 @@
   line-height: 16px;
   position: relative;
   margin-left: 8px;
-  width: 100%;
+}
+
+.sc-name-main::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 0;
+  height: 12px;
+  border-right: 1px solid #e8e8e8;
+}
+
+.sc-name-main:last-child::after {
+  border: 0;
 }
 
 .sc-course {
@@ -282,16 +294,17 @@
   margin-bottom: -16px;
 }
 
-.sc-mm-list:nth-child(4n) {
-  margin-right: 0;
-}
-
 .sc-mm-list {
   width: calc((100% - 48px)/ 4);
   margin-right: 16px;
   margin-bottom: 16px;
   position: relative;
   display: block;
+  cursor: pointer;
+}
+
+.sc-mm-list:nth-child(4n) {
+  margin-right: 0;
 }
 
 .sc-ml-a {

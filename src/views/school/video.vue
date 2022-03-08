@@ -24,10 +24,11 @@
       <el-col :xs="{span: 20, offset: 2}" :sm="{span: 20, offset: 2}" :md="{span: 20, offset: 2}" :lg="{span: 20, offset: 2}" :xl="{span: 20, offset: 2}">
         <div style="padding: 31px 0">
           <div class="vi-course-title">
-            <div class="vi-ct-left">什么是HarmonyOS</div>
+            <div class="vi-ct-left">{{ course.name }}</div>
             <div style="display: flex">
-              <div class="vi-ct-right">
-                <svg-icon icon-class="collect" style="width: 22px; height: 22px; margin-right: 7px"></svg-icon>
+              <div class="vi-ct-right" @click="collect(course.id)">
+                <svg-icon v-if="!course.collect" icon-class="collect" style="width: 22px; height: 22px; margin-right: 7px"></svg-icon>
+                <svg-icon v-if="course.collect" icon-class="collectBlack" style="width: 22px; height: 22px; margin-right: 7px"></svg-icon>
                 <span>收藏</span>
               </div>
             </div>
@@ -35,64 +36,87 @@
           <div class="vi-course-info">
             <div>
               <span>时长 1 分钟</span>
-              <span>　.　评分 4.6</span>
-              <span>　.　77.6K 次播放</span>
+              <span>　.　评分 {{ course.score }}</span>
+              <span>　.　{{ course.watch }} 次播放</span>
             </div>
             <span class="vi-ci-tag">
               <span>关键字</span>
-              <span class="vi-ct-list">Mac</span>
+              <span class="vi-ct-list" v-for="(item, key) in course.labelMap" :key="key">{{ item }}</span>
             </span>
           </div>
         </div>
         <div style="border-top: 1px solid #e8e8e8">
           <div class="vi-content">
             <div style="width: 70%; flex: 1">
-              <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+              <el-tabs v-model="activeName" class="demo-tabs">
                 <el-tab-pane label="课程介绍" name="first">
                   <div class="vi-course-introduce">
                     <div class="vi-ci-main">
                       <div class="vi-ci-cart">
                         <div style="margin-bottom: 32px">
                           <div class="ci-cc-top">课程简介</div>
-                          <div class="ci-cc-footer">阿巴阿巴阿巴</div>
+                          <div class="ci-cc-footer" v-html="course.introduction"></div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="用户评价 (6)" name="second">
+                <el-tab-pane :label="'用户评价（'+disLen+')'" name="second">
+                  <div class="vi-say" v-if="is > 0">
+                    <div class="vi-score">
+                      <el-rate
+                        v-model="discuss.score"
+                        :texts="['1', '2', '3', '4', '5']"
+                        show-text
+                      >
+                      </el-rate>
+                    </div>
+                    <div class="vi-score">
+                      <el-input
+                        v-model="discuss.discuss"
+                        :rows="6"
+                        type="textarea"
+                        placeholder="快来写下对课程的感受和疑问吧"
+                      />
+                    </div>
+                    <div class="vi-sub">
+                      <el-button type="info" round @click="commit(course.id)">提交</el-button>
+                    </div>
+                  </div>
                   <div class="vi-course-introduce">
                     <div class="vi-ci-main">
                       <div style="position: relative">
                         <div>
-                          <div class="vi-review-list">
+                          <div class="vi-review-list" v-for="item in allDiscuss" :key="item.id">
                             <div style="display: flex; align-items: flex-start">
                               <div style="width: 32px; height: 32px">
-                                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
+                                <el-avatar :src="item.portrait" :size="32"></el-avatar>
                               </div>
                               <div style="margin-left: 8px; width: calc(100% - 40px)">
                                 <div class="vi-rl-top">
                                   <div style="display: flex; align-items: center">
                                     <div style="display: flex; align-items: center">
-                                      <span class="vi-rt-left">小羊</span>
+                                      <span class="vi-rt-left">{{ item.author }}</span>
                                     </div>
                                     <div style="display: flex; align-items: center; margin-left: 16px">
-                                      <span class="vi-rt-right">2022-01-25 08:11:48</span>
+                                      <span class="vi-rt-right">{{ item.createtime }}</span>
                                     </div>
                                   </div>
-                                  <div>触碰删除</div>
+                                  <div v-if="item.rep === 1">
+                                    <svg-icon icon-class="del" style="width: 20px; height: 20px"></svg-icon>
+                                  </div>
                                 </div>
                                 <div style="display: flex; align-items: center; margin-top: 4px">
                                   <el-rate
-                                    v-model="value"
+                                    v-model="item.score"
                                     disabled
                                     show-score
                                     text-color="#ff9900"
-                                    score-template="{value}"
+                                    score-template="{{item.score}}"
                                   >
                                   </el-rate>
                                 </div>
-                                <div class="vi-rl-content">开始，应用，开发产品，</div>
+                                <div class="vi-rl-content">{{ item.discuss }}</div>
                               </div>
                             </div>
                             <div style="margin-top: 16px; margin-left: 40px">
@@ -194,22 +218,93 @@
 <script>
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import { fetchCourse, boolDiscuss, createDiscuss, fetchDiscuss, createFollow, fetchUser } from '@/api/video'
+import { isLogin } from '@/utils/tool'
+import Cookie from 'js-cookie'
+import { ElNotification } from 'element-plus'
 
 export default {
   name: "Video",
   components: { Header, Footer },
   data() {
     return {
+      course: {
+        id: '',
+        name: '',
+        introduction: '',
+        labelMap: '',
+        score: '',
+        watch: '',
+        collect: false,
+        userid: ''
+      },
+      discuss: {
+        courseid: '',
+        score: '',
+        discuss: '',
+        author: ''
+      },
+      disLen: 0,
       value: 5,
-      activeName: 'first'
+      activeName: 'first',
+      is: 0,
+      allDiscuss: []
     }
   },
   created() {
+    this.getCourse(this.$route.params.id)
   },
   methods: {
-    handleClick() {
-      console.log(this.activeName)
+    getCourse(id) {
+      this.discuss.courseid = id
+      if(isLogin()) {
+        this.discuss.author = Cookie.get("nickname")
+      }
+      fetchCourse(this.discuss).then(response => {
+        this.course = response.data
+      })
+      if(isLogin()) {
+        this.discuss.author = Cookie.get("nickname")
+        boolDiscuss(this.discuss).then(response => {
+          this.is = response.data
+        })
+      } else {
+        this.is = 0
+      }
+      fetchDiscuss(this.discuss).then(response => {
+        this.allDiscuss = response.data
+        this.disLen = this.allDiscuss.length
+      })
+      fetchUser(this.course.userid).then(response => {
+        console.log(response)
+      })
     },
+    commit(id) {
+      if(isLogin()) {
+        this.discuss.author = Cookie.get("nickname")
+        this.discuss.courseid = id
+        createDiscuss(this.discuss).then(() => {
+          ElNotification({
+            title: 'Success',
+            message: '评论成功',
+            type: 'success',
+          })
+        })
+      }
+    },
+    collect(id) {
+      if(isLogin()) {
+        this.discuss.author = Cookie.get("nickname")
+        this.discuss.courseid = id
+        createFollow(this.discuss).then(() => {
+          if(this.course.collect === false) {
+            this.course.collect = true
+          } else {
+            this.course.collect = false
+          }
+        })
+      }
+    }
   }
 }
 </script>

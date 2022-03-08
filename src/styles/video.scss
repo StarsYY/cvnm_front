@@ -110,6 +110,25 @@
   display: flex;
 }
 
+.vi-say {
+  padding: 24px;
+  margin-bottom: 24px;
+  background-color: #f3f3f3;
+}
+
+.vi-score{
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.vi-sub {
+  cursor: not-allowed;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+}
+
 .vi-course-introduce {
   display: flex;
   flex-direction: row;

@@ -219,7 +219,7 @@ export default {
     },
     getTagDetail(id) {
       this.listQuery.ids = ',' + id + ','
-      this.listQuery.nickname = Cookie.get("nickname")
+      this.listQuery.nickname = Cookie.get("nickname") === null ? Cookie.get("nickname") : ''
       fetchTagDetail(this.listQuery).then(response => {
         this.total = response.data.total
         this.articleList = response.data.articleList
