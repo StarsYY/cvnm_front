@@ -11,7 +11,7 @@
                   <div class="sc-top-left">
                     <ul class="listnone">
                       <li v-for="item in leftNav" :key="item.value">
-                        <div class="sc-level">
+                        <div class="sc-level" @click="more">
                           <div class="sc-first-level">{{ item.label }}</div>
                           <div class="sc-second-level">
                             <div class="sc-tag" v-for="itemModular in item.children" :key="itemModular.value">{{ itemModular.label }}</div>
@@ -24,14 +24,14 @@
                               <div class="sc-subtitle">
                                 <div class="sc-subtitle-name">知识点</div>
                                 <div class="sc-name-content">
-                                  <span class="sc-name-main" v-for="itemModular in item.children" :key="itemModular.value">{{ itemModular.label }}</span>
+                                  <span class="sc-name-main" v-for="itemModular in item.children" :key="itemModular.value" @click="more">{{ itemModular.label }}</span>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="sc-course">
                             <div class="sc-course-list" v-for="itemCourse in item.courseList" :key="itemCourse.id">
-                              <div style="display: flex">
+                              <div style="display: flex" @click="course(itemCourse.id)">
                                 <div class="sc-sourse-image">
                                   <img :src="itemCourse.cover" class="sc-sourse-image-cover">
                                 </div>
@@ -42,7 +42,7 @@
                                   <div class="sc-sc-info">
                                     <div class="sc-sc-price">
                                       <span v-if="itemCourse.price === 0">免费</span>
-                                      <span v-else>￥ {{ itemCourse.price }}</span>
+                                      <span v-else>￥ {{ itemCourse.price / 100 }}</span>
                                     </div>
                                     <div class="sc-sc-number">
                                       <svg-icon icon-class="person" style="width: 1em; height: 1em"></svg-icon>
@@ -90,7 +90,7 @@
               <div class="sc-mmm">
                 <div class="sc-mmmm">
                   <div class="sc-mm-list" v-for="item in hotCourseList" :key="item.id">
-                    <div class="sc-ml-a">
+                    <div class="sc-ml-a" @click="course(item.id)">
                       <div class="sc-ml-top">
                         <img :src="item.cover" class="sc-ct-img">
                       </div>
@@ -109,7 +109,7 @@
                         <div class="sc-ml-price">
                           <div class="sc-mp-r">
                             <span v-if="item.price === 0" class="sc-mpp">免费</span>
-                            <span v-else class="sc-mpp">￥ {{ item.price }}</span>
+                            <span v-else class="sc-mpp">￥ {{ item.price / 100 }}</span>
                           </div>
                           <div class="sc-mp-au">{{ item.author }}</div>
                         </div>
@@ -136,7 +136,7 @@
               <div class="sc-mmm">
                 <div class="sc-mmmm">
                   <div class="sc-mm-list" v-for="item in newCourseList" :key="item.id">
-                    <div class="sc-ml-a">
+                    <div class="sc-ml-a" @click="course(item.id)">
                       <div class="sc-ml-top">
                         <img :src="item.cover" class="sc-ct-img">
                       </div>
@@ -155,7 +155,7 @@
                         <div class="sc-ml-price">
                           <div class="sc-mp-r">
                             <span v-if="item.price === 0" class="sc-mpp">免费</span>
-                            <span v-else class="sc-mpp">￥ {{ item.price }}</span>
+                            <span v-else class="sc-mpp">￥ {{ item.price / 100 }}</span>
                           </div>
                           <div class="sc-mp-au">{{ item.author }}</div>
                         </div>
@@ -173,12 +173,12 @@
               <span style="font-weight: 500">开发者故事</span>
             </div>
             <div style="margin-bottom: 32px;">
-              <a class="sc-dt-more">更多</a>
+              <a class="sc-dt-more" @click="more">更多</a>
             </div>
           </div>
           <div class="sc-dev-foot">
             <div class="sc-df-list" v-for="item in developerStory" :key="item.id">
-              <div class="sc-df-main">
+              <div class="sc-df-main" @click="course(item.id)">
                 <div style="width: 100%">
                   <div class="sc-dm-top">
                     <div class="sc-dt-img">
@@ -248,6 +248,9 @@ export default {
       fetchDeveloperStory().then(response => {
         this.developerStory = response.data
       })
+    },
+    course(id) {
+      window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
     },
     more() {
       window.open(this.$router.resolve({name:'Course'}).href, '_blank')

@@ -146,28 +146,28 @@
                   <div class="vi-author-cart">
                     <div style="display: flex">
                       <div style="width: 64px">
-                        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="64"></el-avatar>
+                        <el-avatar :src="user.portrait" :size="64"></el-avatar>
                       </div>
                       <div style="margin-left: 12px; width: calc(100% - 80px)">
-                        <div class="vi-ac-top">仰望星空</div>
+                        <div class="vi-ac-top">{{ user.nickname }}</div>
                         <div>讲师</div>
-                        <div class="vi-ac-fo">智能终端能力开发，共建开发者生态</div>
+                        <div class="vi-ac-fo">{{ user.summary }}</div>
                       </div>
                     </div>
                     <div class="vi-au-info">
                       <div>
                         <div class="vi-ai-title">课程数</div>
-                        <div class="vi-ai-num">1.3K</div>
+                        <div class="vi-ai-num">{{ user.count }}</div>
                       </div>
                       <div class="vi-ai-line"></div>
                       <div>
                         <div class="vi-ai-title">学习人次</div>
-                        <div class="vi-ai-num">298.3K</div>
+                        <div class="vi-ai-num">{{ user.watch }}</div>
                       </div>
                       <div class="vi-ai-line"></div>
                       <div>
                         <div class="vi-ai-title">课程综合评分</div>
-                        <div class="vi-ai-num">4.8</div>
+                        <div class="vi-ai-num">{{ user.score }}</div>
                       </div>
                     </div>
                   </div>
@@ -244,6 +244,15 @@ export default {
         discuss: '',
         author: ''
       },
+      user: {
+        uid: '',
+        nickname: '',
+        portrait: '',
+        summary: '',
+        count: '',
+        watch: '',
+        score: ''
+      },
       disLen: 0,
       value: 5,
       activeName: 'first',
@@ -255,15 +264,25 @@ export default {
     this.getCourse(this.$route.params.id)
   },
   methods: {
+    Login() {
+      if (Cookie.get("nickname") === undefined) {
+        return false
+      }
+      return true
+    },
     getCourse(id) {
       this.discuss.courseid = id
-      if(isLogin()) {
+      if(this.Login()) {
         this.discuss.author = Cookie.get("nickname")
       }
       fetchCourse(this.discuss).then(response => {
         this.course = response.data
+        var uid = this.course.userid
+        fetchUser(uid).then(response => {
+          this.user = response.data
+        })
       })
-      if(isLogin()) {
+      if(this.Login()) {
         this.discuss.author = Cookie.get("nickname")
         boolDiscuss(this.discuss).then(response => {
           this.is = response.data
@@ -274,9 +293,6 @@ export default {
       fetchDiscuss(this.discuss).then(response => {
         this.allDiscuss = response.data
         this.disLen = this.allDiscuss.length
-      })
-      fetchUser(this.course.userid).then(response => {
-        console.log(response)
       })
     },
     commit(id) {

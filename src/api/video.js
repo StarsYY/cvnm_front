@@ -10,7 +10,7 @@ export function fetchCourse(query) {
 
 export function fetchUser(query) {
   return request({
-    url: '/course/user?id' + query,
+    url: '/course/user?uid=' + query,
     method: 'get',
     params: query
   })

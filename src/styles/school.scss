@@ -154,6 +154,11 @@
   line-height: 16px;
   position: relative;
   margin-left: 8px;
+  cursor: pointer;
+}
+
+.sc-name-main:hover {
+  text-decoration: underline;
 }
 
 .sc-name-main::after {
