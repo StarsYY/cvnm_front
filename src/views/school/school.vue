@@ -31,7 +31,7 @@
                           </div>
                           <div class="sc-course">
                             <div class="sc-course-list" v-for="itemCourse in item.courseList" :key="itemCourse.id">
-                              <div style="display: flex" @click="course(itemCourse.id)">
+                              <div style="display: flex" @click="course(itemCourse.id, itemCourse.price)">
                                 <div class="sc-sourse-image">
                                   <img :src="itemCourse.cover" class="sc-sourse-image-cover">
                                 </div>
@@ -90,7 +90,7 @@
               <div class="sc-mmm">
                 <div class="sc-mmmm">
                   <div class="sc-mm-list" v-for="item in hotCourseList" :key="item.id">
-                    <div class="sc-ml-a" @click="course(item.id)">
+                    <div class="sc-ml-a" @click="course(item.id, item.price)">
                       <div class="sc-ml-top">
                         <img :src="item.cover" class="sc-ct-img">
                       </div>
@@ -136,7 +136,7 @@
               <div class="sc-mmm">
                 <div class="sc-mmmm">
                   <div class="sc-mm-list" v-for="item in newCourseList" :key="item.id">
-                    <div class="sc-ml-a" @click="course(item.id)">
+                    <div class="sc-ml-a" @click="course(item.id, item.price)">
                       <div class="sc-ml-top">
                         <img :src="item.cover" class="sc-ct-img">
                       </div>
@@ -178,7 +178,7 @@
           </div>
           <div class="sc-dev-foot">
             <div class="sc-df-list" v-for="item in developerStory" :key="item.id">
-              <div class="sc-df-main" @click="course(item.id)">
+              <div class="sc-df-main" @click="course(item.id, item.price)">
                 <div style="width: 100%">
                   <div class="sc-dm-top">
                     <div class="sc-dt-img">
@@ -249,8 +249,12 @@ export default {
         this.developerStory = response.data
       })
     },
-    course(id) {
-      window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
+    course(id, price) {
+      if(price === 0) {
+        window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
+      } else {
+        window.open(this.$router.resolve({name:'Purchase', params:{id: id}}).href, '_blank')
+      }
     },
     more() {
       window.open(this.$router.resolve({name:'Course'}).href, '_blank')

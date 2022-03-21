@@ -48,7 +48,7 @@
                   </span>
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item v-for="item in menuList2" :key="item.key" @click="type = item.value">{{ item.value }}</el-dropdown-item>
+                      <el-dropdown-item v-for="item in menuList2" :key="item.key" @click="type = item.value, getTagDetail(label.id)">{{ item.value }}</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
@@ -72,7 +72,7 @@
                           </span>
                           <span class="td-art-type">[{{ item.type }}]</span>
                           <span class="td-art-title" @click="detail(item.id)">{{ item.title }}</span>
-                          <div class="td-art-tag">{{ item.tag }}</div>
+                          <div v-if="item.tag !== ''" class="td-art-tag">{{ item.tag }}</div>
                         </span>
                       </div>
                       <div class="td-art-info">
@@ -110,7 +110,7 @@
               </div>
             </div>
           </div>
-          <div v-if="total > 10" class="td-page">
+          <div v-if="total > 0" class="td-page">
             <div class="td-page-total">
               <span>总计：</span>
               <span class="td-page-num">{{ total }}</span>
@@ -123,6 +123,12 @@
               @current-change="handleCurrentChange"
             >
             </el-pagination>
+          </div>
+          <div v-if="total === 0" class="td-null">
+            <div class="td-null2">
+              <svg-icon icon-class="null2" style="width: 240px; height: 216px"></svg-icon>
+            </div>
+            <p style="color: #777; text-align: center;">暂无帖子可看，不如看看远方吧</p>
           </div>
         </el-col>
         <el-col :xs="8" :sm="6" :md="5" :lg="4" :xl="2" class="hidden-md-and-down">
@@ -278,6 +284,18 @@ export default {
 <style scoped>
 @import "~@/styles/tagdetail.scss";
 @import '~@/styles/display.scss';
+
+.td-null {
+  flex: none;
+  width: 100%;
+  outline: none;
+}
+
+.td-null2 {
+  margin: 112px 0 17px;
+  display: flex;
+  justify-content: center;
+}
 
 .td-bc >>> .el-breadcrumb > .el-breadcrumb__item > .el-breadcrumb__inner {
   font-weight: 400;

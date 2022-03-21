@@ -1,19 +1,47 @@
 <template>
   <Header />
   <div class="vi-main">
-    <div style="background: #000; display: flex">
-      <div class="vi-video">
-        <video src="@/assets/sn1080.mp4" controls="controls" autoplay="autoplay" muted="muted" style="width: 100%"></video>
-      </div>
-      <div class="vi-right">
-        <div>
-          <div class="vi-menu">
-            <div class="vi-menu-title">目录</div>
-          </div>
-          <div style="overflow: auto">
+    <div class="pu-video-info">
+      <div class="pu-width">
+        <div class="pu-video-main">
+          <div class="pu-title">{{ course.name }}</div>
+          <div class="pu-subtitle">
             <div>
-              <div class="vi-list-item">
-                <div class="vi-li-main">概念</div>
+              <span>评分 {{ course.score }}　·　</span>
+              <span>时长 1 分钟</span>
+            </div>
+            <span class="vi-ci-tag">
+              <span>关键字</span>
+              <span class="vi-ct-list" v-for="(item, key) in course.labelMap" :key="key">{{ item }}</span>
+            </span>
+          </div>
+          <div class="pu-summary">{{ course.summary }}</div>
+          <div class="pu-user-action" @click="collect(course.id)">
+            <svg-icon v-if="!course.collect" icon-class="collect" style="width: 22px; height: 22px; margin-right: 7px"></svg-icon>
+            <svg-icon v-if="course.collect" icon-class="collectBlack" style="width: 22px; height: 22px; margin-right: 7px"></svg-icon>
+            <span>收藏</span>
+          </div>
+          <div class="pu-pay">
+            <div class="pu-pay-main">
+              <div>
+                <div class="pu-price">
+                  <div class="pu-pp">
+                    <span>￥</span>
+                    <strong style="font-weight: bolder">{{ course.price / 100 }}</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="pu-pay-btn">
+                <div class="pu-pay-now">
+                  <div class="pu-pn" @click="confirm(course.id)">
+                    <span>立即购买</span>
+                  </div>
+                </div>
+                <div style="cursor: pointer">
+                  <div class="pu-pn pu-free">
+                    <span>免费试学</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -22,30 +50,7 @@
     </div>
     <el-row>
       <el-col :xs="{span: 20, offset: 2}" :sm="{span: 20, offset: 2}" :md="{span: 20, offset: 2}" :lg="{span: 20, offset: 2}" :xl="{span: 20, offset: 2}">
-        <div style="padding: 31px 0">
-          <div class="vi-course-title">
-            <div class="vi-ct-left">{{ course.name }}</div>
-            <div style="display: flex">
-              <div class="vi-ct-right" @click="collect(course.id)">
-                <svg-icon v-if="!course.collect" icon-class="collect" style="width: 22px; height: 22px; margin-right: 7px"></svg-icon>
-                <svg-icon v-if="course.collect" icon-class="collectBlack" style="width: 22px; height: 22px; margin-right: 7px"></svg-icon>
-                <span>收藏</span>
-              </div>
-            </div>
-          </div>
-          <div class="vi-course-info">
-            <div>
-              <span>时长 1 分钟</span>
-              <span>　·　评分 {{ course.score }}</span>
-              <span>　·　{{ course.watch }} 次播放</span>
-            </div>
-            <span class="vi-ci-tag">
-              <span>关键字</span>
-              <span class="vi-ct-list" v-for="(item, key) in course.labelMap" :key="key">{{ item }}</span>
-            </span>
-          </div>
-        </div>
-        <div style="border-top: 1px solid #e8e8e8">
+        <div>
           <div class="vi-content">
             <div style="width: 70%; flex: 1">
               <el-tabs v-model="activeName" class="demo-tabs">
@@ -62,7 +67,7 @@
                   </div>
                 </el-tab-pane>
                 <el-tab-pane :label="'用户评价（'+disLen+')'" name="second">
-                  <div class="vi-say" v-if="is > 0">
+                  <div class="vi-say" style="display: none">
                     <div class="vi-score">
                       <el-rate
                         v-model="discuss.score"
@@ -80,7 +85,7 @@
                       />
                     </div>
                     <div class="vi-sub">
-                      <el-button type="info" round @click="commit(course.id)">提交</el-button>
+                      <el-button type="info" round>提交</el-button>
                     </div>
                   </div>
                   <div class="vi-course-introduce">
@@ -236,7 +241,7 @@ import Cookie from 'js-cookie'
 import { ElNotification } from 'element-plus'
 
 export default {
-  name: "Video",
+  name: "Purchase",
   components: { Header, Footer },
   data() {
     return {
@@ -348,6 +353,9 @@ export default {
           }
         })
       }
+    },
+    confirm(id) {
+      window.open(this.$router.resolve({name:'Confirm', params:{id: id}}).href, '_blank')
     }
   }
 }
@@ -355,6 +363,7 @@ export default {
 
 <style scoped>
 @import "~@/styles/video.scss";
+@import "~@/styles/purchase.scss";
 
 .demo-tabs >>> .el-tabs__header > .el-tabs__nav-wrap::after {
   height: 0;

@@ -1,0 +1,188 @@
+.cf-width {
+  display: block;
+  max-width: 83.3333333333%;
+  flex: 0 0 83.3333333333%;
+  margin: auto;
+}
+
+.cf-ok {
+  margin-top: 64px;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cf-exchange {
+  font-size: 14px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.cf-order-info {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cf-oi-left {
+  position: relative;
+  width: 192px;
+  height: 108px;
+  margin-right: 24px;
+  display: flex;
+}
+
+.cf-course-image {
+  border-radius: 4px;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+  border-style: none;
+}
+
+.cf-oi-right {
+  width: calc(100% - 192px);
+  position: relative;
+}
+
+.cf-or-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cf-om-left {
+  min-width: 510px;
+  max-width: 600px;
+  min-height: 112px;
+}
+
+.cf-or-name {
+  margin-top: 3px;
+  margin-bottom: 6px;
+  font-size: 16px;
+  flex: none;
+  height: 48px;
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.cf-or-co {
+  -webkit-line-clamp: 2;
+  margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: rgba(0,0,0,.65);
+}
+
+.cf-or-info {
+  color: #777;
+  font-size: 12px;
+  width: 39%;
+}
+
+.cf-or-info-main {
+  border-radius: 4px;
+  font-size: 12px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background: #f0f1f6;
+  color: #6f79a9;
+  margin-right: 16px;
+}
+
+.cf-or-price {
+  font-size: 22px;
+  margin-top: 8px;
+}
+
+.cf-section {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.cf-section-title {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 700;
+}
+
+.cf-section-content {
+  margin-right: 8px;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 14px;
+}
+
+.cf-submit {
+  margin-top: 7px;
+  padding-right: 0!important;
+  padding: 20px;
+  background: #fff;
+  display: block;
+}
+
+.cf-totalPriceContent {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  text-align: right;
+  font-size: 14px;
+  color: #666;
+}
+
+.cf-price {
+  text-align: right;
+  color: #333;
+  font-size: 24px;
+  flex: 1;
+}
+
+.cf-rightContent {
+  margin-right: 140px;
+  color: #777;
+}
+
+.cf-payment-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.cf-noMoney {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 24px;
+  font-size: 14px;
+  color: #ce0e2d;
+  letter-spacing: 0;
+}
+
+.cf-btn-sub {
+  padding: 0 30px;
+  border: none!important;
+  outline: 0;
+  border-radius: 25px;
+  background: #ce0e2d;
+  color: #fff;
+  font-size: 16px;
+  height: 48px;
+  line-height: 48px;
+  cursor: pointer;
+  text-transform: none;
+  overflow: visible;
+}

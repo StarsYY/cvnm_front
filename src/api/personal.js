@@ -55,3 +55,35 @@ export function followUser(data) {
     data
   })
 }
+
+export function fetchVerify(data) {
+  return request({
+    url: '/user/verify',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchIntegral(data) {
+  return request({
+    url: '/user/integral',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchDraft(data) {
+  return request({
+    url: '/user/draft',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchReply(data) {
+  return request({
+    url: '/user/reply',
+    method: 'post',
+    data
+  })
+}

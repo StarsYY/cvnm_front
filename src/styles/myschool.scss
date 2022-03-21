@@ -1,0 +1,93 @@
+.ms-main {
+  width: 78%;
+  display: flex;
+  padding: 40px 0 0;
+  margin: auto;
+}
+
+.ms-left {
+  width: 25%;
+}
+
+.ms-l-main {
+  display: flex;
+  transform: none;
+}
+
+.ms-lm {
+  width: 93.333%;
+  margin-right: 20px;
+  background: #fff;
+  padding: 20px 0 0;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.ms-lm-name {
+  width: 100%;
+  padding: 0 10px;
+  text-align: center;
+  font-size: 28px;
+  color: #444343;
+  margin: 24px 0 26px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.ms-lm-verify {
+  margin-bottom: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-lm-line {
+  width: 87.5%;
+  height: 1px;
+  background: #ddd;
+}
+
+.ms-lm-a {
+  padding: 24px 0;
+  width: 100%;
+}
+
+.ms-lm-list {
+  color: #333;
+  display: block;
+  margin-bottom: 10px;
+  background: 0 0;
+  text-decoration: none;
+  outline: 0;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.ms-lm-list-on {
+  background: #d33434;
+  color: #fff;
+}
+
+.ms-ll-main {
+  height: 40px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-menu-img {
+  margin-right: 16px;
+  width: 24px;
+  vertical-align: middle;
+  border-style: none;
+}
+
+.ms-right {
+  width: 75%;
+  flex: 1;
+  position: relative;
+}

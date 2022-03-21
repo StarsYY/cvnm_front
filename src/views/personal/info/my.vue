@@ -21,13 +21,13 @@
         <h3 class="m-info">认证信息</h3>
         <span class="m-edit" @click="editVerify(user.uid)">编辑</span>
       </div>
-      <div style="padding-top: 96px; padding-bottom: 56px">
+      <div v-if="verify === null" style="padding-top: 96px; padding-bottom: 56px">
         <div class="m-fistLine">您当前暂未实名，快去实名认证吧</div>
         <div style="margin-top: 16px">
           <span class="m-realname">实名认证</span>
         </div>
       </div>
-      <div style="margin-top: 40px">
+      <div v-if="verify !== null" style="margin-top: 40px">
         <div style="display: flex">
           <div style="width: 50%">
             <div>
@@ -52,9 +52,9 @@
         <div style="display: flex">
           <div style="width: 50%">
             <div>
-              <div class="m-info-title">开发者ID</div>
+              <div class="m-info-title">真实姓名</div>
               <div class="m-info-descript">
-                <div>2850086000449979396</div>
+                <div>{{ verify.name }}</div>
               </div>
             </div>
           </div>
@@ -67,6 +67,24 @@
             </div>
           </div>
         </div>
+        <div style="display: flex">
+          <div style="width: 50%">
+            <div>
+              <div class="m-info-title">公司/高校名称</div>
+              <div class="m-info-descript">
+                <div>{{ verify.school }}</div>
+              </div>
+            </div>
+          </div>
+          <div style="width: 50%; padding-left: 54px">
+            <div>
+              <div class="m-info-title">职位 </div>
+              <div class="m-info-descript">
+                <div>{{ verify.position }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div style="margin-bottom: 80px">
@@ -74,23 +92,37 @@
         <h3 class="m-info">积分明细</h3>
         <span class="m-edit">积分明细</span>
       </div>
-      <div style="padding-top: 26px; padding-bottom: 56px">
-        <div class="m-fistLine">您还没有积分</div>
+      <div v-if="total === 0" style="padding-top: 26px; padding-bottom: 56px">
+        <div class="m-fistLine">您还没有积分流动</div>
       </div>
-      <div style="margin-top: 24px">
-        <el-table :data="tableData" stripe style="width: 100%">
+      <div v-if="total > 0" style="margin-top: 24px">
+        <el-table :data="integralList" stripe style="width: 100%">
           <el-table-column prop="grow" label="成长值" width="170" />
           <el-table-column prop="integral" label="积分" width="170" />
           <el-table-column prop="describe" label="描述" />
           <el-table-column prop="createtime" label="日期" />
         </el-table>
       </div>
+      <div v-if="total > 0" class="m-page">
+        <el-pagination
+          v-model:currentPage="currentPage1"
+          :page-size="100"
+          :small="small"
+          :disabled="disabled"
+          :background="background"
+          layout="total, prev, pager, next"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        >
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { fetchUser } from '@/api/personal'
+import { fetchUser, fetchVerify, fetchIntegral } from '@/api/personal'
 import Cookie from 'js-cookie'
 
 export default {
@@ -99,39 +131,22 @@ export default {
     return {
       name: {
         name: '',
-        loginName: ''
+        loginName: '',
+        page: 1
       },
       user: {
         uid: '',
         portrait: '',
         nickname: ''
       },
-      tableData: [
-        {
-          grow: '-6',
-          integral: '-6',
-          describe: 'No. 189, Grove St, Los Angeles',
-          createtime: '2021/11/01 19:26:48',
-        },
-        {
-          grow: '-6',
-          integral: '-6',
-          describe: 'No. 189, Grove St, Los Angeles',
-          createtime: '2021/11/01 19:26:48',
-        },
-        {
-          grow: '-6',
-          integral: '-6',
-          describe: 'No. 189, Grove St, Los Angeles',
-          createtime: '2021/11/01 19:26:48',
-        },
-        {
-          grow: '-6',
-          integral: '-6',
-          describe: 'No. 189, Grove St, Los Angeles',
-          createtime: '2021/11/01 19:26:48',
-        },
-      ]
+      verify: {
+        name: '',
+        school: '',
+        position: ''
+      },
+      currentPage1: '',
+      integralList: [],
+      total: 0
     }
   },
   created() {
@@ -144,9 +159,22 @@ export default {
       fetchUser(this.name).then(response => {
         this.user = response.data.user
       })
+      fetchVerify(this.name).then(response => {
+        this.verify = response.data
+      })
+      fetchIntegral(this.name).then(response => {
+        this.integralList = response.data.integral
+        this.total = response.data.total
+      })
     },
     editVerify(uid) {
       this.$router.push({ name: 'Verify', params: { uid: uid }})
+    },
+    handleSizeChange(val) {
+      this.name.page = val
+    },
+    handleCurrentChange(val) {
+      this.name.page = val
     }
   }
 }
@@ -173,5 +201,10 @@ export default {
   text-align: center;
   line-height: 48px;
   color: #fff;
+}
+
+.m-page {
+  margin-top: 10px;
+  text-align: right;
 }
 </style>

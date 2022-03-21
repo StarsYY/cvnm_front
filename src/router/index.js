@@ -61,6 +61,26 @@ const routes = [
     component: () => import('@/views/school/video'),
     name: "Video",
   },
+  {
+    path: "/school/my/:name",
+    component: () => import('@/views/school/myschool'),
+    name: "MySchool",
+  },
+  {
+    path: "/school/purchase/:id",
+    component: () => import('@/views/school/purchase'),
+    name: "Purchase",
+  },
+  {
+    path: "/school/purchase/confirm/:id",
+    component: () => import('@/views/school/confirm'),
+    name: "Confirm",
+  },
+  {
+    path: "/school/purchase/confirm/pay/:id",
+    component: () => import('@/views/school/pay'),
+    name: "Pay",
+  }
 ];
 
 const router = createRouter({

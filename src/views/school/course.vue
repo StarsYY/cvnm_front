@@ -57,7 +57,7 @@
             <div class="sc-mm">
               <div class="sc-mmm">
                 <div class="sc-mmmm">
-                  <div class="sc-mm-list" @click="video(item.id)" v-for="item in courseList" :key="item.id">
+                  <div class="sc-mm-list" @click="video(item.id, item.price)" v-for="item in courseList" :key="item.id">
                     <div class="sc-ml-a">
                       <div class="sc-ml-top">
                         <img :src="item.cover" class="sc-ct-img">
@@ -212,8 +212,12 @@ export default {
         this.total = response.data.total
       })
     },
-    video(id) {
-      window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
+    video(id, price) {
+      if(price === 0) {
+        window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
+      } else {
+        window.open(this.$router.resolve({name:'Purchase', params:{id: id}}).href, '_blank')
+      }
     }
   }
 }

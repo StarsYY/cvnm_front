@@ -9,6 +9,7 @@ export function fetchTags(data) {
 }
 
 export function fetchLabel(query) {
+  console.log(query)
   return request({
     url: '/tags/label?id=' + query,
     method: 'get',

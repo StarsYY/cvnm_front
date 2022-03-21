@@ -39,6 +39,7 @@
               <ul class="list">
                 <li class="h-l" @click="personal(nickname)">个人资料</li>
                 <li class="h-l" @click="account">账号设置</li>
+                <li class="h-l" @click="myschool(nickname)">我的学堂</li>
               </ul>
               <div class="out" @click="logout">
                 <span style="color: #777; cursor: pointer">退出</span>
@@ -117,16 +118,19 @@ export default {
       this.isHidden = true
     },
     personal(name) {
-      window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
+      window.open(this.$router.resolve({name: 'Personal', params:{name: name}}).href, '_blank')
     },
     account() {
-      window.open(this.$router.resolve({name:'User'}).href, '_blank')
+      window.open(this.$router.resolve({name: 'User'}).href, '_blank')
     },
     index() {
       window.open(this.$router.resolve('/').href, '_blank')
     },
     school() {
       window.open(this.$router.resolve('/school').href, '_blank')
+    },
+    myschool(name) {
+      window.open(this.$router.resolve({name: 'MySchool', params:{name: name}}).href, '_blank')
     }
   },
   mounted() {

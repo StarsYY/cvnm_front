@@ -1,0 +1,25 @@
+.fv-sc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.fv-au {
+  display: flex;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.fv-author {
+  flex: 1;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fv-unfa {
+  cursor: pointer;
+  color: #6f79a9;
+}

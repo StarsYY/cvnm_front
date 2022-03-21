@@ -21,6 +21,11 @@
   text-overflow: ellipsis;
   display: -webkit-inline-box;
   box-sizing: border-box;
+  cursor: pointer;
+}
+
+.dr-title:hover {
+  text-decoration: underline;
 }
 
 .dr-svg {

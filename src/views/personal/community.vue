@@ -7,26 +7,28 @@
             <div style="white-space: nowrap">
               <a class="i-link" :class="{ 'i-link-select' : item.is }" @click="select(item.key)">
                 <span v-if="isLog" class="i-tag">我的{{ item.value }}</span>
-                <span v-if="!isLog" class="i-tag">TA的{{ item.value }}</span>
+                <span v-if="!isLog" class="i-tag">
+                  <span v-if="item.key < 4">TA的{{ item.value }}</span>
+                </span>
               </a>
             </div>
           </div>
         </div>
       </div>
       <div class="i-right">
-        <div v-if="key === '0'">
+        <div v-if="key === 0">
           <Article />
         </div>
-        <div v-if="key === '1'">
+        <div v-if="key === 1">
           <Reply />
         </div>
-        <div v-if="key === '2'">
+        <div v-if="key === 2">
           <Fans />
         </div>
-        <div v-if="key === '3'">
+        <div v-if="key === 3">
           <Follow />
         </div>
-        <div v-if="key === '4'">
+        <div v-if="key === 4">
           <Draft />
         </div>
       </div>
@@ -47,13 +49,13 @@ export default {
   components: { Article, Reply, Fans, Follow, Draft },
   data() {
     return {
-      key: '0',
+      key: 0,
       menu: [
-        { key: '0', value: '文章', is: true },
-        { key: '1', value: '回复', is: false },
-        { key: '2', value: '粉丝', is: false },
-        { key: '3', value: '关注', is: false },
-        { key: '4', value: '草稿', is: false }
+        { key: 0, value: '文章', is: true },
+        { key: 1, value: '回复', is: false },
+        { key: 2, value: '粉丝', is: false },
+        { key: 3, value: '关注', is: false },
+        { key: 4, value: '草稿', is: false }
       ],
       isLog: true
     }

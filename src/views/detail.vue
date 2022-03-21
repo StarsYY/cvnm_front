@@ -27,32 +27,18 @@
             <div style="margin-top: 8px; text-align: center">
               <el-image v-for="item in badge" :key="item.id" :src="item.value" class="d-badge" />
             </div>
-            <div class="d-info d-info-bottom_1">
+            <div class="d-info d-info-bottom_2">
               <div class="d-msg">
                 文章
-                <div class="d-num">166</div>
+                <div class="d-num">{{ article[1].article }}</div>
               </div>
               <div class="d-msg">
                 粉丝
-                <div class="d-num">166</div>
-              </div>
-              <div class="d-msg">
-                积分
-                <div class="d-num">166</div>
-              </div>
-            </div>
-            <div class="d-info d-info-bottom_2">
-              <div class="d-msg">
-                获赞
-                <div class="d-num">166</div>
+                <div class="d-num">{{ article[1].fans }}</div>
               </div>
               <div class="d-msg">
                 回复
-                <div class="d-num">166</div>
-              </div>
-              <div class="d-msg">
-                收藏
-                <div class="d-num">166</div>
+                <div class="d-num">{{ article[1].count }}</div>
               </div>
             </div>
             <div :class="{ 'is_follow' : article[1].follow }" class="d-follow" @click="follow(article[1].uid, article[1].nickname, 'article')">
@@ -165,18 +151,18 @@
                     <div class="d-name">
                       <span class="d-username">{{ item.user.nickname }}</span>
                     </div>
-                    <div class="d-level">Lv {{ item.user.grow }}</div>
+                    <div class="d-level">Lv {{ item.grow }}</div>
                     <div style="margin-top: 8px; text-align: center">
                       <el-image v-for="itemImg in badge" :key="itemImg.id" :src="itemImg.value" class="d-badge" />
                     </div>
                     <div class="d-info d-info-bottom_1" style="margin-bottom: 16px">
                       <div class="d-msg">
-                        帖子
-                        <div class="d-num">166</div>
+                        文章
+                        <div class="d-num">{{ item.user.article }}</div>
                       </div>
                       <div class="d-msg">
                         回复
-                        <div class="d-num">166</div>
+                        <div class="d-num">{{ item.user.count }}</div>
                       </div>
                     </div>
                     <div :class="{ 'is_follow' : item.user.follow }" class="d-follow" @click="follow(item.user.uid, item.user.nickname, 'comment')">
@@ -192,7 +178,7 @@
                   <div class="d-comment-msg" @mouseenter="item.hidden = !item.hidden" @mouseleave="item.hidden = !item.hidden">
                     <div class="d-comment-creattime">
                       <span style="margin-right: 8px">楼</span>
-                      <span>回复于{{ item.createtime }}item.id：{{ item.id }}</span>
+                      <span>回复于{{ item.createtime }}</span>
                     </div>
                     <div>
                       <span style="margin-left: 24px" :class="{ 'd-hidden' : item.hidden }">
@@ -227,7 +213,7 @@
                       <view v-html="itemReply.comment" class="d-reply-detail"></view>
                     </div>
                     <div class="d-reply-msg">
-                      <div class="d-reply-time">{{ itemReply.createtime }}<span>itemReply.id：{{ itemReply.id }}</span></div>
+                      <div class="d-reply-time">{{ itemReply.createtime }}</div>
                       <div>
                         <span style="margin-left: 24px" :class="{ 'd-hidden' : itemReply.hidden }">
                           <svg-icon icon-class="report" style="font-size: 20px; cursor: pointer"></svg-icon>

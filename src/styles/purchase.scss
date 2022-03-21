@@ -1,0 +1,127 @@
+.pu-video-info {
+  background-image: url("../assets/course_banner.jpg");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 392px;
+  background-repeat: no-repeat;
+  background-position: top center;
+}  
+
+.pu-width {
+  display: block;
+  max-width: 83.3333333333%;
+  flex: 0 0 83.3333333333%;
+}
+
+.pu-video-main {
+  position: relative;
+  height: 264px;
+  width: 100%;
+}  
+
+.pu-title {
+  -webkit-line-clamp: 2;
+  max-width: 49%;
+  font-size: 32px;
+  line-height: 40px;
+  color: #333;
+  letter-spacing: 0;
+  margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}  
+
+.pu-subtitle {
+  display: flex;
+  margin: 16px 0 24px;
+  font-size: 14px;
+  color: #333;
+  letter-spacing: 0;
+  line-height: 24px;
+}  
+
+.pu-summary {
+  -webkit-line-clamp: 3;
+  font-size: 14px;
+  line-height: 1.57;
+  color: #333;
+  word-break: break-all;
+  max-width: 49%;
+  margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pu-user-action {
+  max-width: 49%;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 24px;
+  cursor: pointer;
+}
+
+.pu-pay {
+  max-width: 49%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  z-index: 20;
+}
+
+.pu-pay-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.pu-price {
+  display: flex;
+  align-items: baseline;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 24px;
+}
+
+.pu-pp {
+  font-size: 24px;
+  font-weight: 500;
+  color: #ce0e2d;
+}
+
+.pu-pay-btn {
+  margin-left: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.pu-pay-now {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pu-pn {
+  border: 1px solid #000;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 48px;
+  border-radius: 24px;
+  box-sizing: border-box;
+  padding: 0 5px;
+  color: #000;
+  text-align: center;
+  cursor: pointer;
+  margin-right: 8px;
+  min-width: 144px;
+}
+
+.pu-free {
+  color: #fff;
+  background: #333;
+}
