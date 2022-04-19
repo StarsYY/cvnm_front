@@ -35,19 +35,19 @@
           <div class="sc-mm">
             <div class="sc-mmm">
               <div class="sc-mmmm">
-                <div class="fv-mm-list">
+                <div v-for="item in course" :key="item.id" class="fv-mm-list">
                   <div class="sc-ml-a fv-ml-a">
-                    <div class="sc-ml-top">
-                      <img src="@/assets/jsfa.jpg" class="sc-ct-img" style="cursor: pointer">
+                    <div class="sc-ml-top" @click="video(item.id, item.price)">
+                      <img :src="item.cover" class="sc-ct-img" style="cursor: pointer">
                     </div>
                     <div class="sc-ml-foot">
-                      <span class="sc-ml-name" style="cursor: pointer; margin-bottom: 0">课程名课程名课程名课程名课程名课程名课程名课程名</span>
-                      <div class="cl-progress">
+                      <span class="sc-ml-name" style="cursor: pointer; margin-bottom: 0" @click="video(item.id, item.price)">{{ item.name }}</span>
+                      <div class="cl-progress" style="display: none">
                         <el-progress :percentage="percentage" :color="customColorMethod" :stroke-width="7" />
                         已学习：{{ percentage }}%
                       </div>
                       <div class="fv-au" style="justify-content: flex-end">
-                        <div class="fv-unfa">取消收藏</div>
+                        <div class="fv-unfa" @click="deleteLearn(item.id)">取消学习</div>
                       </div>
                     </div>
                   </div>
@@ -56,27 +56,81 @@
             </div>
           </div>
         </div>
+        <div v-if="total === listQuery.limit" style="text-align: center">
+          <el-button round @click="more">更多</el-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script scoped>
+import { fetchClass, delLearn } from '@/api/myschool'
+import { isLogin } from '@/utils/tool'
+
 export default {
-  name: "Favorites",
+  name: "Class",
+  props: {
+    userId: Number,
+  },
   data() {
     return {
-      value: 4.7,
-      key: 0,
+      listQuery: {
+        uid: this.userId,
+        page: 0,
+        limit: 9
+      },
+      course: null,
+      total: 0,
+      courseId: {
+        id: ''
+      },
       menu: [
         { key: 0, value: '全部', is: true },
-        { key: 1, value: '学习中', is: false },
-        { key: 2, value: '已学完', is: false }
+        // { key: 1, value: '学习中', is: false },
+        // { key: 2, value: '已学完', is: false }
       ],
       percentage: 90
     }
   },
+  created() {
+    this.getClass()
+  },
   methods: {
+    getClass() {
+      fetchClass(this.listQuery).then(response => {
+        this.total = response.data.length
+        if(this.course !== null) {
+          this.course = this.course.concat(response.data)
+        } else {
+          this.course = response.data
+        }
+      })
+    },
+    deleteLearn(id) {
+      if(isLogin()) {
+        this.courseId.id = id
+        delLearn(this.courseId).then(() => {
+          this.course.some((item, i) => {
+            if(item.id === id) {
+              this.course.splice(i, 1)
+              return true
+            }
+          })
+        })
+      }
+    },
+    more() {
+      this.listQuery.page += 1
+      this.getClass()
+    },
+    video(id, price) {
+      if(price === 0) {
+        window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
+      } else {
+        window.open(this.$router.resolve({name:'Purchase', params:{id: id}}).href, '_blank')
+      }
+    },
     select(val) {
       this.menu.forEach(item => {
         if (item.key === val) {

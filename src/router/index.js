@@ -22,12 +22,17 @@ const routes = [
     name: "Create",
   },
   {
+    path: "/create/edit/:id",
+    component: () => import('@/views/create-edit'),
+    name: "CreateEdit",
+  },
+  {
     path: "/personal/:name",
     component: () => import('@/views/personal'),
     name: "Personal",
   },
   {
-    path: "/user",
+    path: "/user/:name",
     component: () => import('@/views/user'),
     name: "User",
   },
@@ -42,7 +47,7 @@ const routes = [
     name: "TagDetail",
   },
   {
-    path: "/verify",
+    path: "/verify/:uid",
     component: () => import('@/views/verify'),
     name: "Verify",
   },
@@ -80,7 +85,22 @@ const routes = [
     path: "/school/purchase/confirm/pay/:id",
     component: () => import('@/views/school/pay'),
     name: "Pay",
+  },
+  {
+    path: "/search/:search",
+    component: () => import('@/views/search'),
+    name: "Search",
   }
+  // {
+  //   path: "/school/create",
+  //   component: () => import('@/views/school/create'),
+  //   name: "SchoolCreate",
+  // },
+  // {
+  //   path: "/school/create/edit/:id",
+  //   component: () => import('@/views/school/create-edit'),
+  //   name: "SchoolCreateEdit",
+  // }
 ];
 
 const router = createRouter({

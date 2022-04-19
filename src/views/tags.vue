@@ -49,12 +49,12 @@
               </h1>
               <div class="tag-view-count">
                 <div style="margin-right: 24px">
-                  <span class="tag-view-one">帖子</span>
+                  <span class="tag-view-one">文章</span>
                   <span class="tag-view-num">{{ item.articleCount }}</span>
                 </div>
                 <div>
                   <span class="tag-view-one">本月</span>
-                  <span class="tag-view-num">25</span>
+                  <span class="tag-view-num">{{ item.monthArticleCount }}</span>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@
             </div>
             <el-pagination
               v-model:currentPage="currentPage3"
-              :page-size="16"
+              :page-size="listQuery.limit"
               layout="prev, pager, next, jumper"
               :total="total"
               @current-change="handleCurrentChange"

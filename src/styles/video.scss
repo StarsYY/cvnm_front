@@ -207,6 +207,7 @@
   color: #777;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .vi-rtt {
@@ -309,6 +310,7 @@
   box-shadow: 0 8px 10px 10px rgb(235 235 235 / 0%), 0 0 12px 4px rgb(106 106 106 / 6%);
   border-radius: 8px;
   transition: box-shadow .5s;
+  cursor: pointer;
 }
 
 .ci-rc-cart:hover {

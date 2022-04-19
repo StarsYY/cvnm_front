@@ -40,7 +40,7 @@
 .ui-but {
   margin: 30px 0px;
   background: rgba(0,0,0,.05);
-  opacity: .38;
+  /* opacity: .38; */
   border-radius: 8px;
   border: 1px transparent;
   text-align: center;
@@ -49,4 +49,5 @@
   font-size: 18px;
   color: #007dff;
   line-height: 48px;
+  cursor: pointer;
 }

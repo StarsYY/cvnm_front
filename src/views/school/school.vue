@@ -65,8 +65,8 @@
                 <el-col :xs="19" :sm="19" :md="19" :lg="19" :xl="19">
                   <div class="sc-top-right">
                     <el-carousel height="520px">
-                      <el-carousel-item v-for="item in img" :key="item.key">
-                        <el-image :src="item.value" class="sc-rotation-img" />
+                      <el-carousel-item v-for="item in rotations" :key="item.key">
+                        <el-image :src="item.source" class="sc-rotation-img" />
                       </el-carousel-item>
                     </el-carousel>
                   </div>
@@ -207,18 +207,14 @@ export default {
   components: { Header, Footer },
   data() {
     return {
-      img: [
-        { key: 1, value: require("@/assets/s0.png") },
-        { key: 1, value: require("@/assets/s1.jpg") },
-        { key: 1, value: require("@/assets/s2.png") }
-      ],
       leftNav: null,
       hotModularList: null,
       hotId: 0,
       newId: 0,
       hotCourseList: null,
       newCourseList: null,
-      developerStory: null
+      developerStory: null,
+      rotations: null,
     }
   },
   created() {
@@ -230,6 +226,7 @@ export default {
   methods: {
     getCourseModular() {
       fetchModular().then(response => {
+        this.rotations = response.data.rotations
         this.leftNav = response.data.leftNav
         this.hotModularList = response.data.courseNav
       })

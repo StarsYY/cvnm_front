@@ -43,7 +43,6 @@ export default {
       key: '0',
       menu: [
         { key: '0', value: '基本信息', is: true },
-        { key: '1', value: '我的活动', is: false },
         { key: '2', value: '我的收藏', is: false },
         { key: '3', value: '我的消息', is: false }
       ],

@@ -8,9 +8,12 @@ import ElementPlus from 'element-plus'
 // 引用所有样式
 import 'element-plus/dist/index.css'
 import SvgIcon from '@/components/SvgIcon'// svg component
+import uploader from 'vue-simple-uploader'
 
 export const app = createApp(App)
 app.component('svg-icon', SvgIcon)
+
+app.use(uploader)
 
 app.use(store).use(router).use(SvgIcon).use(ElementPlus).mount("#app")
 

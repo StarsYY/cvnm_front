@@ -40,12 +40,12 @@
                       <div style="display: flex">
                         <div style="width: 44.3349%; flex: 1">
                           <div style="display: flex">
-                            <div class="or-co-pic">
+                            <div class="or-co-pic" @click="study(item.courseid, item.price)">
                               <img :src="item.cover" class="or-img">
                             </div>
                             <div style="width: 100%; flex: 1">
                               <div class="or-order-title">
-                                <div style="visibility: visible; cursor: pointer">
+                                <div style="visibility: visible; cursor: pointer" @click="study(item.courseid, item.price)">
                                   {{ item.name }}
                                 </div>
                               </div>
@@ -65,12 +65,12 @@
                           <p v-if="item.payment === null && item.transaction === 0" class="or-change-p or-label-box">
                             <span class="or-label-finished">交易关闭</span>
                           </p>
-                          <div v-if="item.payment === null && item.transaction === 1" class="or-pay">立即付款</div>
+                          <div v-if="item.payment === null && item.transaction === 1" class="or-pay" @click="payCourse(item.id)">立即付款</div>
                           <div v-if="item.payment !== null && item.transaction === 0" class="or-pay">已付款</div>
                         </div>
                         <div class="or-del">
-                          <span v-if="item.transaction === 1" style="cursor: pointer">取消订单</span>
-                          <span v-if="item.transaction === 0" style="cursor: pointer">删除订单</span>
+                          <span v-if="item.transaction === 1" style="cursor: pointer" @click="delOrder(item.id)">取消订单</span>
+                          <span v-if="item.transaction === 0" style="cursor: pointer" @click="delOrder(item.id)">删除订单</span>
                         </div>
                       </div>
                       <div class="or-order-footer">
@@ -85,7 +85,11 @@
                           <p class="or-order-info">
                             <span class="or-fin-time">订单支付方式</span>
                             <span v-if="item.payment === null">-</span>
-                            <span v-if="item.payment !== null">{{ item.payment }}</span>
+                            <span v-if="item.payment !== null">
+                              <span v-if="item.payment === 0">微信支付</span>
+                              <span v-if="item.payment === 1  ">支付宝支付</span>
+                              <span v-if="item.payment === 2">积分兑换</span>
+                            </span>
                           </p>
                           <p class="or-order-info">
                             <span class="or-fin-time">订单支付时间</span>
@@ -99,6 +103,9 @@
                 </div>
               </div>
             </div>
+            <div v-if="total === listQuery.limit" style="text-align: center">
+              <el-button round @click="more">更多</el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -107,21 +114,25 @@
 </template>
 
 <script>
-import { fetchOrder } from '@/api/myschool'
+import { fetchOrder, delMyOrder, payMyOrder } from '@/api/myschool'
 import Cookie from 'js-cookie'
 import { isLogin } from '@/utils/tool'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default {
   name: "Order",
+  components: { ElMessage, ElMessageBox },
   props: {
     userId: Number,
   },
   data() {
     return {
       listQuery: {
-        userid: this.userId,
+        uid: this.userId,
         payment: 0, // 0/1/2: 全部/待付款/已付款
-        username: ''
+        username: '',
+        page: 0,
+        limit: 10
       },
       key: 0,
       menu: [
@@ -131,7 +142,11 @@ export default {
         // { key: 3, value: '待审核', is: false },
         // { key: 4, value: '审核失败', is: false }
       ],
-      order: []
+      order: null,
+      total: 0,
+      delId: {
+        id: ''
+      }
     }
   },
   created() {
@@ -142,12 +157,76 @@ export default {
       if(isLogin()) {
         this.listQuery.username = Cookie.get("nickname")
         fetchOrder(this.listQuery).then(response => {
-          this.order = response.data
+          this.total = response.data.length
+          if(this.order !== null) {
+            this.order = this.order.concat(response.data)
+          } else {
+            this.order = response.data
+          }
         })
       }
     },
+    delOrder(id) {
+      if(isLogin) {
+        ElMessageBox.confirm(
+          '你确定要删除这个订单嘛?',
+          '警告',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true,
+          }
+        ).then(() => {
+          this.delId.id = id
+          delMyOrder(this.delId).then(() => {
+            ElMessage({
+              type: 'success',
+              message: '删除成功',
+            })
+            this.order.some((item, i) => {
+              if(item.id === id) {
+                this.order.splice(i, 1)
+                return true
+              }
+            })
+          })
+        })
+      }
+    },
+    payCourse(id) {
+      if(isLogin) {
+        this.delId.id = id
+        payMyOrder(this.delId).then(response => {
+          ElMessage({
+            type: 'success',
+            message: '支付成功！',
+          })
+          this.order.forEach(item => {
+            if(item.id === id) {
+              item.transaction = response.data.transaction
+              item.payment = response.data.payment
+              item.paytime = response.data.paytime
+              return
+            }
+          })
+        })
+      }
+    },
+    study(id, price) {
+      if(price === 0) {
+        window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
+      } else {
+        window.open(this.$router.resolve({name:'Purchase', params:{id: id}}).href, '_blank')
+      }
+    },
+    more() {
+      this.listQuery.page += 1
+      this.getMyOrder()
+    },
     select(val) {
       this.listQuery.payment = val
+      this.order = null
       this.getMyOrder()
       this.menu.forEach(item => {
         if (item.key === val) {

@@ -8,7 +8,7 @@
           <div class="pa-je">订单金额：</div>
           <div class="pa-ac">
             <div>
-              <span class="pa-rr">￥13.30</span>
+              <span class="pa-rr">￥{{ order.price / 100 }}</span>
               <span>
                 <span style="font-size: 16px; color: #333">请尽快支付</span>
               </span>
@@ -21,9 +21,9 @@
         </div>
         <div class="pa-order-detail">
           <div class="pa-order-de-main">
-            <div class="pa-order-row">订单编号：HT-202203171252240150</div>
-            <div class="pa-order-row">商品明细：AR/MR技术实现原理教程</div>
-            <div class="pa-order-row" style="margin-bottom: 0">下单时间：2022-03-17 20:52:24</div>
+            <div class="pa-order-row">订单编号：{{ order.number }}</div>
+            <div class="pa-order-row">商品明细：{{ order.name }}</div>
+            <div class="pa-order-row" style="margin-bottom: 0">下单时间：{{ order.createtime }}</div>
           </div>
         </div>
       </div>
@@ -40,13 +40,22 @@
               <div style="position: relative">
                 <div style="position: relative; transition: opacity .3s">
                   <div style="width: 120px; height: 120px;">
-                    <img src="@/assets/qr.gif" style="vertical-align: middle; border-style: none">
+                    <img src="@/assets/weixin.png" width="120" height="120" style="vertical-align: middle; border-style: none">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pa-qrcode-container" style="margin-left: 20px">
+              <div style="position: relative">
+                <div style="position: relative; transition: opacity .3s">
+                  <div style="width: 120px; height: 120px;">
+                    <img src="@/assets/zhifubao.jpg" width="120" height="120" style="vertical-align: middle; border-style: none">
                   </div>
                 </div>
               </div>
             </div>
             <div style="margin-left: 24px">
-              <div class="pa-how">支付宝扫码支付 </div>
+              <div class="pa-how">微信/支付宝扫码支付 </div>
               <div style="margin-top: 22px">
                 <span>请及时支付</span>
               </div>
@@ -62,17 +71,32 @@
 <script>
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import { fetchPay } from '@/api/pay'
 
 export default {
   name: "Pay",
   components: { Header, Footer },
   data() {
     return {
+      order: {
+        id: '',
+        number: '',
+        price: 0,
+        createtime: '',
+        name: ''
+      }
     }
   },
   created() {
+    this.getOrder(this.$route.params.id)
   },
   methods: {
+    getOrder(id) {
+      this.order.id = id
+      fetchPay(this.order).then(response => {
+        this.order = response.data
+      })
+    }
   }
 }
 </script>

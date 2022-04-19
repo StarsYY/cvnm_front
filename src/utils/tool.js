@@ -13,11 +13,15 @@ export function isLogin() {
 }
 
 export function deleteHTML(richText) {
-  let content = richText.replace(/<.+?>/g, '')
-  content = content.replace(/&nbsp;/ig, '')
-  content = content.replace(/&ldquo;/ig, '')
-  content = content.replace(/&rdquo;/ig, '')
-  content = content.replace(/&mdash;/ig, '')
-  content = content.replace(/\s/ig, '')
-  return content
+  if(richText !== null) {
+    let content = richText.replace(/<.+?>/g, '')
+    content = content.replace(/&nbsp;/ig, '')
+    content = content.replace(/&ldquo;/ig, '')
+    content = content.replace(/&rdquo;/ig, '')
+    content = content.replace(/&mdash;/ig, '')
+    content = content.replace(/&gt;/ig, '')
+    content = content.replace(/&emsp;/ig, '')
+    content = content.replace(/\s/ig, '')
+    return content
+  }
 }

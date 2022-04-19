@@ -9,11 +9,18 @@ export function fetchTags(data) {
 }
 
 export function fetchLabel(query) {
-  console.log(query)
   return request({
-    url: '/tags/label?id=' + query,
+    url: '/tags/label',
     method: 'get',
     params: query
+  })
+}
+
+export function followLabelById(data) {
+  return request({
+    url: '/tags/label/follow',
+    method: 'post',
+    data
   })
 }
 
@@ -27,6 +34,14 @@ export function fetchPlate() {
 export function fetchTagDetail(query) {
   return request({
     url: '/tags/article',
+    method: 'get',
+    params: query
+  })
+}
+
+export function fetchTagRight(query) {
+  return request({
+    url: '/tags/right',
     method: 'get',
     params: query
   })

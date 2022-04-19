@@ -65,7 +65,6 @@
   line-height: 32px;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-inline-box;
   font-weight: 600;
   padding-right: 8px;
   cursor: pointer;
@@ -164,4 +163,75 @@
   text-align: right;
   line-height: 20px;
   display: inline-block;
+}
+
+
+
+/* 新增 */
+
+.icon-top {
+  display: inline-block;
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 2.5px;
+  position: relative;
+  top: 1px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.i-top {
+  background-image: url("../assets/top.svg");
+}
+
+.i-hot {
+  background-image: url("../assets/hot_1.svg");
+}
+
+.title-tag {
+  display: inline-block;
+  position: relative;
+  top: -4px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.title-tag > .t {
+  padding: 2px 8px;
+  position: relative;
+  display: inline-block;
+  height: 20px;
+  line-height: 15px;
+  vertical-align: middle;
+}
+
+.title-tag > .r-color {
+  background-color: rgba(254,239,239,.9);
+  color: #F15858;
+}
+
+.title-tag > .b-color {
+  background-color: rgba(50,141,255,.1);
+  color: #328dff;
+}
+
+.index-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  padding: 16px 0;
+  background-color: #fff;
+}
+
+.index-more-btn {
+  width: 144px;
+  height: 48px;
+  border-radius: 24px;
+  border: 2px solid #777;
+  line-height: 24px;
 }

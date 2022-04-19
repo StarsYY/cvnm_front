@@ -1,6 +1,7 @@
 <template>
   <div class="tinymce-box tinymce-body">
     <editor
+      :id="tinymceId"
       v-model="myValue"
       :init="init"
       :disabled="disabled"
@@ -23,7 +24,7 @@ import 'tinymce/icons/default/icons' // 解决了icons.js 报错Unexpected token
 // 编辑器插件plugins
 // 更多插件参考：https://www.tiny.cloud/docs/plugins/
 import 'tinymce/plugins/image'// 插入上传图片插件
-import 'tinymce/plugins/media'// 插入视频插件
+// import 'tinymce/plugins/media'// 插入视频插件
 import 'tinymce/plugins/table'// 插入表格插件
 import 'tinymce/plugins/lists'// 列表插件
 import 'tinymce/plugins/wordcount'// 字数统计插件
@@ -41,6 +42,12 @@ export default {
   name: 'Tinymce',
   props: {
     // 默认的富文本内容
+    id: {
+      type: String,
+      default: function() {
+        return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
+      }
+    },
     value: {
       type: String,
       default: ''
@@ -58,16 +65,22 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: 'link lists image code table wordcount media preview fullscreen'
+      // default: 'link lists image code table wordcount media preview fullscreen'
+      default: 'link lists image code table wordcount preview fullscreen'
     },
     toolbar: {
       type: [String, Array],
-      default: 'bold italic underline strikethrough | fontsizeselect | formatselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | undo redo | link unlink code lists table image media | removeformat | fullscreen preview'
+      default: 'bold italic underline strikethrough | fontsizeselect | formatselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | undo redo | link unlink code lists table image | removeformat | fullscreen preview'
+      // default: 'bold italic underline strikethrough | fontsizeselect | formatselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | undo redo | link unlink code lists table image media | removeformat | fullscreen preview'
     }
   },
   data () {
     return {
+      tinymceId: this.id,
+      hasChange: false,
+      hasInit: false,
       init: {
+        selector: `#${this.tinymceId}`,
         language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,
         language: 'zh_CN',
         skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide`,
@@ -83,6 +96,31 @@ export default {
         statusbar: true, // 底部的状态栏
         menubar: 'file edit insert view format table tools', // （1级菜单）最上方的菜单
         branding: false, // （隐藏右下角技术支持）水印“Powered by TinyMCE”
+        // init_instance_callback: editor => {
+        //   if (this.value) {
+        //     editor.setContent(this.value)
+        //   }
+        //   this.hasInit = true
+        //   editor.on('NodeChange Change KeyUp SetContent', () => {
+        //     this.hasChange = true
+        //     this.$emit('input', editor.getContent())
+        //   })
+
+        //   //input和change事件
+        //   editor.on('input',(e) => {
+        //     this.$emit('input',e.target.innerHTML);
+        //   });
+        //   editor.on('change',(e) => {
+        //     this.$emit('input',e.level.content)
+        //   })
+        // },
+        // //初始化内容
+        // setup: (editor) => {
+        //   editor.on("init", (e) => {
+        //     editor.setContent(this.value);
+        //     //this.hasInit = true;
+        //   });
+        // },
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
         images_upload_handler: (blobInfo, success, failure) => {
@@ -105,11 +143,23 @@ export default {
   mounted () {
     tinymce.init({})
   },
+  // methods: {
+  //   setContent(value) {
+  //     window.tinymce.get(this.tinymceId).setContent(value)
+  //   },
+  //   getContent() {
+  //     window.tinymce.get(this.tinymceId).getContent()
+  //   },
+  // },
   watch: {
     value (newValue) {
       // this.myValue = newValue
       // window.tinyMCE.setContent(newValue)
-      this.$nextTick(() => window.tinymce.get(this.tinymceId).setContent(newValue));
+      this.$nextTick(() => window.tinymce.get(this.tinymceId).setContent(newValue))
+      // if (this.hasInit) {
+      //   this.$nextTick(() =>
+      //     window.tinymce.get(this.tinymceId).setContent(newValue || ''))
+      // }
     },
     myValue (newValue) {
       this.$emit('input', newValue)

@@ -30,15 +30,18 @@
                     <span class="i-name">{{ nickname }}</span>
                     <span class="level">Lv {{ user.grow }}</span>
                   </div>
-                  <p class="authentication">
+                  <p v-if="user.position === '讲师'" class="authentication">
                     <span style="color: #777; margin-right: 5px">已认证</span>
                     <el-icon color="#328DFF" :size="12"><success-filled /></el-icon>
+                  </p>
+                  <p v-else class="authentication">
+                    <span style="color: #777; margin-right: 5px">未认证</span>
                   </p>
                 </div>
               </div>
               <ul class="list">
                 <li class="h-l" @click="personal(nickname)">个人资料</li>
-                <li class="h-l" @click="account">账号设置</li>
+                <li class="h-l" @click="account(nickname)">账号设置</li>
                 <li class="h-l" @click="myschool(nickname)">我的学堂</li>
               </ul>
               <div class="out" @click="logout">
@@ -55,27 +58,50 @@
           <font class="font">DEVELOPERS</font>
         </div>
         <div class="menu">
-          <div class="menu-list" @click="index">社区首页</div>
-          <div class="menu-list" @click="school">认证</div>
-          <div class="menu-list">认证</div>
-          <div class="menu-list">认证</div>
+          <div v-for="item in navigation" :key="item.id" class="menu-list">
+            <el-link :href="item.jump" target="_blank" :underline="false">{{ item.name }}</el-link>
+          </div>
         </div>
         <div class="nav-right">
-          <el-icon :size="20"><search /></el-icon>
+          <el-icon :size="20" @click="dialogVisible = true"><search /></el-icon>
           <div class="create">
-            <el-icon :size="20"><bell /></el-icon>
-            <span>创作中心</span>
+            <el-badge v-if="user.unreadMessage > 0" :value="user.unreadMessage" class="item" @click="personal(nickname)">
+              <el-icon :size="20"><bell /></el-icon>
+            </el-badge>
+            <el-icon v-else :size="20"><bell /></el-icon>
+            <el-dropdown>
+              <span class="create-center">创作中心</span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="create">发文章</el-dropdown-item>
+                  <!-- <el-dropdown-item @click="course">上传课程</el-dropdown-item> -->
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
         </div>
       </div>
     </el-affix>
+    <el-dialog v-model="dialogVisible" title="搜索内容">
+      <el-form :model="form">
+        <el-form-item label="关键字" :label-width="formLabelWidth">
+          <el-input v-model="form.search" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="searchAll">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import Cookie from 'js-cookie'
 import { ArrowDown, User, Check, Search, Bell, SuccessFilled } from '@element-plus/icons'
-import { getInfo } from '@/api/login'
+import { getInfo, fetchNavigation } from '@/api/login'
 
 export default {
   name: 'Header',
@@ -88,7 +114,14 @@ export default {
       user: {
         nickname: null,
         portrait: null,
-        grow: null
+        grow: null,
+        position: null,
+        unreadMessage: 0
+      },
+      navigation: null,
+      dialogVisible: false,
+      form: {
+        search: ''
       }
     }
   },
@@ -97,12 +130,22 @@ export default {
     if(this.nickname != undefined) {
       this.fetchUser()
     }
+    this.getNavigaton()
   },
   methods: {
     fetchUser() {
       getInfo(this.nickname).then(response => {
         this.user = response.data.loginUser
       })
+    },
+    getNavigaton() {
+      fetchNavigation().then(response => {
+        this.navigation = response.data.navigation
+      })
+    },
+    searchAll() {
+      this.dialogVisible = false
+      window.open(this.$router.resolve({name: 'Search', params: {search: this.form.search}}).href, '_blank')
     },
     login() {
       this.$router.push({name:'Login'})
@@ -114,20 +157,29 @@ export default {
     logout() {
       Cookie.remove("nickname")
       Cookie.remove("token")
+      this.$router.push('/')
       this.hidden = false
       this.isHidden = true
+    },
+    create() {
+      if (Cookie.get("nickname") === undefined) {
+        this.$router.push({name:'Login'})
+        return
+      }
+      window.open(this.$router.resolve({name:'Create'}).href, '_blank')
+    },
+    course() {
+      if (Cookie.get("nickname") === undefined) {
+        this.$router.push({name:'Login'})
+        return
+      }
+      window.open(this.$router.resolve({name:'SchoolCreate'}).href, '_blank')
     },
     personal(name) {
       window.open(this.$router.resolve({name: 'Personal', params:{name: name}}).href, '_blank')
     },
-    account() {
-      window.open(this.$router.resolve({name: 'User'}).href, '_blank')
-    },
-    index() {
-      window.open(this.$router.resolve('/').href, '_blank')
-    },
-    school() {
-      window.open(this.$router.resolve('/school').href, '_blank')
+    account(name) {
+      window.open(this.$router.resolve({name: 'User', params:{name: name}}).href, '_blank')
     },
     myschool(name) {
       window.open(this.$router.resolve({name: 'MySchool', params:{name: name}}).href, '_blank')
@@ -145,7 +197,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 @import "~@/styles/header.scss";
 
+.create-center {
+  font-size: 16px;
+  color: #333;
+}
+
+.menu-list >>> .el-link--default:hover {
+  color: #000;
+}
 </style>

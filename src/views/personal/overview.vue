@@ -7,8 +7,7 @@
       </div>
       <div class="o-card-introduce">了解最新资讯，揭秘最新开放能力，学习精品课程。</div>
       <div class="o-card-link">
-        <div class="o-link-content">开发者学堂</div>
-        <div class="o-link-content">Codelabs</div>
+        <div class="o-link-content" @click="school">开发者学堂</div>
       </div>
     </div>
     <div class="o-s-c" style="padding-left: 55px">
@@ -24,8 +23,8 @@
         </div>
       </div>
       <div class="o-card-link">
-        <div class="o-link-content">论坛</div>
-        <div class="o-link-content">问答</div>
+        <div class="o-link-content" @click="index">论坛</div>
+        <div class="o-link-content">问答（待删除）</div>
       </div>
     </div>
   </div>
@@ -35,7 +34,7 @@
       <el-row>
         <el-col :xs="24" :sm="24" :md="24" :lg="17" :xl="18">
           <div>
-            <div style="background: white; padding: 16px">
+            <div style="background: white; padding: 16px; margin-bottom: 80px">
               <div class="o-post-title-block">
                 <div class="o-post-left">
                   <span class="o-title-text">最新发布</span>
@@ -57,7 +56,8 @@
                       <div class="o-article-left">文章<span style="margin-left: 12px; margin-right: 4px">|</span></div>
                       <div style="width: 93%">
                         <div class="o-article-title" @click="detail(item.id)">{{ item.title }}</div>
-                        <div class="o-detail">{{ item.summary }}</div>
+                        <div v-if="item.summary.length === 0" class="o-detail">{{ item.content }}</div>
+                        <div v-else class="o-detail">{{ item.summary }}</div>
                         <div style="margin-left: 8px; margin-top: 16px">
                           <div class="o-article-tag">浏览：{{ item.watch }}</div>
                           <div class="o-article-tag">回复：{{ item.comment }}</div>
@@ -68,10 +68,10 @@
                     </div>
                   </div>
                   <div v-if="newArticle && newArticle.length === 0" class="o-write">
-                    <div class="o-write-title">发帖</div>
+                    <div class="o-write-title" @click="create">发帖</div>
                   </div>
                   <div v-if="newArticle && newArticle.length > 0" class="o-write" style="text-align: left">
-                    <div class="o-write-title">发帖</div>
+                    <div class="o-write-title" @click="create">发帖</div>
                   </div>
                 </div>
                 <div v-if="isLogName && newArticle && newArticle.length === 0" style="margin-top: 24px;">
@@ -94,7 +94,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="isLogName" style="background: white; padding: 16px; margin-top: 16px">
+            <div v-if="isLogName" style="background: white; padding: 16px; margin-top: 16px; display: none">
               <div class="o-post-title-block">
                 <div class="o-post-left">
                   <span class="o-title-text">我的活动</span>
@@ -196,23 +196,24 @@
               <div v-if="isLogName" style="margin-top: 24px">
                 <div class="o-exert">
                   <div class="o-exert-push">专家博主推荐</div>
-                  <div class="o-exert-new">
+                  <div class="o-exert-new" @click="batch">
                     <svg-icon icon-class="normal" style="font-size: 18px"></svg-icon>
                     <span style="margin-left: 6px">换一批</span>
                   </div>
                 </div>
                 <div style="margin-top: 16px; padding: 0 8px">
-                  <div class="o-follow-user">
+                  <div v-for="item in expert" :key="item.id" class="o-follow-user">
                     <div class="o-follow-av">
-                      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" :size="32"></el-avatar>
-                      <svg-icon icon-class="certification" class="o-head-svg"></svg-icon>
+                      <el-avatar :src="item.portrait" :size="32"></el-avatar>
+                      <svg-icon icon-class="certification" class="o-head-svg" style="display: none"></svg-icon>
                     </div>
                     <div class="o-follow-nickname">
-                      <div class="o-follow-name">小羊</div>
-                      <div class="o-follow-lv">Lv 7</div>
+                      <div class="o-follow-name">{{ item.nickname }}</div>
+                      <div class="o-follow-lv">Lv {{ item.grow }}</div>
                     </div>
-                    <div class="o-follow-exert">
-                      <span class="o-f-f">关注</span>
+                    <div :class="{ 'is_follow' : item.follow }" class="o-follow-exert">
+                      <span v-if="item.follow" class="is_follow_span o-f-f" @click="followExpertUser(item.uid, item.nickname)">已关注</span>
+                      <span v-if="!item.follow" class="o-f-f" @click="followExpertUser(item.uid, item.nickname)">关注</span>
                     </div>
                   </div>
                 </div>
@@ -246,8 +247,11 @@
 </template>
 
 <script>
-import { fetchOverview } from '@/api/personal'
+import { fetchOverview, followUser, fetchExpert } from '@/api/personal'
 import Cookie from 'js-cookie'
+import { deleteHTML } from '@/utils/tool'
+import { isLogin } from '@/utils/tool'
+import { ElMessage } from 'element-plus'
 
 export default {
   name: "Overview",
@@ -256,10 +260,15 @@ export default {
       name: {
         name: ''
       },
+      comment: {
+        username: '',
+        userid: ''
+      },
       communication: null,
       newArticle: null,
       follow: null,
       fans: null,
+      expert: null,
       one: true,
       two: false,
       three: false,
@@ -269,6 +278,7 @@ export default {
   },
   created() {
     this.getOverview(this.$route.params.name)
+    this.getRecommendExpert()
   },
   methods: {
     getOverview(name) {
@@ -284,7 +294,56 @@ export default {
         this.newArticle = response.data.newArticle
         this.follow = response.data.follow
         this.fans = response.data.fans
+
+        this.newArticle.forEach(item => {
+          item.content = deleteHTML(item.content)
+        })
       })
+    },
+    getRecommendExpert() {
+      this.name.name = Cookie.get("nickname") !== undefined ? Cookie.get("nickname") : ''
+      fetchExpert(this.name).then(response => {
+        this.expert = response.data.expert
+      })
+    },
+    followExpertUser(id, nickname) {
+      if(isLogin()) {
+        if (Cookie.get("nickname") === nickname) {
+          ElMessage({
+            message: '不能自己关注自己呦🤣',
+            type: 'warning',
+          })
+          return
+        }
+        this.comment.username = Cookie.get("nickname")
+        this.comment.userid = id
+        followUser(this.comment).then(() => {
+          this.expert.forEach(item => {
+            if (item.uid === id) {
+              if(item.follow) {
+                item.follow = false
+                return
+              } else {
+                item.follow = true
+                return
+              }
+            }
+          })
+        })
+      }
+    },
+    school() {
+      window.open(this.$router.resolve('/school').href, '_blank')
+    },
+    index() {
+      window.open(this.$router.resolve('/').href, '_blank')
+    },
+    create() {
+      if (Cookie.get("nickname") === undefined) {
+        this.$router.push({name:'Login'})
+        return
+      }
+      window.open(this.$router.resolve({name:'Create'}).href, '_blank')
     },
     detail(id) {
       window.open(this.$router.resolve({name:'Detail', params:{id: id}}).href, '_blank')
@@ -292,6 +351,9 @@ export default {
     personal(name) {
       window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
     },
+    batch() {
+      this.getRecommendExpert()
+    }
   }
 }
 </script>
@@ -300,4 +362,11 @@ export default {
 @import "~@/styles/overview.scss";
 @import '~@/styles/display.scss';
 
+.is_follow {
+  background: #328dff;
+}
+
+.is_follow_span {
+  color: #fff;
+}
 </style>

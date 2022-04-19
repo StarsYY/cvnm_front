@@ -15,3 +15,27 @@ export function payment(data) {
     data
   })
 }
+
+export function fetchUserIntegral(data) {
+  return request({
+    url: '/school/confirm/userIntegral',
+    method: 'post',
+    data
+  })
+}
+
+export function IntegralPayCourse(data) {
+  return request({
+    url: '/school/confirm/pay/integral',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchPay(data) {
+  return request({
+    url: '/school/order/pay',
+    method: 'post',
+    data
+  })
+}

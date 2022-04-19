@@ -31,6 +31,9 @@
         <div v-if="key === 4">
           <Draft />
         </div>
+        <div v-if="key === 5">
+          <Audit />
+        </div>
       </div>
     </div>
   </div>
@@ -42,11 +45,12 @@ import Reply from "./community/reply.vue"
 import Fans from "./community/fans.vue"
 import Follow from "./community/follow.vue"
 import Draft from "./community/draft.vue"
+import Audit from "./community/audit.vue"
 import Cookie from 'js-cookie'
 
 export default {
   name: "Community",
-  components: { Article, Reply, Fans, Follow, Draft },
+  components: { Article, Reply, Fans, Follow, Draft, Audit },
   data() {
     return {
       key: 0,
@@ -55,7 +59,8 @@ export default {
         { key: 1, value: '回复', is: false },
         { key: 2, value: '粉丝', is: false },
         { key: 3, value: '关注', is: false },
-        { key: 4, value: '草稿', is: false }
+        { key: 4, value: '草稿', is: false },
+        { key: 5, value: '待审核', is: false }
       ],
       isLog: true
     }

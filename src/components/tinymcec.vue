@@ -23,7 +23,6 @@ import 'tinymce/icons/default/icons' // 解决了icons.js 报错Unexpected token
 // 编辑器插件plugins
 // 更多插件参考：https://www.tiny.cloud/docs/plugins/
 import 'tinymce/plugins/image'// 插入上传图片插件
-import 'tinymce/plugins/media'// 插入视频插件
 import 'tinymce/plugins/table'// 插入表格插件
 import 'tinymce/plugins/lists'// 列表插件
 import 'tinymce/plugins/wordcount'// 字数统计插件
@@ -58,11 +57,11 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: 'link lists image code table wordcount media preview fullscreen'
+      default: 'link lists image code table wordcount preview fullscreen'
     },
     toolbar: {
       type: [String, Array],
-      default: 'bold italic underline strikethrough | fontsizeselect | formatselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | undo redo | link unlink code lists table image media | removeformat | fullscreen preview'
+      default: 'bold italic underline strikethrough | fontsizeselect | formatselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | undo redo | link unlink code lists table image | removeformat | fullscreen preview'
     }
   },
   data () {

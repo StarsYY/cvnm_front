@@ -23,3 +23,11 @@ export function register(query) {
     params: query
   })
 }
+
+export function fetchNavigation(query) {
+  return request({
+    url: '/navigation',
+    method: 'get',
+    params: query
+  })
+}

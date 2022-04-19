@@ -32,7 +32,7 @@
   box-sizing: border-box;
   flex: 0 0 auto;
   float: left;
-  max-width: 45.8%;
+  width: 45.8%;
   position: relative;
   min-height: 1px;
 }
@@ -193,4 +193,50 @@
 .p-cart-select {
   color: black;
   border-bottom: 1px solid black;
+}
+
+.p-medal-main {
+  width: auto;
+  max-height: 410px;
+  overflow-y: auto;
+}
+
+.p-medal-list {
+  display: inline-block;
+  margin-right: 32px;
+  margin-bottom: 16px;
+  width: 236px;
+  height: 216px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.p-img-com {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.p-img-h5 {
+  -webkit-line-clamp: 1;
+  margin: 0 8px 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #43474c;
+  letter-spacing: .12px;
+  line-height: 24px;
+  max-height: 24px;
+}
+
+.p-img-h6 {
+  -webkit-line-clamp: 2;
+  margin: 0 8px;
+  font-size: 12px;
+  color: #777;
+  letter-spacing: .09px;
+  line-height: 16px;
+  min-height: 32px;
+  max-height: 32px;
 }

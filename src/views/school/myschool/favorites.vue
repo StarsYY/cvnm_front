@@ -18,43 +18,46 @@
             </div>
           </div>
         </div>
-          <div class="sc-md-main" style="margin: 0 -3px -3px; margin-top: 15px">
-            <div class="sc-mm">
-              <div class="sc-mmm">
-                <div class="sc-mmmm">
-                  <template v-for="item in course" :key="item.id">
-                    <div class="fv-mm-list" v-if="!item.collect">
-                      <div class="sc-ml-a fv-ml-a">
-                        <div class="sc-ml-top" @click="video(item.id, item.price)">
-                          <img :src="item.cover" class="sc-ct-img" style="cursor: pointer">
+        <div class="sc-md-main" style="margin: 0 -3px -3px; margin-top: 15px">
+          <div class="sc-mm">
+            <div class="sc-mmm">
+              <div class="sc-mmmm">
+                <template v-for="item in course" :key="item.id">
+                  <div class="fv-mm-list" v-if="!item.collect">
+                    <div class="sc-ml-a fv-ml-a">
+                      <div class="sc-ml-top" @click="video(item.id, item.price)">
+                        <img :src="item.cover" class="sc-ct-img" style="cursor: pointer">
+                      </div>
+                      <div class="sc-ml-foot">
+                        <span class="sc-ml-name" style="cursor: pointer" @click="video(item.id, item.price)">{{ item.name }}</span>
+                        <div class="fv-sc">
+                          <el-rate
+                            v-model="item.score"
+                            disabled
+                            show-score
+                            text-color="#ff9900"
+                            score-template="{item.score}"
+                          />
+                          <div style="color: rgb(121 138 151)">
+                            <svg-icon icon-class="person"></svg-icon>
+                            {{ item.watch }}
+                          </div>
                         </div>
-                        <div class="sc-ml-foot">
-                          <span class="sc-ml-name" style="cursor: pointer" @click="video(item.id, item.price)">{{ item.name }}</span>
-                          <div class="fv-sc">
-                            <el-rate
-                              v-model="item.score"
-                              disabled
-                              show-score
-                              text-color="#ff9900"
-                              score-template="{item.score}"
-                            />
-                            <div style="color: rgb(121 138 151)">
-                              <svg-icon icon-class="person"></svg-icon>
-                              {{ item.watch }}
-                            </div>
-                          </div>
-                          <div class="fv-au">
-                            <div class="fv-author">{{ item.author }}</div>
-                            <div class="fv-unfa" @click="collect(item.id)">取消收藏</div>
-                          </div>
+                        <div class="fv-au">
+                          <div class="fv-author">{{ item.author }}</div>
+                          <div class="fv-unfa" @click="collect(item.id)">取消收藏</div>
                         </div>
                       </div>
                     </div>
-                  </template>
-                </div>
+                  </div>
+                </template>
               </div>
             </div>
           </div>
+        </div>
+        <div v-if="total === listQuery.limit" style="text-align: center">
+          <el-button round @click="more">更多</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -73,22 +76,31 @@ export default {
   },
   data() {
     return {
-      uid: this.userId,
-      course: [],
+      listQuery: {
+        uid: this.userId,
+        page: 0,
+        limit: 9
+      },
+      course: null,
+      total: 0,
       discuss: {
         courseid: '',
         author: ''
-      },
-      value: 4.7
+      }
     }
   },
   created() {
-    this.getFavorites(this.uid)
+    this.getFavorites()
   },
   methods: {
-    getFavorites(uid) {
-      fetchFavorites(uid).then(response => {
-        this.course = response.data
+    getFavorites() {
+      fetchFavorites(this.listQuery).then(response => {
+        this.total = response.data.length
+        if(this.course !== null) {
+          this.course = this.course.concat(response.data)
+        } else {
+          this.course = response.data
+        }
       })
     },
     collect(id) {
@@ -97,11 +109,17 @@ export default {
         this.discuss.courseid = id
         createFollow(this.discuss).then(() => {
           this.course.forEach(item => {
-            if(item.id === id)
-            item.collect = true
-          });
+            if(item.id === id) {
+              item.collect = true
+              return
+            }
+          })
         })
       }
+    },
+    more() {
+      this.listQuery.page += 1
+      this.getFavorites()
     },
     video(id, price) {
       if(price === 0) {

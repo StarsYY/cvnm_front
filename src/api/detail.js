@@ -8,6 +8,14 @@ export function fetchArticle(data) {
   })
 }
 
+export function fetchLeftArticle(data) {
+  return request({
+    url: '/detail/left?uid=' + data,
+    method: 'get',
+    params: data
+  })
+}
+
 export function fetchComment(data) {
   return request({
     url: '/detail/comment',
@@ -59,6 +67,14 @@ export function upComment(data) {
 export function followAuthor(data) {
   return request({
     url: '/detail/followAuthor',
+    method: 'post',
+    data
+  })
+}
+
+export function reportArticleOrComment(data) {
+  return request({
+    url: '/detail/report',
     method: 'post',
     data
   })

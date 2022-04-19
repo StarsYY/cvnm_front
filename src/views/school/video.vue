@@ -2,8 +2,8 @@
   <Header />
   <div class="vi-main">
     <div style="background: #000; display: flex">
-      <div class="vi-video">
-        <video src="@/assets/sn1080.mp4" controls="controls" autoplay="autoplay" muted="muted" style="width: 100%"></video>
+      <div class="vi-video" @click="clickVideo">
+        <video :src="videoSource" controls="controls" autoplay="autoplay" muted="muted" style="width: 100%"></video>
       </div>
       <div class="vi-right">
         <div>
@@ -12,8 +12,8 @@
           </div>
           <div style="overflow: auto">
             <div>
-              <div class="vi-list-item">
-                <div class="vi-li-main">概念</div>
+              <div v-for="item in video" :key="item.id" class="vi-list-item" @click="videoSource = item.source">
+                <div class="vi-li-main">{{ item.filename }}</div>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@
                   <div class="vi-course-introduce">
                     <div class="vi-ci-main">
                       <div style="position: relative">
-                        <div>
+                        <div v-if="disLen > 0">
                           <div class="vi-review-list" v-for="item in allDiscuss" :key="item.id">
                             <div style="display: flex; align-items: flex-start">
                               <div style="width: 32px; height: 32px">
@@ -103,10 +103,10 @@
                                     </div>
                                   </div>
                                   <div style="display: flex">
-                                    <div v-if="item.admRep === 0" @click="item.status = 1 - item.status">
+                                    <div v-if="isadmin === 1 && item.admRep === 0" @click="item.status = 1 - item.status">
                                       <svg-icon icon-class="review" style="cursor: pointer; width: 20px; height: 20px"></svg-icon>
                                     </div>
-                                    <div v-if="item.rep === 1">
+                                    <div v-if="item.rep === 1" @click="deleteMyDis(item.id)">
                                       <svg-icon icon-class="del" style="cursor: pointer; width: 20px; height: 20px; margin-left: 20px"></svg-icon>
                                     </div>
                                   </div>
@@ -134,11 +134,18 @@
                               </div>
                               <div v-if="item.admRep === 1" style="padding: 16px; background-color: #f5f5f5">
                                 <div class="vi-re-top">
-                                  <span class="vi-rtt">
-                                    <svg-icon icon-class="service" style="width: 24px; height: 24px"></svg-icon>
-                                    <span style="margin-left: 7px">客服回复</span>
-                                  </span>
-                                  <span class="vi-rt-right">{{ item.reDis.createtime }}</span>
+                                  <div style="display: flex; align-items: center">
+                                    <span class="vi-rtt">
+                                      <svg-icon icon-class="service" style="width: 24px; height: 24px"></svg-icon>
+                                      <span style="margin-left: 7px">客服回复</span>
+                                    </span>
+                                    <span class="vi-rt-right">{{ item.reDis.createtime }}</span>
+                                  </div>
+                                  <div style="display: flex">
+                                    <div v-if="isadmin === 1" @click="deleteMyDis(item.reDis.id)">
+                                      <svg-icon icon-class="del" style="cursor: pointer; width: 20px; height: 20px; margin-left: 20px"></svg-icon>
+                                    </div>
+                                  </div>
                                 </div>
                                 <div class="vi-rt-content">{{ item.reDis.discuss }}</div>
                               </div>
@@ -185,34 +192,20 @@
                   </div>
                 </div>
               </div>
-              <div style="margin-top: 64px">
+              <div v-if="recommendCourse" style="margin-top: 64px">
                 <div class="vi-recommend">相关课程推荐</div>
-                <div class="ci-rc-main">
+                <div v-for="item in recommendCourse" :key="item.id" class="ci-rc-main" @click="courseRe(item.id, item.price)">
                   <div class="ci-rc-cart">
-                    <h2 class="ci-rc-name">系统架构</h2>
+                    <h2 class="ci-rc-name">{{ item.name }}</h2>
                     <div class="ci-rc-info">
-                      <span>7.9K人在学</span>
+                      <span>{{ item.watch }}人在学</span>
                       <span style="margin: -6px 6px 0">.</span>
-                      <span>评分 4.6</span>
+                      <span>评分 {{ item.score }}</span>
                     </div>
                     <div style="margin-top: 16px">
                       <div class="ci-rc-price">
-                        <span class="ci-rpp">免费</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="ci-rc-main">
-                  <div class="ci-rc-cart">
-                    <h2 class="ci-rc-name">系统架构</h2>
-                    <div class="ci-rc-info">
-                      <span>7.9K人在学</span>
-                      <span style="margin: -6px 6px 0">.</span>
-                      <span>评分 4.6</span>
-                    </div>
-                    <div style="margin-top: 16px">
-                      <div class="ci-rc-price">
-                        <span class="ci-rpp">免费</span>
+                        <span v-if="item.price === 0" class="ci-rpp">免费</span>
+                        <span v-else class="ci-rpp">￥ {{ item.price / 100 }}</span>
                       </div>
                     </div>
                   </div>
@@ -230,10 +223,10 @@
 <script>
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import { fetchCourse, boolDiscuss, createDiscuss, fetchDiscuss, createFollow, fetchUser } from '@/api/video'
+import { fetchCourse, boolDiscuss, createDiscuss, fetchDiscuss, createFollow, fetchUser, deleteMyDiscuss, createLearning, fetchRecommend } from '@/api/video'
 import { isLogin } from '@/utils/tool'
 import Cookie from 'js-cookie'
-import { ElNotification } from 'element-plus'
+import { ElNotification, ElMessageBox } from 'element-plus'
 
 export default {
   name: "Video",
@@ -245,12 +238,16 @@ export default {
         name: '',
         introduction: '',
         labelMap: '',
+        price: '',
         score: '',
         watch: '',
         collect: false,
         userid: ''
       },
+      video: [],
+      videoSource: '',
       discuss: {
+        id: '',
         courseid: '',
         disid: '',
         score: 5,
@@ -266,11 +263,18 @@ export default {
         watch: '',
         score: ''
       },
+      isadmin: 0,
       disLen: 0,
       value: 5,
       activeName: 'first',
       is: 0,
-      allDiscuss: []
+      allDiscuss: [],
+      clickNum: 0,
+      learning: {
+        username: '',
+        courseid: ''
+      },
+      recommendCourse: null
     }
   },
   created() {
@@ -289,7 +293,13 @@ export default {
         this.discuss.author = Cookie.get("nickname")
       }
       fetchCourse(this.discuss).then(response => {
-        this.course = response.data
+        this.course = response.data.course
+        this.isadmin = response.data.isAdmin
+        if(this.isadmin === 0 && response.data.video === null) {
+          this.$router.push({name:'Purchase', params:{id: id}})
+        }
+        this.video = response.data.video
+        this.videoSource = this.video[0].source
         var uid = this.course.userid
         fetchUser(uid).then(response => {
           this.user = response.data
@@ -305,7 +315,14 @@ export default {
       }
       fetchDiscuss(this.discuss).then(response => {
         this.allDiscuss = response.data
-        this.disLen = this.allDiscuss.length
+        if(this.allDiscuss.length === undefined || this.allDiscuss.length === 0) {
+          this.disLen = 0
+        } else {
+          this.disLen = this.allDiscuss.length
+        }
+      })
+      fetchRecommend(id).then(response => {
+        this.recommendCourse = response.data
       })
     },
     commit(id) {
@@ -347,6 +364,58 @@ export default {
             this.course.collect = false
           }
         })
+      }
+    },
+    videoLogin() {
+      if (Cookie.get("nickname") === undefined) {
+        return false
+      }
+      return true
+    },
+    clickVideo() {
+      if(this.videoLogin()) {
+        if(this.clickNum === 0) {
+          this.learning.username = Cookie.get("nickname")
+          this.learning.courseid = this.course.id
+          createLearning(this.learning)
+        }
+        this.clickNum += 1
+      }
+    },
+    deleteMyDis(id) {
+      if(isLogin()) {
+        ElMessageBox.confirm(
+          '你确定要删除评论嘛?',
+          '警告',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true,
+          }
+        ).then(() => {
+          this.discuss.id = id
+          deleteMyDiscuss(this.discuss).then(() => {
+            this.allDiscuss.some((item, i) => {
+              if(item.id === id) {
+                this.allDiscuss.splice(i, 1)
+                this.disLen -= 1
+                return true
+              } else if(item.reDis.id === id) {
+                item.admRep = 0
+                item.reDis = null
+                return true
+              }
+            })
+          })
+        })
+      }
+    },
+    courseRe(id, price) {
+      if(price === 0) {
+        window.open(this.$router.resolve({name:'Video', params:{id: id}}).href, '_blank')
+      } else {
+        window.open(this.$router.resolve({name:'Purchase', params:{id: id}}).href, '_blank')
       }
     }
   }

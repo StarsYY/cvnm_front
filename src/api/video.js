@@ -47,3 +47,27 @@ export function createFollow(data) {
     data
   })
 }
+
+export function deleteMyDiscuss(data) {
+  return request({
+    url: '/course/discuss/delete',
+    method: 'post',
+    data
+  })
+}
+
+export function createLearning(data) {
+  return request({
+    url: '/course/learning',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchRecommend(query) {
+  return request({
+    url: '/course/recommend?id=' + query,
+    method: 'get',
+    params: query
+  })
+}

@@ -8,7 +8,8 @@
             <div class="ms-lm">
               <el-avatar :src="user.portrait" :size="120"></el-avatar>
               <div class="ms-lm-name">{{ user.nickname }}</div>
-              <div class="ms-lm-verify">讲师（要后台判断是否认证讲师）</div>
+              <div v-if="user.position === '讲师'" class="ms-lm-verify">讲师</div>
+              <div v-else class="ms-lm-verify" @click="goVerify(user.uid)">申请成为讲师</div>
               <div class="ms-lm-line"></div>
               <div class="ms-lm-a">
                 <a v-for="item in menu" :key="item.key" class="ms-lm-list">
@@ -65,7 +66,8 @@ export default {
       user: {
         uid: '',
         nickname: '',
-        portrait: ''
+        portrait: '',
+        position: ''
       }
     }
   },
@@ -87,8 +89,10 @@ export default {
       this.user.nickname = name
       fetchMySchool(this.user).then(response => {
         this.user = response.data
-        console.log(response)
       })
+    },
+    goVerify(uid) {
+      this.$router.push({ name: 'Verify', params: { uid: uid }})
     }
   }
 }

@@ -6,19 +6,38 @@
         <div class="left">
           <el-scrollbar height="570px">
             <ul class="def">
-              <li
-                v-for="items in def"
-                class="common"
-                :class="{ hover : items.activeIndex }"
-                :key="items.key"
-                @click ="select(items.key)"
-                v-on:mouseover="changeActive($event)"
-                v-on:mouseout="removeActive($event, items.key)">
-                {{ items.value }}
-              </li>
+              <template v-for="items in def" :key="items.key">
+                <li
+                  class="common"
+                  :class="{ hover : items.activeIndex }"
+                  v-if="items.key === 4 && isLogined"
+                  @click ="select(items.key)"
+                  v-on:mouseover="changeActive($event, items.key)"
+                  v-on:mouseout="removeActive($event, items.key)"
+                >
+                  {{ items.value }}
+                </li>
+                <li
+                  class="common"
+                  :class="{ hover : items.activeIndex }"
+                  v-if="items.key < 4"
+                  @click ="select(items.key)"
+                  v-on:mouseover="changeActive($event, items.key)"
+                  v-on:mouseout="removeActive($event, items.key)"
+                >
+                  {{ items.value }}
+                </li>
+              </template>
             </ul>
             <div class="tree">
-              <el-tree :data="data" :props="defaultProps" default-expand-all @node-click="handleNodeClick">
+              <el-tree 
+                :data="data" 
+                :props="defaultProps" 
+                :expand-on-click-node="false" 
+                :highlight-current="true" 
+                default-expand-all 
+                @node-click="handleNodeClick"
+              >
                 <template v-slot="{ node, data }">
                   <span style="display: flex; align-items: center">
                     <el-image v-if="data.icon != '' && data.icon != null" class="icon" :src="data.icon" />{{ node.label }}
@@ -33,23 +52,125 @@
         <div :class="{ middle : is }">
           <div class="block" :class="{ hidden : hidden }">
             <el-carousel trigger="click" height="288px">
-              <el-carousel-item v-for="item in img" :key="item.key" style="background-color: #fff">
-                <el-image :src="item.value" style="height: 288px" />
+              <el-carousel-item v-for="item in rotation" :key="item.key" style="background-color: #fff">
+                <el-image :src="item.source" style="height: 288px" />
               </el-carousel-item>
             </el-carousel>
           </div>
-          <div class="content">
-            <div style="border-bottom: 1px solid #E8E8E8">
-              <div
-                v-for="items in contentTags"
-                class="content-tags"
-                :class="{ 'hover-tag select-tag' : items.tagIndex }"
-                :key="items.key"
-                @click ="selectTag(items.key)"
-                v-on:mouseover="changeTag($event, items.key)"
-                v-on:mouseout="removeTag($event, items.key)">
-              {{ items.value }}
+          <div class="index-plate-children" v-if="listQuery.defOrTree === 2">
+            <div class="ipc-top">
+              <div class="ipc-top-title">
+                <div class="ipc-tt-left">
+                  <span style="margin-right: 8px; line-height: 32px">
+                    <svg-icon icon-class="index-text" style="width: 24px; height: 24px"></svg-icon>
+                  </span>
+                  <span class="ipc-tt-main">{{ plate.plate }}</span>
+                </div>
+                <div style="white-space: nowrap">
+                  <el-button v-if="!plate.follow" type="primary" plain round style="margin-left: 16px" @click="followPlate(plate.id)">关注</el-button>
+                  <el-button v-if="plate.follow" type="primary" round style="margin-left: 16px" @click="followPlate(plate.id)">已关注</el-button>
+                </div>
               </div>
+              <p class="ipc-top-desc">
+                <el-tooltip :content="plate.describe" placement="bottom" effect="light">
+                  <span class="itd-span">{{ plate.describe }}</span>
+                </el-tooltip>
+              </p>
+              <div style="width: 65%; margin-top: 16px">
+                <div class="ipc-top-bot">
+                  <div class="info-item">
+                    <p class="itb-ii-title">今日</p>
+                    <p class="itb-ii-num">{{ plate.todayArticle }}</p>
+                  </div>
+                  <div class="info-item">
+                    <p class="itb-ii-title">文章</p>
+                    <p class="itb-ii-num">{{ plate.articleCount }}</p>
+                  </div>
+                  <div class="info-item">
+                    <p class="itb-ii-title">回复</p>
+                    <p class="itb-ii-num">{{ plate.replyCount }}</p>
+                  </div>
+                  <div class="info-item">
+                    <p class="itb-ii-title">关注</p>
+                    <p class="itb-ii-num">{{ plate.followCount }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="plateChildren && plateChildren.length > 0" class="ipc-bottom" :class="{ 'ipc-bottom-all' : showAll }">
+              <div v-for="item in plateChildren" :key="item.id" class="ipc-bt-list" @click="selectPlate(item.id)">
+                <div style="position: relative">
+                  <p class="ibl-title">
+                    <span class="ibl-title-main">{{ item.plate }}</span>
+                  </p>
+                  <div style="display: flex">
+                    <div class="ibl-t-info">
+                      <span class="iti-one">{{ item.articleCount }} </span>
+                      <span class="iti-two">文章</span>
+                    </div>
+                    <div class="ibl-t-info" style="margin-right: 0">
+                      <span class="iti-one">{{ item.replyCount }} </span>
+                      <span class="iti-two">回复</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="plateChildren && plateChildren.length > 0" class="expand-area">
+              <svg-icon v-if="!showAll" icon-class="index-normal" style="width: 16px; height: 16px; cursor: pointer" @click="showAll = !showAll"></svg-icon>
+              <svg-icon v-else icon-class="index-active" style="width: 16px; height: 16px; cursor: pointer" @click="showAll = !showAll"></svg-icon>
+            </div>
+          </div>
+          <div class="content">
+            <div>
+              <div v-if="listQuery.defOrTree === 2" class="td-operation-bar">
+                <div class="tag-search-input">
+                  <el-input
+                    v-model="listQuery.title"
+                    class="w-50 m-2"
+                    size="small"
+                    placeholder="输入文章名称搜索"
+                    prefix-icon="Search"
+                    @change="search"
+                  />
+                  <el-icon class="tag-icon"><Search /></el-icon>
+                </div>
+                <div class="set-flex">
+                  <div style="margin-right: 24px">
+                    <el-dropdown>
+                      <span class="el-dropdown-link" style="cursor: pointer">
+                        {{ tag }}
+                        <el-icon class="el-icon--right">
+                          <arrow-down />
+                        </el-icon>
+                      </span>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item v-for="item in menuList" :key="item.key" @click="getM1(item.value)">{{ item.value }}</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                  </div>
+                  <div>
+                    <el-dropdown>
+                      <span class="el-dropdown-link" style="cursor: pointer">
+                        {{ type }}
+                        <el-icon class="el-icon--right">
+                          <arrow-down />
+                        </el-icon>
+                      </span>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item v-for="item in menuList2" :key="item.key" @click="getM2(item.key, item.value)">{{ item.value }}</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                  </div>
+                </div>
+              </div>
+              <el-tabs v-model="contentTag" @tab-click="handleClick">
+                <el-tab-pane v-for="item in contentTags" :key="item.key" :label="item.value" :name="item.key"></el-tab-pane>
+              </el-tabs>
             </div>
             <div v-loading="loading">
               <div v-for="item in article" :key="item.id" class="article">
@@ -62,9 +183,11 @@
                   </span>
                   <span class="title" @click="detail(item.id)">{{ item.title }}</span>
                   <div class="title-tag">
-                    <span class="t t-color">推荐</span>
+                    <span v-if="item.tag === '推荐'" class="t r-color">推荐</span>
+                    <span v-if="item.tag === '精华'" class="t b-color">精华</span>
                   </div>
                 </div>
+                <div class="article-content">{{ item.content }}</div>
                 <div class="message">
                   <div style="display: flex">
                     <el-avatar :src="item.portrait" :size="24" style="margin-right: 8px; position: relative; cursor: pointer" @click="personal(item.nickname)"></el-avatar>
@@ -88,14 +211,18 @@
                     </p>
                     <p class="icon-flex" style="margin-left: 20px">
                       <svg-icon icon-class="review" style="font-size: 20px"></svg-icon>
-                      <span style="margin-left: 4px; color: #777">88 评论数</span>
+                      <span style="margin-left: 4px; color: #777">{{ item.comment }}</span>
                     </p>
                     <p class="icon-flex" style="margin-left: 20px">
-                      <svg-icon icon-class="up" style="font-size: 20px"></svg-icon>
+                      <svg-icon v-if="!item.like" icon-class="up" style="font-size: 22px; cursor: pointer" @click="up(item.id)"></svg-icon>
+                      <svg-icon v-if="item.like" icon-class="isup" style="font-size: 20px; cursor: pointer" @click="up(item.id)"></svg-icon>
                       <span style="margin-left: 4px; color: #777">{{ item.up }}</span>
                     </p>
                   </div>
                 </div>
+              </div>
+              <div class="index-more" :class="{ 'hidden-more' : hideMore }">
+                <el-button class="index-more-btn" plain round @click="showMore">查看更多</el-button>
               </div>
             </div>
           </div>
@@ -116,18 +243,19 @@
                   <img src="../assets/Signin.svg" />
                 </div>
                 <p class="sign-in-main">快来签到领取积分吧！</p>
-                <button class="check-in">签到</button>
+                <button v-if="!sign" class="check-in" @click="signIn">签到</button>
+                <button v-if="sign" class="check-in">已签到</button>
               </div>
             </div>
           </div>
           <div style="margin-top: 40px;">
             <div class="hot">热门文章</div>
             <div>
-              <div style="margin-bottom: 20px">
-                <span class="hot-title">落霞与孤鹜齐飞，秋水共长天一色。</span>
+              <div v-for="item in hotArticle" :key="item.id" style="margin-bottom: 20px">
+                <span class="hot-title" @click="detail(item.id)">{{ item.title }}</span>
                 <div class="hot-view">
                   <svg-icon icon-class="view" style="font-size: 16px"></svg-icon>
-                  <span style="margin-left: 8px">163</span>
+                  <span style="margin-left: 8px">{{ item.watch }}</span>
                 </div>
               </div>
             </div>
@@ -139,23 +267,18 @@
             </div>
             <div style="margin: 0 -8px 0 0; padding-bottom: 0">
               <div style="max-height: 84px; overflow: hidden">
-                <h3 class="hot-tag" @click="tagDetail">HarmonyOS</h3>
-                <h3 class="hot-tag">开发</h3>
-                <h3 class="hot-tag">HMS Core</h3>
-                <h3 class="hot-tag">HarmonyOS app</h3>
-                <h3 class="hot-tag">华为快应用</h3>
-                <h3 class="hot-tag">服务接入</h3>
+                <h3 v-for="item in hotLabel" :key="item.id" class="hot-tag" @click="tagDetail(item.id)">{{ item.label }}</h3>
               </div>
             </div>
           </div>
           <div style="margin-top: 40px;">
             <div class="hot">推荐文章</div>
             <div>
-              <div style="margin-bottom: 20px">
-                <span class="hot-title">落霞与孤鹜齐飞，秋水共长天一色。</span>
+              <div v-for="item in recommendArticle" :key="item.id" style="margin-bottom: 20px">
+                <span class="hot-title" @click="detail(item.id)">{{ item.title }}</span>
                 <div class="hot-view">
                   <svg-icon icon-class="view" style="font-size: 16px"></svg-icon>
-                  <span style="margin-left: 8px">163</span>
+                  <span style="margin-left: 8px">{{ item.watch }}</span>
                 </div>
               </div>
             </div>
@@ -170,19 +293,18 @@
 <script>
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { fetchIndex, fetchContentTags, fetchArticle, getArticle } from '@/api/index'
+import { fetchIndex, fetchContentTags, fetchArticle, fetchPlate, followPlateById, fetchIndexRight, userSignIn, fetchSignIn } from '@/api/index'
 import Cookie from 'js-cookie'
+import { isLogin, deleteHTML } from '@/utils/tool'
+import { upArticle } from '@/api/detail'
+import { ElMessage } from 'element-plus'
+import { ArrowDown, Search } from '@element-plus/icons'
 
 export default {
   name: "Index",
-  components: { Header, Footer },
+  components: { Header, Footer, ArrowDown, Search },
   data() {
     return {
-      img: [
-        { key: 1, value: require("../assets/1.jpg") },
-        { key: 1, value: require("../assets/2.jpg") },
-        { key: 1, value: require("../assets/3.jpg") }
-      ],
       is: true,
       hidden: false,
       windowWidth: document.documentElement.clientWidth,
@@ -190,6 +312,7 @@ export default {
         { key: 1, value: '所有帖子', activeIndex: true },
         { key: 2, value: '热门内容', activeIndex: false },
         { key: 3, value: '推荐精华', activeIndex: false },
+        { key: 4, value: '我的关注', activeIndex: false }
       ],
       contentTags: null,
       data: null,
@@ -197,22 +320,77 @@ export default {
         defOrTree: 1, // 1为def  2为tree
         leftId: 1,
         contentTag: 1,
+        username: '',
+        title: '',
+        type: '全部',
+        hot: '全部',
         page: 0,
-        limit: 10,
+        limit: 20,
+      },
+      contentTag: 1,
+      menuList:[
+        { key: 1, value: '全部' },
+        { key: 2, value: '精华' },
+        { key: 3, value: '热门' },
+        { key: 4, value: '推荐' },
+      ],
+      menuList2:[
+        { key: 1, value: '最新发布' },
+        { key: 2, value: '最新回复' },
+        { key: 3, value: '最多回复' },
+      ],
+      tag: '全部',
+      type: '最新发布',
+      comment: {
+        username: '',
+        articleid: '',
+        comment: '',
+        comid: 0,
+        is: '',
+        userid: ''
       },
       defaultProps: {
         children: 'children',
         label: 'label',
       },
-      activeName: 'first',
       article: null,
-      loading: false
+      hotArticle: null,
+      hotLabel: null,
+      recommendArticle: null,
+      plate: {
+        id: '',
+        plate: '',
+        describe: '',
+        icon: '',
+        todayArticle: '',
+        articleCount: '',
+        replyCount: '',
+        followCount: '',
+        follow: ''
+      },
+      plateChildren: null,
+      follow: {
+        id: '',
+        username: ''
+      },
+      loading: false,
+      hideMore: true,
+      showAll: false,
+      rotation: null,
+      sign: false,
+      isLogined: false
     }
   },
   created() {
     this.getIndex()
     this.getContentTags()
     this.getArticle()
+    this.getIndexRight()
+    this.getSignInStatus()
+
+    if(Cookie.get("nickname") !== undefined) {
+      this.isLogined = true
+    }
   },
   methods: {
     getIndex() {
@@ -226,28 +404,153 @@ export default {
       })
     },
     getArticle() {
+      Cookie.get("nickname") === undefined ? this.listQuery.username = '' : this.listQuery.username = Cookie.get("nickname")
       fetchArticle(this.listQuery).then(response => {
-        this.article = response.data.article
+        if(response.data.article.length < 20) {
+          this.hideMore = true
+        } else {
+          this.hideMore = false
+        }
+        if(this.article !== null) {
+          this.article = this.article.concat(response.data.article)
+        } else {
+          this.article = response.data.article
+        }
+        if(this.article) {
+          this.article.forEach(item => {
+            item.content = deleteHTML(item.content)
+          })
+        }
+        this.loading = false
       })
     },
+    getIndexRight() {
+      fetchIndexRight().then(response => {
+        this.rotation = response.data.rotation
+        this.hotArticle = response.data.hotArticle
+        this.hotLabel = response.data.hotLabel
+        this.recommendArticle = response.data.recommendArticle
+      })
+    },
+    getLoginStatus() {
+      if (Cookie.get("nickname") === undefined) {
+        return false
+      }
+      return true
+    },
+    getSignInStatus() {
+      if(this.getLoginStatus()) {
+        this.follow.username = Cookie.get("nickname")
+        fetchSignIn(this.follow).then(response => {
+          this.sign = response.data
+        })
+      }
+    },
+    setComment(id) {
+      this.comment.username = Cookie.get("nickname")
+      this.comment.articleid = id
+    },
+    search() {
+      this.listQuery.page = 0
+      this.getArticle()
+    },
+    up(id) {
+      if(isLogin()) {
+        this.article.forEach(element => {
+          if(element.id === id) {
+            if(element.unlike) {
+              ElMessage({
+                message: '您已经将文章标为不喜欢，请先取消再点赞.',
+                type: 'warning',
+              })
+              return
+            }
+            this.setComment(id)
+            this.comment.is = 1
+            upArticle(this.comment).then(() => {
+              if (element.like) {
+                element.like = false
+                element.up = element.up - 1
+              } else {
+                element.like = true
+                element.up = element.up + 1
+              }
+            })
+          }
+        })
+      }
+    },
+    followPlate(id) {
+      if(isLogin()) {
+        this.follow.id = id
+        this.follow.username = Cookie.get("nickname")
+        followPlateById(this.follow).then(() => {
+          if(this.plate.follow) {
+            this.plate.follow = false
+          } else {
+            this.plate.follow = true
+          }
+        })
+      }
+    },
+    signIn() {
+      if(isLogin()) {
+        this.follow.username = Cookie.get("nickname")
+        userSignIn(this.follow).then(() => {
+          this.sign = true
+        })
+      }
+    },
+    plateCommon(id) {
+      this.follow.username = Cookie.get("nickname") !== undefined ? Cookie.get("nickname") : null
+      this.follow.id = id
+      fetchPlate(this.follow).then(response => {
+        this.plate = response.data.indexPlate
+        this.plateChildren = response.data.plateChildren
+      })
+
+      this.hidden = true
+      this.def.forEach(element => {
+          element.activeIndex = false
+      })
+      this.listQuery.defOrTree = 2
+      this.listQuery.leftId = id
+      this.listQuery.contentTag = 1
+      this.listQuery.page = 0
+      this.article = null
+      this.contentTag = 1
+      this.type = '最新发布'
+      this.listQuery.type = '全部'
+      this.hideMore = false
+      this.loading = true
+      this.getContentTags()
+      this.getArticle()
+    },
     handleNodeClick(data) {
-      console.log(data)
+      this.plateCommon(data.value)
+    },
+    selectPlate(id) {
+      this.plateCommon(id)
     },
     personal(name) {
-      window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
+      if(isLogin()) {
+        window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
+      }
     },
     tags() {
       this.$router.push({name:'Tags'})
     },
-    tagDetail() {
-      this.$router.push({name:'TagDetail'})
+    tagDetail(id) {
+      this.$router.push({name:'TagDetail', params:{id: id}})
     },
     select(index) {
-      if (this.def[index - 1].key == index) {
-        this.def[index - 1].activeIndex = true
-        this.def[index % 3].activeIndex = false
-        this.def[(index + 1) % 3].activeIndex = false
-      }
+      this.def.forEach(element => {
+        if(element.key === index) {
+          element.activeIndex = true
+        } else {
+          element.activeIndex = false
+        }
+      })
       if (index == 1) {
         this.hidden = false
       } else {
@@ -256,42 +559,53 @@ export default {
       this.listQuery.defOrTree = 1
       this.listQuery.leftId = index
       this.listQuery.contentTag = 1
-      getArticle(this.listQuery).then(response => {
-        this.article = response.data.article
-      })
+      this.listQuery.type = '全部'
+      this.listQuery.page = 0
+      this.article = null
+      this.contentTag = 1
+      this.hideMore = false
+      this.loading = true
+      this.getContentTags()
+      this.getArticle()
     },
-    changeActive($event){
-      $event.currentTarget.className="common hover"
+    changeActive($event, index){
+      if (!this.def[index - 1].activeIndex) {
+        $event.currentTarget.className="common active"
+      }
     },
     removeActive($event, index){
       if (!this.def[index - 1].activeIndex) {
         $event.currentTarget.className="common"
       }
     },
-    selectTag(index) {
-      if (this.contentTags[index - 1].key == index) {
-        this.contentTags[index - 1].tagIndex = 1
-        this.contentTags[index % 3].tagIndex = 0
-        this.contentTags[(index + 1) % 3].tagIndex = 0
+    handleClick(val) {
+      console.log(val.props.label)
+      if(this.listQuery.defOrTree === 2) {
+        this.listQuery.type = val.props.label
+      } else {
+        this.listQuery.contentTag = this.contentTag
       }
-      console.log(index)
-      this.listQuery.contentTag = index
+      this.listQuery.page = 0
+      this.hideMore = false
       this.article = null
       this.loading = true
-      getArticle(this.listQuery).then(response => {
-        this.article = response.data.article
-        this.loading = false
-      })
+      this.getArticle()
     },
-    changeTag($event, index){
-      if (this.contentTags[index - 1].tagIndex === 0) {
-        $event.currentTarget.className="content-tags hover-tag"
-      }
+    getM1(val) {
+      this.listQuery.page = 0
+      this.article = null
+      this.tag = val
+      this.listQuery.hot = val
+      this.hideMore = false
+      this.getArticle()
     },
-    removeTag($event, index){
-      if (this.contentTags[index - 1].tagIndex === 0) {
-        $event.currentTarget.className="content-tags"
-      }
+    getM2(key, val) {
+      this.listQuery.page = 0
+      this.article = null
+      this.type = val
+      this.listQuery.contentTag = key
+      this.hideMore = false
+      this.getArticle()
     },
     detail(id) {
       window.open(this.$router.resolve({name:'Detail', params:{id: id}}).href, '_blank')
@@ -302,6 +616,10 @@ export default {
         return
       }
       window.open(this.$router.resolve({name:'Create'}).href, '_blank')
+    },
+    showMore() {
+      this.listQuery.page = this.listQuery.page + 1
+      this.getArticle()
     }
   },
   mounted() {
@@ -321,6 +639,28 @@ export default {
 <style scoped>
 @import "~@/styles/index.scss";
 @import '~@/styles/display.scss';
+
+.td-operation-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 17px;
+}
+
+.set-flex {
+  display: flex;
+  align-items: center;
+}
+
+.tag-icon {
+  position: relative;
+  top: -25px;
+  left: 9px;
+}
+
+.tag-search-input {
+  height: 32px;
+}
 
 .tree >>> .el-tree {
   font-size: 14px;
@@ -354,5 +694,18 @@ export default {
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
+}
+
+.index-more >>> .el-button.is-round {
+  border-radius: 24px;
+}
+
+.index-more >>> .el-button.is-round:hover, .index-more >>> .el-button.is-round:active, .index-more >>> .el-button.is-round:focus {
+  color: #333;
+  border-color: #333;
+}
+
+.hidden-more {
+  display: none;
 }
 </style>

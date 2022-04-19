@@ -10,7 +10,8 @@
             <span class="c-ct-title" style="cursor: pointer" @click="detail(item.id)">{{ item.title }}</span>
           </div>
           <div style="margin-top: 16px">
-            <p class="c-ct-summary">{{ item.summary }}</p>
+            <p v-if="item.summary.length === 0" class="c-ct-summary">{{ item.content }}</p>
+            <p v-else class="c-ct-summary">{{ item.summary }}</p>
           </div>
           <div style="overflow: hidden">
             <div class="c-ct-left" style="float: left">
@@ -59,6 +60,9 @@
           </div>
         </li>
       </ul>
+      <div class="index-more" :class="{ 'hidden-more' : hideMore }">
+        <el-button class="index-more-btn" plain round @click="showMore">查看更多</el-button>
+      </div>
     </div>
     <div v-if="collect && collect.length === 0" class="a-nothing">
       <div style="height: 100px; margin-bottom: 8px">
@@ -75,20 +79,24 @@ import { fetchCollect } from '@/api/personal'
 import Cookie from 'js-cookie'
 import { ElMessage } from 'element-plus'
 import { upArticle, starArticle } from '@/api/detail'
+import { deleteHTML } from '@/utils/tool'
 
 export default {
   name: "Collection",
   data() {
     return {
-      name: {
-        name: ''
+      listQuery: {
+        username: '',
+        page: 0,
+        limit: 20,
       },
       collect: null,
       comment: {
         username: '',
         articleid: '',
         is: ''
-      }
+      },
+      hideMore: true
     }
   },
   created() {
@@ -96,9 +104,22 @@ export default {
   },
   methods: {
     getCollect() {
-      this.name.name = Cookie.get("nickname")
-      fetchCollect(this.name).then(response => {
-        this.collect = response.data.collect
+      this.listQuery.username = Cookie.get("nickname")
+      fetchCollect(this.listQuery).then(response => {
+        if(response.data.collect.length < 20) {
+          this.hideMore = true
+        } else {
+          this.hideMore = false
+        }
+        if(this.collect !== null) {
+          this.collect = this.collect.concat(response.data.collect)
+        } else {
+          this.collect = response.data.collect
+        }
+
+        this.collect.forEach(item => {
+          item.content = deleteHTML(item.content)
+        })
       })
     },
     detail(id) {
@@ -118,7 +139,7 @@ export default {
       this.comment.username = Cookie.get("nickname")
       this.comment.articleid = id
       this.comment.is = 1
-      upArticle(this.comment).then(response => {
+      upArticle(this.comment).then(() => {
         this.collect.forEach(item => {
           if(item.id === id) {
             if (item.like) {
@@ -135,7 +156,7 @@ export default {
     star(id) {
       this.comment.username = Cookie.get("nickname")
       this.comment.articleid = id
-      starArticle(this.comment).then(response => {
+      starArticle(this.comment).then(() => {
         this.collect.forEach(item => {
           if(item.id === id) {
             if (item.star) {
@@ -149,6 +170,10 @@ export default {
         })
       })
     },
+    showMore() {
+      this.listQuery.page = this.listQuery.page + 1
+      this.getCollect()
+    }
   }
 }
 </script>
@@ -162,5 +187,18 @@ export default {
   line-height: 1.5;
   text-align: center;
   margin-top: 16px;
+}
+
+.index-more >>> .el-button.is-round {
+  border-radius: 24px;
+}
+
+.index-more >>> .el-button.is-round:hover, .index-more >>> .el-button.is-round:active, .index-more >>> .el-button.is-round:focus {
+  color: #333;
+  border-color: #333;
+}
+
+.hidden-more {
+  display: none;
 }
 </style>

@@ -9,13 +9,13 @@
         <div v-for="item in fans" :key="item.id" class="fans-list">
           <div class="fans-attention-details">
             <div style="display: flex">
-              <div class="fans-aaa">
+              <div class="fans-aaa" @click="personal(item.nickname)">
                 <el-avatar :src="item.portrait" :size="48"></el-avatar>
                 <img src="@/assets/vip.png" class="fans-vip">
               </div>
               <div class="fans-hand-name">
                 <div class="fans-name-top">
-                  <div class="fans-nickname">{{ item.nickname }}</div>
+                  <div class="fans-nickname" @click="personal(item.nickname)">{{ item.nickname }}</div>
                   <div>
                     <div :class="{ 'is_follow' : item.follow }" class="fans-btn">
                       <span v-if="item.follow" class="is_follow_span fans-name" @click="follow(item.uid, item.nickname)">已关注</span>
@@ -43,6 +43,9 @@
           </div>
         </div>
       </div>
+      <div class="index-more" :class="{ 'hidden-more' : hideMore }">
+        <el-button class="index-more-btn" plain round @click="showMore">查看更多</el-button>
+      </div>
     </div>
     <div v-if="fans && fans.length === 0" class="a-nothing">
       <div style="height: 100px; margin-bottom: 8px">
@@ -64,16 +67,19 @@ export default {
   name: "Fans",
   data() {
     return {
-      name: {
-        name: '',
-        loginName: ''
+      listQuery: {
+        username: '',
+        loginName: '',
+        page: 0,
+        limit: 9,
       },
       comment: {
         username: '',
         userid: ''
       },
       fans: null,
-      isLog: true
+      isLog: true,
+      hideMore: true
     }
   },
   created() {
@@ -83,15 +89,27 @@ export default {
       this.isLog = false
     }
 
-    this.getMyFans(this.$route.params.name)
+    this.listQuery.username = this.$route.params.name
+    this.getMyFans()
   },
   methods: {
-    getMyFans(name) {
-      this.name.name = name
-      this.name.loginName = Cookie.get("nickname")
-      fetchFans(this.name).then(response => {
-        this.fans = response.data.fans
+    getMyFans() {
+      this.listQuery.loginName = Cookie.get("nickname")
+      fetchFans(this.listQuery).then(response => {
+        if(response.data.fans.length < 9) {
+          this.hideMore = true
+        } else {
+          this.hideMore = false
+        }
+        if(this.fans !== null) {
+          this.fans = this.fans.concat(response.data.fans)
+        } else {
+          this.fans = response.data.fans
+        }
       })
+    },
+    personal(name) {
+      window.open(this.$router.resolve({name:'Personal', params:{name: name}}).href, '_blank')
     },
     follow(id, nickname) {
       if(isLogin()) {
@@ -104,17 +122,25 @@ export default {
         }
         this.comment.username = Cookie.get("nickname")
         this.comment.userid = id
-        followUser(this.comment).then(response => {
+        followUser(this.comment).then(() => {
           this.fans.forEach(item => {
-            if (item.follow) {
-              item.follow = false
-            } else {
-              item.follow = true
+            if (item.uid === id) {
+              if(item.follow) {
+                item.follow = false
+                return
+              } else {
+                item.follow = true
+                return
+              }
             }
-          });
+          })
         })
       }
     },
+    showMore() {
+      this.listQuery.page = this.listQuery.page + 1
+      this.getMyFans()
+    }
   }
 }
 </script>
@@ -128,5 +154,18 @@ export default {
 
 .is_follow_span {
   color: #fff;
+}
+
+.index-more >>> .el-button.is-round {
+  border-radius: 24px;
+}
+
+.index-more >>> .el-button.is-round:hover, .index-more >>> .el-button.is-round:active, .index-more >>> .el-button.is-round:focus {
+  color: #333;
+  border-color: #333;
+}
+
+.hidden-more {
+  display: none;
 }
 </style>

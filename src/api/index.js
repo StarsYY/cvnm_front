@@ -31,3 +31,43 @@ export function getArticle(query) {
     params: query
   })
 }
+
+export function fetchPlate(query) {
+  return request({
+    url: '/index/plate',
+    method: 'get',
+    params: query
+  })
+}
+
+export function followPlateById(data) {
+  return request({
+    url: '/index/plate/follow',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchIndexRight(query) {
+  return request({
+    url: '/index/right',
+    method: 'get',
+    params: query
+  })
+}
+
+export function userSignIn(data) {
+  return request({
+    url: '/index/user/signIn',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchSignIn(data) {
+  return request({
+    url: '/index/user/signIn/status',
+    method: 'post',
+    data
+  })
+}

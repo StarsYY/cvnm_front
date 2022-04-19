@@ -40,6 +40,7 @@
   text-overflow: ellipsis;
   width: 100%;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .d-level {
@@ -210,6 +211,7 @@
   white-space: nowrap; /* 不换行 */
   overflow: hidden;
   text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
+  cursor: pointer;
 }
 
 .d-article-name:hover {

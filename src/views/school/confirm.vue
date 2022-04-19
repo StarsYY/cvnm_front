@@ -5,9 +5,9 @@
       <div>
         <div class="cf-ok">
           <div style="font-size: 32px; color: #333">确认订单</div>
-          <div class="cf-exchange">
+          <div class="cf-exchange" @click="integralPay">
             <span>
-              如您已有券码，可
+              如您积分充足，可
               <span style="color: #328dff;">点击这里</span>
               直接兑换
             </span>
@@ -71,6 +71,22 @@
           </div>
         </div>
       </div>
+      <el-dialog v-model="centerDialogVisible" title="积分兑换" width="30%" center>
+        <span>您的积分余额为 
+          <span style="color: #f56c6c">{{ integral }}</span>
+          ，课程所需积分为 
+          <span style="color: #f56c6c">{{ payIntegral }}</span>
+          <span v-if="integral >= payIntegral">，您的积分充足，可以兑换。</span>
+          <span v-if="integral < payIntegral">，您的积分余额不足，暂时不能兑换。</span>
+        </span>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button round @click="centerDialogVisible = false">取消</el-button>
+            <el-button v-if="payIntegral > integral" type="primary" disabled round>确定</el-button>
+            <el-button v-else type="primary" round @click="payCourse(course.id)">确定</el-button>
+          </span>
+        </template>
+      </el-dialog>
     </div>
   </div>
   <Footer />
@@ -79,9 +95,10 @@
 <script>
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import { fetchOrder, payment } from '@/api/pay'
+import { fetchOrder, payment, fetchUserIntegral, IntegralPayCourse } from '@/api/pay'
 import { isLogin } from '@/utils/tool'
 import Cookie from 'js-cookie'
+import { ElNotification } from 'element-plus'
 
 export default {
   name: "Confirm",
@@ -98,7 +115,10 @@ export default {
       order: {
         username: '',
         courseid: ''
-      }
+      },
+      integral: 0,
+      payIntegral: 0,
+      centerDialogVisible: false
     }
   },
   created() {
@@ -111,12 +131,38 @@ export default {
         this.course = response.data
       })
     },
+    integralPay() {
+      if(isLogin()) {
+        this.order.username = Cookie.get("nickname")
+        fetchUserIntegral(this.order).then(response => {
+          this.integral = response.data
+
+          this.payIntegral = Math.floor(this.course.price / 100 * 0.8)
+          this.centerDialogVisible = true
+        })
+      }
+    },
+    payCourse(id) {
+      if(isLogin()) {
+        this.order.username = Cookie.get("nickname")
+        this.order.courseid = id
+        IntegralPayCourse(this.order).then(() => {
+          ElNotification({
+            title: '兑换成功',
+            message: '课程兑换成功',
+            type: 'success',
+          })
+          this.centerDialogVisible = false
+          this.$router.push({name:'Purchase', params:{id: id}})
+        })
+      }
+    },
     pay(id) {
       if(isLogin()) {
         this.order.username = Cookie.get("nickname")
         this.order.courseid = id
-        payment(this.order).then(() => {
-          window.open(this.$router.resolve({name:'Pay', params:{id: id}}).href, '_blank')
+        payment(this.order).then(response => {
+          window.open(this.$router.resolve({name:'Pay', params:{id: response.data}}).href, '_blank')
         })
       }
     },
