@@ -3,7 +3,7 @@
   <div class="vi-main">
     <div style="background: #000; display: flex">
       <div class="vi-video" @click="clickVideo">
-        <video :src="videoSource" controls="controls" autoplay="autoplay" muted="muted" style="width: 100%"></video>
+        <video :src="videoSource" controls="controls" preload="auto" muted="muted" style="width: 100%"></video>
       </div>
       <div class="vi-right">
         <div>
@@ -35,8 +35,8 @@
           </div>
           <div class="vi-course-info">
             <div>
-              <span>时长 1 分钟</span>
-              <span>　·　评分 {{ course.score }}</span>
+              <!-- <span>时长 1 分钟</span> -->
+              <span>评分 {{ course.score }}</span>
               <span>　·　{{ course.watch }} 次播放</span>
             </div>
             <span class="vi-ci-tag">

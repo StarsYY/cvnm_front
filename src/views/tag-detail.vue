@@ -96,7 +96,8 @@
                           <div v-if="item.tag !== ''" class="td-art-tag">{{ item.tag }}</div>
                         </span>
                       </div>
-                      <div class="td-article-content">{{ item.content }}</div>
+                      <div v-if="item.summary == null || item.summary == ''" class="td-article-content">{{ item.content }}</div>
+                      <div v-else class="td-article-content">{{ item.summary }}</div>
                       <div class="td-art-info">
                         <div style="display: flex; flex-basis: 70%">
                           <el-avatar :src="item.portrait" :size="24" style="margin-right: 8px; cursor: pointer" @click="personal(item.nickname)"></el-avatar>
@@ -150,7 +151,7 @@
             <div class="td-null2">
               <svg-icon icon-class="null2" style="width: 240px; height: 216px"></svg-icon>
             </div>
-            <p style="color: #777; text-align: center;">暂无帖子可看，不如看看远方吧</p>
+            <p style="color: #777; text-align: center;">暂无文章可看，不如看看远方吧</p>
           </div>
         </el-col>
         <el-col :xs="8" :sm="6" :md="5" :lg="4" :xl="2" class="hidden-md-and-down">

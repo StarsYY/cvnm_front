@@ -196,7 +196,7 @@ export default {
       if(isLogin()) {
         this.listQuery.username = Cookie.get("nickname")
         fetchAdministratorMessage(this.listQuery).then(response => {
-          if(response.data.administratorMessage.length < 9) {
+          if(response.data.administratorMessage.length < 20) {
             this.hideMore = true
           } else {
             this.hideMore = false
@@ -337,9 +337,9 @@ export default {
             this.jsonIds.idsJSON = JSON.stringify(ids)
 
             deleteSelectMessage(this.jsonIds).then(() => {
-              this.systemMessage.forEach((item, i) => {
-                if(item.select) {
-                  this.systemMessage.splice(i, 1)
+              this.systemMessage = this.systemMessage.filter(item => {
+                if(!item.select) {
+                  return item
                 }
               })
             })
@@ -352,9 +352,9 @@ export default {
             this.jsonIds.idsJSON = JSON.stringify(ids)
 
             deleteSelectMessage(this.jsonIds).then(() => {
-              this.administratorMessage.forEach((item, i) => {
-                if(item.select) {
-                  this.administratorMessage.splice(i, 1)
+              this.administratorMessage = this.administratorMessage.filter(item => {
+                if(!item.select) {
+                  return item
                 }
               })
             })

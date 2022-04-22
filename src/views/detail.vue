@@ -98,7 +98,11 @@
             </span>
           </div>
           <div class="d-article">
+            <div v-if="article[0].cover != null && article[0].cover != ''" style="width: 100%; text-align: center; overflow: hidden">
+              <img :src="article[0].cover">
+            </div>
             <div v-html="article[0].content"></div>
+            <div v-if="article[0].source != null && article[0].source != ''" style="text-align: right; color: #909399; font-size: 14px">引自：<el-link type="info">{{ article[0].source }}</el-link></div>
             <p class="d-article-final">本帖最后由 {{ article[0].author }} 于 {{ article[0].updatetime }} 编辑</p>
             <div class="d-article-bottom"><!-- 点击后效果相反 @mouseenter="show = !show" @mouseleave="show = !show" -->
               <div class="d-article-author">
@@ -379,6 +383,7 @@ export default {
     }
 
     this.loginName = Cookie.get("nickname") !== undefined ? Cookie.get("nickname") : ''
+    this.id = this.$route.params.id
 
     this.getArticle(this.$route.params.id)
     this.getComment(this.$route.params.id)
@@ -563,21 +568,12 @@ export default {
           }
         ).then(() => {
           this.commentId.id = id
-          deleteMyReply(this.commentId).then(response => {
+          deleteMyReply(this.commentId).then(() => {
             ElMessage({
               type: 'success',
               message: '删除成功',
             })
-            this.commentList.some((item, i) => {
-              if(response.data.findIndex(im => im === item.id) >= 0) {
-                this.commentList.splice(i, 1)
-              }
-            })
-            this.allComment.some((item, i) => {
-              if(response.data.findIndex(im => im === item.id) >= 0) {
-                this.commentList.splice(i, 1)
-              }
-            })
+            this.getComment(this.id)
           })
         })
       }

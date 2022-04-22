@@ -5,7 +5,7 @@
       <el-input 
         v-model="listQuery.search"
         class="w-50 m-2"
-        maxlength="100"
+        maxlength="120"
         placeholder="您想了解..."
         @keyup.enter="getSearch"
       >
@@ -86,6 +86,12 @@
               </div>
             </div>
           </div>
+          <div v-if="total === 0" class="td-null">
+            <div class="td-null2">
+              <svg-icon icon-class="null2" style="width: 240px; height: 216px"></svg-icon>
+            </div>
+            <p style="color: #777; text-align: center;">暂无课程可看，不如看看远方吧</p>
+          </div>
         </div>
         <div v-if="listQuery.choose === '2'" style="width: 100%">
           <div v-for="item in articleList" :key="item.id" class="sh-cart-list">
@@ -97,7 +103,8 @@
             </div>
             <div class="sh-cart-content">
               <div style="width: 100%">
-                <p class="sh-cc-main">{{ item.content }}</p>
+                <p v-if="item.summary == null || item.summary == ''" class="sh-cc-main">{{ item.content }}</p>
+                <p v-else class="sh-cc-main">{{ item.summary }}</p>
                 <div class="sh-card-msg">
                   <div class="sh-cm-time-line">
                     <div class="sh-ct-time">{{ item.createtime }}</div>
@@ -142,6 +149,12 @@
               </div>
             </div>
           </div>
+          <div v-if="total === 0" class="td-null">
+            <div class="td-null2">
+              <svg-icon icon-class="null2" style="width: 240px; height: 216px"></svg-icon>
+            </div>
+            <p style="color: #777; text-align: center;">暂无文章可看，不如看看远方吧</p>
+          </div>
         </div>
       </div>
     </div>
@@ -181,7 +194,7 @@ export default {
     return {
       listQuery: {
         search: '',
-        choose: '1',
+        choose: '2',
         plate: 0,
         type: 0,
         time: 0,
@@ -379,5 +392,17 @@ export default {
 
 .type-tabs >>> .el-tabs__header > .el-tabs__nav-wrap::after {
   height: 0;
+}
+
+.td-null {
+  flex: none;
+  width: 100%;
+  outline: none;
+}
+
+.td-null2 {
+  margin: 112px 0 17px;
+  display: flex;
+  justify-content: center;
 }
 </style>

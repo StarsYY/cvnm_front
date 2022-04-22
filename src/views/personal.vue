@@ -18,6 +18,8 @@
           <el-input
             v-model="edit.summary"
             :rows="4"
+            maxlength="120"
+            show-word-limit
             type="textarea"
             placeholder="修改个人简介"
           />
@@ -46,8 +48,8 @@
           </div>
         </div>
         <div v-if="!isLogName" class="pe-btn">
-          <div v-if="user.follow" class="isyes pe-btn-btn">已关注</div>
-          <div v-if="!user.follow" class="pe-btn-btn">关注</div>
+          <div v-if="user.follow" class="isyes pe-btn-btn" @click="follow(user.uid, user.nickname)">已关注</div>
+          <div v-if="!user.follow" class="pe-btn-btn" @click="follow(user.uid, user.nickname)">关注</div>
         </div>
       </div>
     </div>
@@ -121,8 +123,9 @@ import Footer from "@/components/footer"
 import Overview from "./personal/overview.vue"
 import Info from "./personal/info.vue"
 import Community from "./personal/community.vue"
-import { fetchUser, editUserSummary } from '@/api/personal'
+import { fetchUser, editUserSummary, followUser } from '@/api/personal'
 import Cookie from 'js-cookie'
+import { isLogin } from '@/utils/tool'
 
 export default {
   name: "Personal",
@@ -150,6 +153,10 @@ export default {
       edit: {
         uid: '',
         summary: ''
+      },
+      comment: {
+        username: '',
+        userid: ''
       },
       one: true,
       two: false,
@@ -187,6 +194,22 @@ export default {
         this.user.summary = this.edit.summary
       })
       this.hidden = false
+    },
+    follow(id, nickname) {
+      if(isLogin()) {
+        if (Cookie.get("nickname") === nickname) {
+          ElMessage({
+            message: '不能自己关注自己呦🤣',
+            type: 'warning',
+          })
+          return
+        }
+        this.comment.username = Cookie.get("nickname")
+        this.comment.userid = id
+        followUser(this.comment).then(() => {
+          this.user.follow = !this.user.follow
+        })
+      }
     },
     select1() {
       if (!this.one) {

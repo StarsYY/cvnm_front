@@ -117,6 +117,15 @@
             <el-radio label="私密">私密</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item prop="isopen" label="是否开启评论区">
+          <el-switch
+            v-model="isopen"
+            inline-prompt
+            active-text="是"
+            inactive-text="否"
+            @change="setIsOpen"
+          />
+        </el-form-item>
       </el-form>
     </div>
     <div style="margin: auto">
@@ -207,8 +216,10 @@ export default {
         cover: '',
         watch: 0,
         hot: '',
-        source: ''
+        source: '',
+        isopen: 1
       },
+      isopen: true,
       rules: {
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
         type: [{ required: true, message: '请选择一个分类', trigger: 'change' }],
@@ -218,7 +229,8 @@ export default {
           { min: 2, message: '至少添加一个标签', trigger: 'change' }
         ],
         publish: [{ required: true, message: '请选择发布形式', trigger: 'change' }],
-        content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }]
+        content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }],
+        isopen: [{ required: true, message: '请选择是否开启评论区', trigger: 'change' }]
       },
       articleDraft: [],
       draftLen: 0,

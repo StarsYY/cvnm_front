@@ -154,7 +154,7 @@
       <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
         <el-form ref="form" :model="form" :rules="rules">
           <el-form-item v-if="type === 1" label="账户名：" prop="nickname" label-width="19.23%">
-            <el-input v-model="form.nickname" maxlength="10" show-word-limit clearable />
+            <el-input v-model="form.nickname" maxlength="20" show-word-limit clearable />
           </el-form-item>
           <el-form-item v-if="type === 2" label="手机号" prop="phone" label-width="19.23%">
             <el-input v-model="form.phone" />
@@ -162,10 +162,10 @@
           <el-form-item v-if="type === 3" label="邮箱" prop="email" label-width="19.23%">
             <el-input v-model="form.email" />
           </el-form-item>
-          <el-form-item v-if="type === 4" label="旧密码" prop="password" label-width="19.23%">
+          <el-form-item v-if="type === 4" label="新密码" prop="password" label-width="19.23%">
             <el-input v-model="form.password" type="password" show-password />
           </el-form-item>
-          <el-form-item v-if="type === 4" label="新密码" prop="repassword" label-width="19.23%">
+          <el-form-item v-if="type === 4" label="再次输入密码" prop="repassword" label-width="19.23%">
             <el-input v-model="form.repassword" type="password" show-password />
           </el-form-item>
         </el-form>
@@ -218,12 +218,12 @@ export default {
         nickname: [{ required: true, message: '账户名是必填项', trigger: 'blur' }],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { pattern: /^\S{6,32}$/, message: '密码长度位 6-20 位', trigger: ['blur', 'change'] },
+          { pattern: /^\S{6,32}$/, message: '密码长度位 6-32 位', trigger: ['blur', 'change'] },
           { pattern: /^\w+$/, message: '密码只能由数字、字母、下划线组成', trigger: ['blur', 'change'] }
         ],
         repassword: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { pattern: /^\S{6,32}$/, message: '密码长度位 6-20 位', trigger: ['blur', 'change'] },
+          { pattern: /^\S{6,32}$/, message: '密码长度位 6-32 位', trigger: ['blur', 'change'] },
           { pattern: /^\w+$/, message: '密码只能由数字、字母、下划线组成', trigger: ['blur', 'change'] },
           { validator: validatePass2, trigger: 'blur' }
         ],
@@ -282,16 +282,13 @@ export default {
               message: '修改成功',
                 type: 'success',
             })
-            if(this.user.nickname !== this.form.nickname) {
+            if(type == 1 || 4) {
               Cookie.remove("nickname")
               Cookie.remove("token")
               this.$router.push('/')
-            }
-            if(type === 1) {
-              this.user.nickname = this.form.nickname
-            } else if(type === 2) {
+            } else if(type == 2) {
               this.user.phone = this.form.phone
-            } else if(type === 3) {
+            } else if(type == 3) {
               this.user.email = this.form.email
             }
             this.setNull()

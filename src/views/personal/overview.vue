@@ -24,7 +24,7 @@
       </div>
       <div class="o-card-link">
         <div class="o-link-content" @click="index">论坛</div>
-        <div class="o-link-content">问答（待删除）</div>
+        <!-- <div class="o-link-content">问答（待删除）</div> -->
       </div>
     </div>
   </div>
@@ -135,7 +135,7 @@
           </div>
         </el-col>
         <el-col :xs="10" :sm="9" :md="8" :lg="7" :xl="6" class="hidden-md-and-down">
-          <div style="margin-left: 16px">
+          <div style="margin-left: 16px; margin-bottom: 16px; display: none">
             <div style="background: white; padding: 16px">
               <div class="o-follow">
                 <span class="o-follow-title">访问统计</span>
@@ -167,7 +167,7 @@
               </div>
             </div>
           </div>
-          <div style="margin-left: 16px; margin-top: 16px">
+          <div style="margin-left: 16px">
             <div style="background: white; padding: 16px">
               <div class="o-follow">
                 <span v-if="isLogName" class="o-follow-title">我的关注</span>

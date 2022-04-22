@@ -7,8 +7,8 @@
           <div class="pu-title">{{ course.name }}</div>
           <div class="pu-subtitle">
             <div>
-              <span>评分 {{ course.score }}　·　</span>
-              <span>时长 1 分钟</span>
+              <span>评分 {{ course.score }}</span>
+              <!-- <span>时长 1 分钟</span> -->
             </div>
             <span class="vi-ci-tag">
               <span>关键字</span>
@@ -111,7 +111,7 @@
                                     <div v-if="isadmin === 1 && item.admRep === 0" @click="item.status = 1 - item.status">
                                       <svg-icon icon-class="review" style="cursor: pointer; width: 20px; height: 20px"></svg-icon>
                                     </div>
-                                    <div v-if="item.rep === 1">
+                                    <div v-if="item.rep === 1" @click="deleteMyDis(item.id)">
                                       <svg-icon icon-class="del" style="cursor: pointer; width: 20px; height: 20px; margin-left: 20px"></svg-icon>
                                     </div>
                                   </div>

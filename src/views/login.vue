@@ -96,9 +96,23 @@ export default {
         })
         return
       }
+      if(this.postForm.nickname >= 20) {
+        this.$message({
+          message: '用户名长度不能超过20',
+          type: 'warning'
+        })
+        return
+      }
       if(this.postForm.password.length < 6) {
         this.$message({
           message: '密码不能少于 6 位',
+          type: 'error'
+        })
+        return
+      }
+      if(this.postForm.password.length > 32) {
+        this.$message({
+          message: '密码不能多于 32 位',
           type: 'error'
         })
         return
@@ -117,9 +131,23 @@ export default {
         })
         return
       }
+      if(this.postForm.nickname >= 20) {
+        this.$message({
+          message: '用户名长度不能超过20',
+          type: 'warning'
+        })
+        return
+      }
       if(this.postForm.password.length < 6) {
         this.$message({
           message: '密码不能少于 6 位',
+          type: 'error'
+        })
+        return
+      }
+      if(this.postForm.password.length > 32) {
+        this.$message({
+          message: '密码不能多于 32 位',
           type: 'error'
         })
         return

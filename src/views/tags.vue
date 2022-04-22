@@ -28,6 +28,7 @@
                 v-model="listQuery.label"
                 class="w-50 m-2"
                 size="small"
+                maxlength="120"
                 placeholder="输入标签名称搜索"
                 prefix-icon="Search"
                 @change="search"

@@ -114,7 +114,8 @@ export default {
       nowTime: '',
       order: {
         username: '',
-        courseid: ''
+        courseid: '',
+        price: ''
       },
       integral: 0,
       payIntegral: 0,
@@ -146,6 +147,7 @@ export default {
       if(isLogin()) {
         this.order.username = Cookie.get("nickname")
         this.order.courseid = id
+        this.order.price = this.payIntegral
         IntegralPayCourse(this.order).then(() => {
           ElNotification({
             title: '兑换成功',

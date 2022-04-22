@@ -53,7 +53,7 @@
           <div class="block" :class="{ hidden : hidden }">
             <el-carousel trigger="click" height="288px">
               <el-carousel-item v-for="item in rotation" :key="item.key" style="background-color: #fff">
-                <el-image :src="item.source" style="height: 288px" />
+                <el-image :src="item.source" style="height: 288px" @click="goToOther(item.jump)" />
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -129,6 +129,7 @@
                     v-model="listQuery.title"
                     class="w-50 m-2"
                     size="small"
+                    maxlength="120"
                     placeholder="输入文章名称搜索"
                     prefix-icon="Search"
                     @change="search"
@@ -187,7 +188,8 @@
                     <span v-if="item.tag === '精华'" class="t b-color">精华</span>
                   </div>
                 </div>
-                <div class="article-content">{{ item.content }}</div>
+                <div v-if="item.summary == null || item.summary == ''" class="article-content">{{ item.content }}</div>
+                <div v-else class="article-content">{{ item.summary }}</div>
                 <div class="message">
                   <div style="display: flex">
                     <el-avatar :src="item.portrait" :size="24" style="margin-right: 8px; position: relative; cursor: pointer" @click="personal(item.nickname)"></el-avatar>
@@ -224,6 +226,12 @@
               <div class="index-more" :class="{ 'hidden-more' : hideMore }">
                 <el-button class="index-more-btn" plain round @click="showMore">查看更多</el-button>
               </div>
+            </div>
+            <div v-if="total === 0" class="index-null">
+              <div class="index-null2">
+                <svg-icon icon-class="null2" style="width: 240px; height: 216px"></svg-icon>
+              </div>
+              <p style="color: #777; text-align: center;">暂无文章可看，不如看看远方吧</p>
             </div>
           </div>
         </div>
@@ -378,7 +386,8 @@ export default {
       showAll: false,
       rotation: null,
       sign: false,
-      isLogined: false
+      isLogined: false,
+      total: 0
     }
   },
   created() {
@@ -421,6 +430,7 @@ export default {
             item.content = deleteHTML(item.content)
           })
         }
+        this.total = this.article.length
         this.loading = false
       })
     },
@@ -620,6 +630,9 @@ export default {
     showMore() {
       this.listQuery.page = this.listQuery.page + 1
       this.getArticle()
+    },
+    goToOther(jump) {
+      window.open(jump, "_blank")
     }
   },
   mounted() {
@@ -707,5 +720,17 @@ export default {
 
 .hidden-more {
   display: none;
+}
+
+.index-null {
+  flex: none;
+  width: 100%;
+  outline: none;
+}
+
+.index-null2 {
+  margin: 112px 0 17px;
+  display: flex;
+  justify-content: center;
 }
 </style>

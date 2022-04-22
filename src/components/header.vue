@@ -2,7 +2,8 @@
   <div class="top">
     <div class="header">
       <div class="header-left">
-        这是一个图标
+        <img src="https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png" width="25">
+        <span class="IT-Logo">CVNM</span>
       </div>
       <div class="header-right">
         <div class="h-user" :class="{ 'h-hidden': hidden }">
@@ -85,7 +86,7 @@
     <el-dialog v-model="dialogVisible" title="搜索内容">
       <el-form :model="form">
         <el-form-item label="关键字" :label-width="formLabelWidth">
-          <el-input v-model="form.search" autocomplete="off" />
+          <el-input v-model="form.search" maxlength="120" show-word-limit autocomplete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -176,12 +177,24 @@ export default {
       window.open(this.$router.resolve({name:'SchoolCreate'}).href, '_blank')
     },
     personal(name) {
+      if (Cookie.get("nickname") === undefined) {
+        this.$router.push({name:'Login'})
+        return
+      }
       window.open(this.$router.resolve({name: 'Personal', params:{name: name}}).href, '_blank')
     },
     account(name) {
+      if (Cookie.get("nickname") === undefined) {
+        this.$router.push({name:'Login'})
+        return
+      }
       window.open(this.$router.resolve({name: 'User', params:{name: name}}).href, '_blank')
     },
     myschool(name) {
+      if (Cookie.get("nickname") === undefined) {
+        this.$router.push({name:'Login'})
+        return
+      }
       window.open(this.$router.resolve({name: 'MySchool', params:{name: name}}).href, '_blank')
     }
   },
@@ -207,5 +220,13 @@ export default {
 
 .menu-list >>> .el-link--default:hover {
   color: #000;
+}
+
+.IT-Logo {
+  font-weight: 700;
+  margin-left: 10px;
+  font-size: 14px;
+  user-select: none;
+  letter-spacing: 1px;
 }
 </style>

@@ -33,7 +33,7 @@
                             <div class="sc-course-list" v-for="itemCourse in item.courseList" :key="itemCourse.id">
                               <div style="display: flex" @click="course(itemCourse.id, itemCourse.price)">
                                 <div class="sc-sourse-image">
-                                  <img :src="itemCourse.cover" class="sc-sourse-image-cover">
+                                  <img :src="itemCourse.cover" class="sc-sourse-image-cover" />
                                 </div>
                                 <div class="sc-sourse-content">
                                   <div class="sc-sc-name">
@@ -66,7 +66,7 @@
                   <div class="sc-top-right">
                     <el-carousel height="520px">
                       <el-carousel-item v-for="item in rotations" :key="item.key">
-                        <el-image :src="item.source" class="sc-rotation-img" />
+                        <el-image :src="item.source" class="sc-rotation-img" @click="goToOther(item.jump)" />
                       </el-carousel-item>
                     </el-carousel>
                   </div>
@@ -255,6 +255,9 @@ export default {
     },
     more() {
       window.open(this.$router.resolve({name:'Course'}).href, '_blank')
+    },
+    goToOther(jump) {
+      window.open(jump, "_blank")
     }
   }
 }

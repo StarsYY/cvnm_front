@@ -18,7 +18,7 @@
         <div>
           <el-form :model="ruleForm" class="demo-ruleForm">
             <el-form-item label="昵称">
-              <el-input v-model="ruleForm.nickname"></el-input>
+              <el-input v-model="ruleForm.nickname" maxlength="20" show-word-limit></el-input>
             </el-form-item>
             <el-form-item label="性别">
               <el-select v-model="ruleForm.sex" placeholder="性别" style="width: 100%">
@@ -28,7 +28,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="姓名">
-              <el-input v-model="ruleForm.name"></el-input>
+              <el-input v-model="ruleForm.name" maxlength="20" show-word-limit></el-input>
             </el-form-item>
           </el-form>
           <div style="text-align: center">
