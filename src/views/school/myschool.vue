@@ -38,6 +38,9 @@
         <div v-if="key === 2">
           <Class :userId="user.uid" />
         </div>
+        <div v-if="key === 3">
+          <Course :userId="user.uid" />
+        </div>
       </div>
     </div>
   </div>
@@ -50,18 +53,20 @@ import Footer from "@/components/footer"
 import Order from "./myschool/order.vue"
 import Favorites from "./myschool/favorites.vue"
 import Class from "./myschool/class.vue"
+import Course from "./myschool/course.vue"
 import { fetchMySchool } from '@/api/myschool'
 
 export default {
   name: "MySchool",
-  components: { Header, Footer, Order, Favorites, Class },
+  components: { Header, Footer, Order, Favorites, Class, Course },
   data() {
     return {
       key: 0,
       menu: [
         { key: 0, value: '我的订单', is: true },
         { key: 1, value: '我的收藏', is: false },
-        { key: 2, value: '学习记录', is: false }
+        { key: 2, value: '学习记录', is: false },
+        { key: 3, value: '我的课程', is: false }
       ],
       user: {
         uid: '',

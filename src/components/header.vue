@@ -31,7 +31,7 @@
                     <span class="i-name">{{ nickname }}</span>
                     <span class="level">Lv {{ user.grow }}</span>
                   </div>
-                  <p v-if="user.position === '讲师'" class="authentication">
+                  <p v-if="user.position === '专家' || user.position === '2'" class="authentication">
                     <span style="color: #777; margin-right: 5px">已认证</span>
                     <el-icon color="#328DFF" :size="12"><success-filled /></el-icon>
                   </p>
@@ -75,7 +75,7 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item @click="create">发文章</el-dropdown-item>
-                  <!-- <el-dropdown-item @click="course">上传课程</el-dropdown-item> -->
+                  <el-dropdown-item v-if="user.position === '讲师' || user.position === '2'" @click="course">上传课程</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -134,13 +134,13 @@ export default {
     this.getNavigaton()
   },
   methods: {
-    fetchUser() {
-      getInfo(this.nickname).then(response => {
+    async fetchUser() {
+      await getInfo(this.nickname).then(response => {
         this.user = response.data.loginUser
       })
     },
-    getNavigaton() {
-      fetchNavigation().then(response => {
+    async getNavigaton() {
+      await fetchNavigation().then(response => {
         this.navigation = response.data.navigation
       })
     },

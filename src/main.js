@@ -9,6 +9,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import SvgIcon from '@/components/SvgIcon'// svg component
 import uploader from 'vue-simple-uploader'
+import 'vue-simple-uploader/dist/style.css'
 
 export const app = createApp(App)
 app.component('svg-icon', SvgIcon)

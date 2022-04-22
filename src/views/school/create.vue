@@ -75,7 +75,7 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <!-- <Uploader ref="upload"></Uploader> -->
+          <Uploader ref="upload"></Uploader>
         </el-form-item>
         <el-form-item label="简介">
           <el-input v-model="ruleForm.summary" :autosize="{ minRows: 3 }" type="textarea" clearable maxlength="500" placeholder="简介（选填）" show-word-limit></el-input>
@@ -88,7 +88,7 @@
             :disabled="disabled"
           />
         </el-form-item>
-        <el-form-item label="封面">
+        <el-form-item label="封面" prop="cover">
           <div style="display: none">
             <el-input v-model="ruleForm.cover"></el-input>
           </div>
@@ -169,6 +169,9 @@ export default {
         cover: '',
         video: '',
         watch: 0,
+        stauts: '待审核',
+        video: '',
+        num: 0
       },
       rules: {
         name: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
@@ -177,7 +180,8 @@ export default {
           { required: true, message: '至少添加一个标签', trigger: 'change' },
           { min: 2, message: '至少添加一个标签', trigger: 'change' }
         ],
-        introduction: [{ required: true, message: '课程介绍不能为空', trigger: 'blur' }]
+        introduction: [{ required: true, message: '课程介绍不能为空', trigger: 'blur' }],
+        cover: [{ required: true, message: '请添加封面', trigger: 'cahnge' }]
       },
       courseDraft: [],
       draftLen: 0,
@@ -246,15 +250,15 @@ export default {
       this.ruleForm.price = this.price * 100
     },
     setVideo() {
-      this.video = this.$refs.upload.sendUploaderToCourseAdd()
-      if(this.postForm.num === 0 && this.video.length === 0) {
+      this.video = this.$refs['upload'].sendUploaderToCourseAdd()
+      if(this.ruleForm.num === 0 && this.video.length === 0) {
         this.$message({
           message: '请上传视频文件',
           type: 'error'
         })
         return false
       }
-      this.postForm.video = JSON.stringify(this.video)
+      this.ruleForm.video = JSON.stringify(this.video)
       return true
     },
     submitForm(formName) {
@@ -288,6 +292,7 @@ export default {
         return false
       }
       if (isLogin()) {        
+        this.ruleForm.introduction = tinymce.editors[0].getContent()
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.ruleForm.status = "草稿"

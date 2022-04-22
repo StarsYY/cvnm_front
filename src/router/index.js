@@ -90,17 +90,17 @@ const routes = [
     path: "/search/:search",
     component: () => import('@/views/search'),
     name: "Search",
+  },
+  {
+    path: "/school/create",
+    component: () => import('@/views/school/create'),
+    name: "SchoolCreate",
+  },
+  {
+    path: "/school/create/edit/:id",
+    component: () => import('@/views/school/create-edit'),
+    name: "SchoolCreateEdit",
   }
-  // {
-  //   path: "/school/create",
-  //   component: () => import('@/views/school/create'),
-  //   name: "SchoolCreate",
-  // },
-  // {
-  //   path: "/school/create/edit/:id",
-  //   component: () => import('@/views/school/create-edit'),
-  //   name: "SchoolCreateEdit",
-  // }
 ];
 
 const router = createRouter({

@@ -20,7 +20,7 @@
     "vue": "^3.0.0",
     "vue-image-crop-upload": "^3.0.3",
     "vue-router": "^4.0.0-0",
-    "vue-simple-uploader": "^0.7.6",
+    "vue-simple-uploader": "git+https://github.com/simple-uploader/vue-uploader.git#vue3",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

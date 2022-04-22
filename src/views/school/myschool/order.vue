@@ -225,6 +225,7 @@ export default {
       this.getMyOrder()
     },
     select(val) {
+      this.listQuery.page = 0
       this.listQuery.payment = val
       this.order = null
       this.getMyOrder()

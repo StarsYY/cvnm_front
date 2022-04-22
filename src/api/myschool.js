@@ -55,3 +55,19 @@ export function delLearn(data) {
     data
   })
 }
+
+export function fetchCourse(data) {
+  return request({
+    url: '/school/my/course',
+    method: 'get',
+    params: data
+  })
+}
+
+export function delMyCourse(data) {
+  return request({
+    url: '/school/my/course/delete',
+    method: 'post',
+    data
+  })
+}

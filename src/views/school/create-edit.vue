@@ -4,16 +4,16 @@
     <div class="c-bc">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">论坛首页</el-breadcrumb-item>
-        <el-breadcrumb-item>发布帖子</el-breadcrumb-item>
+        <el-breadcrumb-item>上传课程</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="c-box">
-      <div class="c-b-t">我要发文章</div>
+      <div class="c-b-t">上传课程</div>
       <el-dropdown>
         <span class="c-draft">草稿箱( {{ draftLen }} )</span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item v-for="item in articleDraft" :key="item.id" @click="editDraft(item.id)">{{ item.title }}</el-dropdown-item>
+            <el-dropdown-item v-for="item in courseDraft" :key="item.id" @click="editDraft(item.id)">{{ item.name }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -27,30 +27,22 @@
         label-width="120px"
         class="demo-ruleForm"
       >
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" clearable maxlength="120" placeholder="请输入帖子标题（120个字以内）" show-word-limit></el-input>
-        </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <Editor id="tinymce" v-model="ruleForm.content" :init="editorInit" />
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="ruleForm.name" clearable maxlength="20" placeholder="请输入课程名称（20个字以内）" show-word-limit></el-input>
         </el-form-item>
         <div class="c-pt">
-          <el-form-item label="板块" prop="plateid">
-            <el-cascader ref="plateCascader" v-model="ruleForm.plateid" placeholder="请选择板块" :options="options" :props="props" clearable @change="setAncestor" />
-          </el-form-item>
-          <el-form-item label="分类" prop="type">
-            <el-select v-model="ruleForm.type" placeholder="请选择分类">
-              <el-option v-for="item in typeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-            </el-select>
+          <el-form-item label="模块" prop="modularid">
+            <el-cascader ref="plateCascader" v-model="ruleForm.modularid" placeholder="请选择板块" :options="options" :props="props" clearable @change="setAncestor" />
           </el-form-item>
         </div>
-        <el-form-item label="标签" prop="labelid">
+        <el-form-item label="关键字" prop="labelid">
           <div style="display: none">
             <el-input v-model="ruleForm.labelid"></el-input>
           </div>
           <el-select
             style="width: 100%"
             v-model="lids"
-            placeholder="请添加标签（最多添加5个）"
+            placeholder="请添加关键字（最多添加5个）"
             reserve-keyword="true"
             multiple-limit="5"
             filterable
@@ -76,7 +68,22 @@
             </el-tabs>
           </el-select>
         </el-form-item>
-        <el-form-item label="封面">
+        <el-form-item label="价格">
+          <div class="slider-demo-block">
+            <el-slider v-model="ruleForm.price" :max="100000" :format-tooltip="formatTooltip" style="width: 80%"></el-slider>
+            <el-input-number v-model="price" :precision="2" :step="0.01" :min="0" :max="1000" style="width: 150px" @change="setPrice" />
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <Uploader ref="upload"></Uploader>
+        </el-form-item>
+        <el-form-item label="简介">
+          <el-input v-model="ruleForm.summary" :autosize="{ minRows: 3 }" type="textarea" clearable maxlength="500" placeholder="简介（选填）" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="内容" prop="introduction">
+          <Editor id="tinymce" v-model="ruleForm.introduction" :init="editorInit" />
+        </el-form-item>
+        <el-form-item label="封面" prop="cover">
           <div style="display: none">
             <el-input v-model="ruleForm.cover"></el-input>
           </div>
@@ -108,21 +115,12 @@
             @crop-success="cropSuccess"
           />
         </el-form-item>
-        <el-form-item label="摘要">
-          <el-input v-model="ruleForm.summary" :autosize="{ minRows: 3 }" type="textarea" clearable maxlength="500" placeholder="摘要（选填）：会在推荐、列表等场景外露，帮助读者快速了解内容" show-word-limit></el-input>
-        </el-form-item>
-        <el-form-item label="发布形式" prop="publish">
-          <el-radio-group v-model="ruleForm.publish">
-            <el-radio label="公开">公开</el-radio>
-            <el-radio label="私密">私密</el-radio>
-          </el-radio-group>
-        </el-form-item>
       </el-form>
     </div>
     <div style="margin: auto">
       <div class="c-c">
         <button class="c-save c-save-primary" @click="draftForm('ruleForm')">保存草稿</button>
-        <button class="c-save-submit c-save c-save-primary" @click="submitForm('ruleForm')">发布帖子</button>
+        <button class="c-save-submit c-save c-save-primary" @click="submitForm('ruleForm')">发布课程</button>
       </div>
     </div>
   </div>
@@ -132,12 +130,13 @@
 <script>
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import { UploadFilled } from '@element-plus/icons'
-import { fetchCreate, fetchArticle, updateArticle, fetchArticleDraft } from '@/api/create'
+import { fetchCreate, updateCourse, fetchCourseDraft, fetchCourse } from '@/api/course'
 import { ElNotification, ElMessage } from 'element-plus'
 import Cookie from 'js-cookie'
 import { isLogin } from '@/utils/tool'
 import MyUpload from 'vue-image-crop-upload'
+import { uploadCourseImage } from '@/api/upload'
+import Uploader from '@/components/uploader'
 import Tinymce from '@/components/tinymce'
 // import tinymce from 'tinymce/tinymce'
 
@@ -161,12 +160,14 @@ import 'tinymce/plugins/code'
 import 'tinymce/plugins/preview'
 import 'tinymce/plugins/fullscreen'
 
-import { uploadArticleImage } from '@/api/upload'
-
 export default {
   name: "SchoolCreateEdit",
-  components: { Header, Footer, UploadFilled, Tinymce, Editor, MyUpload },
+  components: { Header, Footer, Tinymce, MyUpload, Uploader, Editor },
   data() {
+    const formatTooltip = (val) => {
+      this.price = val / 100
+      return val / 100
+    }
     return {
       editorInit: {
         selector: '#tinymce',
@@ -175,7 +176,7 @@ export default {
         skin_url: '/tinymce/skins/ui/oxide',
         height: 1000,
         plugins: 'link lists image code table wordcount preview fullscreen',
-        toolbar: 'bold italic underline strikethrough | fontsizeselect | formatselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | undo redo | link unlink code lists table image media | removeformat | fullscreen preview',
+        toolbar: 'bold italic underline strikethrough | fontsizeselect | formatselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | undo redo | link unlink code lists table image | removeformat | fullscreen preview',
         // 此处为图片上传处理函数
         images_upload_handler: (blobInfo, success, failure) => {
           if (blobInfo.blob().size/1024/1024 > 8) {
@@ -192,55 +193,46 @@ export default {
         branding: false // 水印“Powered by TinyMCE”
       },
 
+      video: [],
+      formatTooltip,
+      price: 0,
       ruleForm: {
-        id: '',
-        title: '',
-        publish: '公开',
-        type: '',
-        plateid: '',
+        name: '',
         labelid: '',
-        content: '',
         summary: '',
+        introduction: '',
+        price: 0,
+        modularid: '',
         status: '',
         author: '',
-        tag: '',
         cover: '',
+        video: '',
         watch: 0,
-        hot: '',
-        source: ''
+        stauts: '待审核',
+        video: '',
+        num: 0
       },
       rules: {
-        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-        type: [{ required: true, message: '请选择一个分类', trigger: 'change' }],
-        plateid: [{ required: true, message: '请选择一个板块', trigger: 'change' }],
+        name: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+        modularid: [{ required: true, message: '请选择一个模块', trigger: 'change' }],
         labelid: [
           { required: true, message: '至少添加一个标签', trigger: 'change' },
           { min: 2, message: '至少添加一个标签', trigger: 'change' }
         ],
-        publish: [{ required: true, message: '请选择发布形式', trigger: 'change' }],
-        content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }]
+        introduction: [{ required: true, message: '课程介绍不能为空', trigger: 'blur' }],
+        cover: [{ required: true, message: '请添加封面', trigger: 'cahnge' }]
       },
-      articleDraft: [],
+      courseDraft: [],
       draftLen: 0,
-      typeOptions: [
-        { key: 'Original', display_name: '原创' },
-        { key: 'Reprint', display_name: '转载' },
-        { key: 'Translation', display_name: '翻译' },
-        { key: 'Question', display_name: '问题求助' },
-        { key: 'Industry', display_name: '行业动态' },
-        { key: 'Share', display_name: '分享' },
-        { key: 'Solve', display_name: '解决方案' },
-        { key: 'Proposal', display_name: '改进意见' }
-      ],
-      categoryOptions: null,
       labelOptions: null,
       lids: [],
       props: {
-        checkStrictly: true
+        expandTrigger: 'hover',
       },
       options: null,
       activeName: 1,
       disabled: false,
+      tinymceContent: '',
       image: '',
       imgDataUrl: {
         base64: '' // the datebase64 url of created image
@@ -252,8 +244,8 @@ export default {
   },
   created() {
     this.getCreate()
-    this.getArticleDraft()
-    this.getArticle(this.$route.params.id)
+    this.getCourseDraft()
+    this.getCourse(this.$route.params.id)
   },
   mounted() {
     tinymce.init({})
@@ -261,22 +253,22 @@ export default {
   methods: {
     getCreate() {
       fetchCreate().then(response => {
-        this.options = response.data.allPlate
+        this.options = response.data.optionModular
         this.labelOptions = response.data.allLabel
       })
     },
-    getArticleDraft() {
+    getCourseDraft() {
       if (isLogin()) {
         this.ruleForm.author = Cookie.get("nickname")
-        fetchArticleDraft(this.ruleForm).then(response => {
-          this.articleDraft = response.data.draft
+        fetchCourseDraft(this.ruleForm).then(response => {
+          this.courseDraft = response.data.draft
           this.draftLen = response.data.draft.length
         })
       }
     },
-    getArticle(id) {
-      fetchArticle(id).then(response => {
-        this.ruleForm = response.data
+    getCourse(id) {
+      fetchCourse(id).then(response => {
+        this.ruleForm = response.data.course
 
         this.lids = this.ruleForm.labelid.split(",").map(Number)
         this.ruleForm.labelid = ',' + this.ruleForm.labelid + ','
@@ -292,15 +284,15 @@ export default {
     },
     cropSuccess(base64, field) {
       this.imgDataUrl.base64 = base64
-      uploadArticleImage(this.imgDataUrl).then(response => {
+      uploadCourseImage(this.imgDataUrl).then(response => {
         this.image = response.data.imagePath
         this.ruleForm.cover = response.data.imagePath
         this.showImage = false
       })
     },
     setAncestor() {
-      if (this.ruleForm.plateid !== null) {
-        this.ruleForm.plateid = this.ruleForm.plateid[this.ruleForm.plateid.length - 1]
+      if (this.ruleForm.modularid !== null) {
+        this.ruleForm.modularid = this.ruleForm.modularid[this.ruleForm.modularid.length - 1]
       }
     },
     setLabelid() {
@@ -310,13 +302,33 @@ export default {
       }
       this.ruleForm.labelid = idss
     },
+    setPrice() {
+      this.ruleForm.price = this.price * 100
+    },
+    setVideo() {
+      this.video = this.$refs['upload'].sendUploaderToCourseAdd()
+      if(this.ruleForm.num === 0 && this.video.length === 0) {
+        this.$message({
+          message: '请上传视频文件',
+          type: 'error'
+        })
+        return false
+      }
+      this.ruleForm.video = JSON.stringify(this.video)
+      return true
+    },
     submitForm(formName) {
+      console.log(this.ruleForm)
+      if(!this.setVideo()) {
+        return false
+      }
       if (isLogin()) {
+        this.ruleForm.introduction = tinymce.editors[0].getContent()
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.ruleForm.status = "待审核"
             this.ruleForm.author = Cookie.get("nickname")
-            updateArticle(this.ruleForm).then(() => {
+            updateCourse(this.ruleForm).then(() => {
               ElNotification({
                 title: '发布成功',
                 message: '正在等待管理员审核',
@@ -332,18 +344,22 @@ export default {
       }
     },
     draftForm(formName) {
+      if(!this.setVideo()) {
+        return false
+      }
       if (isLogin()) {        
+        this.ruleForm.introduction = tinymce.editors[0].getContent()
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.ruleForm.status = "草稿"
             this.ruleForm.author = Cookie.get("nickname")
-            updateArticle(this.ruleForm).then(() => {
+            updateCourse(this.ruleForm).then(() => {
               ElMessage({
                 message: '保存成功',
                 type: 'success',
               })
-              this.$router.push('/')
             })
+            this.$router.push('/')
           } else {
             console.log('error submit!!')
             return false
@@ -352,12 +368,12 @@ export default {
       }
     },
     editDraft(id) {
-      this.articleDraft.forEach(element => {
+      this.courseDraft.forEach(element => {
         if(element.id === id) {
           this.ruleForm = element
         }
       })
-      this.$router.push({ name: 'CreateEdit', params: {id: id} })
+      this.$router.push({ name: 'SchoolCreateEdit', params: {id: id} })
     }
   }
 }
@@ -440,5 +456,13 @@ export default {
 .c-pt >>> .el-form-item > .el-form-item__content > .el-cascader,
 .c-pt >>> .el-form-item > .el-form-item__content > .el-select {
   width: 100%;
+}
+
+.slider-demo-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin-left: 70px;
 }
 </style>

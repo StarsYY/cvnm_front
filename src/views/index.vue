@@ -402,20 +402,20 @@ export default {
     }
   },
   methods: {
-    getIndex() {
-      fetchIndex().then(response => {
+    async getIndex() {
+      await fetchIndex().then(response => {
         this.data = response.data.labelTree
       })
     },
-    getContentTags() {
-      fetchContentTags(this.listQuery).then(response => {
+    async getContentTags() {
+      await fetchContentTags(this.listQuery).then(response => {
         this.contentTags = response.data.contentTags
       })
     },
-    getArticle() {
+    async getArticle() {
       Cookie.get("nickname") === undefined ? this.listQuery.username = '' : this.listQuery.username = Cookie.get("nickname")
-      fetchArticle(this.listQuery).then(response => {
-        if(response.data.article.length < 20) {
+      await fetchArticle(this.listQuery).then(response => {
+        if(response.data.length < 20) {
           this.hideMore = true
         } else {
           this.hideMore = false
@@ -423,7 +423,7 @@ export default {
         if(this.article !== null) {
           this.article = this.article.concat(response.data.article)
         } else {
-          this.article = response.data.article
+          this.article = response.data.article !== null ? response.data.article : []
         }
         if(this.article) {
           this.article.forEach(item => {
@@ -434,8 +434,8 @@ export default {
         this.loading = false
       })
     },
-    getIndexRight() {
-      fetchIndexRight().then(response => {
+    async getIndexRight() {
+      await fetchIndexRight().then(response => {
         this.rotation = response.data.rotation
         this.hotArticle = response.data.hotArticle
         this.hotLabel = response.data.hotLabel
@@ -448,10 +448,10 @@ export default {
       }
       return true
     },
-    getSignInStatus() {
+    async getSignInStatus() {
       if(this.getLoginStatus()) {
         this.follow.username = Cookie.get("nickname")
-        fetchSignIn(this.follow).then(response => {
+        await fetchSignIn(this.follow).then(response => {
           this.sign = response.data
         })
       }
