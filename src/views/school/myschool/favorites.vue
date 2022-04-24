@@ -31,13 +31,14 @@
                       <div class="sc-ml-foot">
                         <span class="sc-ml-name" style="cursor: pointer" @click="video(item.id, item.price)">{{ item.name }}</span>
                         <div class="fv-sc">
-                          <el-rate
+                          <!-- <el-rate
                             v-model="item.score"
                             disabled
                             show-score
                             text-color="#ff9900"
                             score-template="{item.score}"
-                          />
+                          /> -->
+                          课程分数：{{ item.score }}
                           <div style="color: rgb(121 138 151)">
                             <svg-icon icon-class="person"></svg-icon>
                             {{ item.watch }}

@@ -24,6 +24,14 @@ export function fetchOverview(data) {
   })
 }
 
+export function fetchreRecommendArticle(data) {
+  return request({
+    url: '/user/recommendArticle',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchExpert(data) {
   return request({
     url: '/user/expert',

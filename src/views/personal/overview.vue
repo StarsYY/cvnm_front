@@ -77,16 +77,16 @@
                 <div v-if="isLogName && newArticle && newArticle.length === 0" style="margin-top: 24px;">
                   <div class="o-export">
                     <div class="o-e-title">热门推荐</div>
-                    <div class="o-e-more">更多</div>
+                    <!-- <div class="o-e-more">更多</div> -->
                   </div>
                   <div style="display: inline-block; width: 100%">
-                    <div class="o-content">
+                    <div v-for="item in recommendArticle" :key="item.id" class="o-content">
                       <div style="display: inline-block;">博文｜</div>
                       <div class="o-content-right">
-                        <div class="o-c-r-title">【聊聊心目中的鸿蒙智联产品】参与话题互动阿巴阿巴阿巴</div>
+                        <div class="o-c-r-title" @click="detail(item.id)">{{ item.title }}</div>
                         <div class="o-content-sec">
-                          <span style="margin-right: 16px">点赞：6</span>
-                          <span style="margin-right: 16px">回复：17</span>
+                          <span style="margin-right: 16px">点赞：{{ item.up }}</span>
+                          <span style="margin-right: 16px">回复：{{ item.comment }}</span>
                         </div>
                       </div>
                     </div>
@@ -247,7 +247,7 @@
 </template>
 
 <script>
-import { fetchOverview, followUser, fetchExpert } from '@/api/personal'
+import { fetchOverview, followUser, fetchExpert, fetchreRecommendArticle } from '@/api/personal'
 import Cookie from 'js-cookie'
 import { deleteHTML } from '@/utils/tool'
 import { isLogin } from '@/utils/tool'
@@ -266,6 +266,7 @@ export default {
       },
       communication: null,
       newArticle: null,
+      recommendArticle: null,
       follow: null,
       fans: null,
       expert: null,
@@ -279,6 +280,7 @@ export default {
   created() {
     this.getOverview(this.$route.params.name)
     this.getRecommendExpert()
+    this.getRecommendArticle()
   },
   methods: {
     getOverview(name) {
@@ -304,6 +306,11 @@ export default {
       this.name.name = Cookie.get("nickname") !== undefined ? Cookie.get("nickname") : ''
       fetchExpert(this.name).then(response => {
         this.expert = response.data.expert
+      })
+    },
+    getRecommendArticle() {
+      fetchreRecommendArticle().then(response => {
+        this.recommendArticle = response.data
       })
     },
     followExpertUser(id, nickname) {

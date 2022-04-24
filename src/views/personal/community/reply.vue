@@ -1,7 +1,8 @@
 <template>
   <div class="m-main">
     <div>
-      <h3 class="c-col">我的回复</h3>
+      <h3 v-if="isLog" class="c-col">我的文章</h3>
+      <h3 v-if="!isLog" class="c-col">TA的文章</h3>
     </div>
     <div style="height: 24px"></div>
     <div v-for="item in comment" :key="item.id" class="r-list">
@@ -13,7 +14,7 @@
             <span v-if="item.cm !== null" class="r-time">{{ item.createtime }}</span>
           </span>
         </div>
-        <div class="r-del" @click="delReply(item.id)">
+        <div v-if="isLog" class="r-del" @click="delReply(item.id)">
           <svg-icon icon-class="ic_dele" style="width: 24px; height: 24px"></svg-icon>
         </div>
       </div>
@@ -58,6 +59,7 @@
 import { fetchReply, deleteMyReply } from '@/api/personal'
 import { deleteHTML } from '@/utils/tool'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import Cookie from 'js-cookie'
 
 export default {
   name: "Reply",
@@ -72,11 +74,18 @@ export default {
         id: ''
       },
       comment: null,
+      isLog: true,
       total: 0,
       hideMore: true
     }
   },
   created() {
+    if(this.$route.params.name === Cookie.get("nickname")) {
+      this.isLog = true
+    } else {
+      this.isLog = false
+    }
+
     this.listQuery.username = this.$route.params.name
     this.getReply()
   },

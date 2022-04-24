@@ -61,9 +61,10 @@
             <div class="ipc-top">
               <div class="ipc-top-title">
                 <div class="ipc-tt-left">
-                  <span style="margin-right: 8px; line-height: 32px">
-                    <svg-icon icon-class="index-text" style="width: 24px; height: 24px"></svg-icon>
-                  </span>
+                  <!-- <span style="margin-right: 8px; line-height: 32px"> -->
+                    <!-- <svg-icon icon-class="index-text" style="width: 24px; height: 24px"></svg-icon> -->
+                    <!-- <img v-if="plata.icon !== '' && plata.icon !== null" :src="plata.icon" width="24"> -->
+                  <!-- </span> -->
                   <span class="ipc-tt-main">{{ plate.plate }}</span>
                 </div>
                 <div style="white-space: nowrap">

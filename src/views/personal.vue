@@ -207,6 +207,11 @@ export default {
         this.comment.username = Cookie.get("nickname")
         this.comment.userid = id
         followUser(this.comment).then(() => {
+          if(this.user.follow) {
+            this.user.fans -= 1
+          } else {
+            this.user.fans += 1
+          }
           this.user.follow = !this.user.follow
         })
       }

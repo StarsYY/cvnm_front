@@ -1,7 +1,7 @@
 <template>
   <div class="m-main">
     <div>
-      <h3 class="c-col">我的草稿</h3>
+      <h3 class="c-col">我的待审核</h3>
     </div>
     <div v-if="total > 0" style="margin-top: 8px; margin-bottom: 120px">
       <div v-for="item in article" :key="item.id" class="dr-list">

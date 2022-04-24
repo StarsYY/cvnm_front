@@ -82,7 +82,7 @@
               <div style="display: flex">
                 <div style="width: 100%">
                   <div class="fw-top">
-                    <img src="@/assets/OS.png" class="fw-img">
+                    <img v-if="item.icon !== '' && item.icon !== null" :src="item.icon" class="fw-img">
                     <div style="box-sizing: border-box">
                       <div :class="{ 'is_follow_plate' : !item.follow }" class="fw-top-right">
                         <span v-if="item.follow" class="fw-top-btn" @click="followP(item.id)">已关注</span>

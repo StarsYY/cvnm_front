@@ -112,14 +112,15 @@
                                   </div>
                                 </div>
                                 <div style="display: flex; align-items: center; margin-top: 4px">
-                                  <el-rate
+                                  <!-- <el-rate
                                     v-model="item.score"
                                     disabled
                                     show-score
                                     text-color="#ff9900"
                                     score-template="{{item.score}}"
                                   >
-                                  </el-rate>
+                                  </el-rate> -->
+                                  评分：{{ item.score }}
                                 </div>
                                 <div class="vi-rl-content">{{ item.discuss }}</div>
                               </div>

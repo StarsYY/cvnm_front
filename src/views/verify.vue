@@ -168,7 +168,7 @@ export default {
         base64: '' // the datebase64 url of created image
       },
       show: false,
-      showImage: true,
+      showImage: false,
       showIcon: false
     }
   },
@@ -182,15 +182,18 @@ export default {
         if(response.data !== null) {
           this.verifyList = response.data
           this.verifyLen = this.verifyList.length
-          this.ruleForm = this.verifyList[0]
-          this.index = 0
-          this.bantime[0] = this.ruleForm.start
-          this.bantime[1] = this.ruleForm.end
+          if(this.verifyLen > 0) {
+            this.ruleForm = this.verifyList[0]
+            this.bantime[0] = this.ruleForm.start
+            this.bantime[1] = this.ruleForm.end
 
-          this.image = this.ruleForm.photo
-          if(this.image !== '' && this.image !== null) {
-            this.showImage = true
+            this.image = this.ruleForm.photo
+            if(this.image !== '' && this.image !== null) {
+              this.showImage = true
+            }
           }
+
+          this.index = 0
         }
       })
     },
@@ -210,7 +213,6 @@ export default {
       this.ruleForm.start = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
       d = val[1]
       this.ruleForm.end = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()
-      this.ruleForm.userid = d
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
